@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Comment te définis-tu en 3 mots ?</title>
+<style>
+  html,body{margin:0;height:100%;background:#0d5266;overflow:hidden}
+  iframe{display:block;width:100%;height:100%;border:0}
+</style>
+</head>
+<body>
+<script>
+/* Page de chargement.
+
+   GitHub Pages demande aux navigateurs de garder les pages en mémoire
+   pendant dix minutes. Résultat : après « Enregistrer les modifications »,
+   l'ancienne version continuait de s'afficher dans Genially.
+
+   Cette page-ci ne change jamais : elle peut donc être gardée en mémoire
+   sans dommage. Elle appelle l'activité avec un repère de temps qui change
+   toutes les minutes, ce qui oblige le navigateur à aller rechercher la
+   dernière version. Une modification est visible au bout d'une minute.        */
+(function () {
+  var frais = 'v=' + Math.floor(Date.now() / 60000);
+
+  // …/activite.html#edition ouvre directement la vue éditeur
+  if (location.hash === '#edition') {
+    location.replace('nuage-de-mots.html?' + frais + '#edition');
+    return;
+  }
+  var f = document.createElement('iframe');
+  f.allowFullscreen = true;
+  f.setAttribute('allow', 'fullscreen');
+  f.title = 'Activité : choisis 3 mots';
+  f.src = 'nuage-de-mots.html?' + frais;
+  document.body.appendChild(f);
+})();
+</script>
+<noscript>
+  <iframe src="nuage-de-mots.html" title="Activité : choisis 3 mots"></iframe>
+</noscript>
+</body>
+</html>
