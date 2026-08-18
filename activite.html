@@ -4,41 +4,31 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Comment te définis-tu en 3 mots ?</title>
-<style>
-  html,body{margin:0;height:100%;background:#0d5266;overflow:hidden}
-  iframe{display:block;width:100%;height:100%;border:0}
-</style>
+<style>html,body{margin:0;height:100%;background:#6fb3c3}</style>
 </head>
 <body>
 <script>
-/* Page de chargement.
+/* Porte d'entrée de l'activité.
 
    GitHub Pages demande aux navigateurs de garder les pages en mémoire
-   pendant dix minutes. Résultat : après « Enregistrer les modifications »,
-   l'ancienne version continuait de s'afficher dans Genially.
+   pendant dix minutes. Après « Enregistrer les modifications », l'ancienne
+   version continuait donc de s'afficher dans Genially.
 
-   Cette page-ci ne change jamais : elle peut donc être gardée en mémoire
-   sans dommage. Elle appelle l'activité avec un repère de temps qui change
-   toutes les minutes, ce qui oblige le navigateur à aller rechercher la
-   dernière version. Une modification est visible au bout d'une minute.        */
-(function () {
-  var frais = 'v=' + Math.floor(Date.now() / 60000);
+   Cette page-ci ne change jamais : la garder en mémoire est sans
+   conséquence. Elle renvoie aussitôt vers l'activité, avec un repère de
+   temps qui change chaque minute — le navigateur est obligé d'aller
+   rechercher la dernière version. Une modification est visible au bout
+   d'une minute.
 
-  // …/activite.html#edition ouvre directement la vue éditeur
-  if (location.hash === '#edition') {
-    location.replace('nuage-de-mots.html?' + frais + '#edition');
-    return;
-  }
-  var f = document.createElement('iframe');
-  f.allowFullscreen = true;
-  f.setAttribute('allow', 'fullscreen');
-  f.title = 'Activité : choisis 3 mots';
-  f.src = 'nuage-de-mots.html?' + frais;
-  document.body.appendChild(f);
-})();
+   C'est une redirection, pas un cadre dans un cadre : Genially n'affiche
+   qu'un seul iframe, et l'activité reste pleinement cliquable.            */
+location.replace('nuage-de-mots.html?v=' + Math.floor(Date.now() / 60000)
+                 + location.hash);
 </script>
 <noscript>
-  <iframe src="nuage-de-mots.html" title="Activité : choisis 3 mots"></iframe>
+  <p style="font-family:system-ui;padding:2rem">
+    <a href="nuage-de-mots.html">Ouvrir l'activité</a>
+  </p>
 </noscript>
 </body>
 </html>
