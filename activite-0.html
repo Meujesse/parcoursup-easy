@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bienvenue : fais connaissance avec Lisa</title>
+<style>html,body{margin:0;height:100%;background:#6fb3c3}</style>
+</head>
+<body>
+<script>
+/* Porte d'entrée de l'activité.
+
+   GitHub Pages demande aux navigateurs de garder les pages en mémoire
+   pendant dix minutes. Après « Enregistrer les modifications », l'ancienne
+   version continuait donc de s'afficher dans Genially.
+
+   Cette page-ci ne change jamais : la garder en mémoire est sans
+   conséquence. Elle renvoie aussitôt vers l'activité, avec un repère de
+   temps qui change chaque minute — le navigateur est obligé d'aller
+   rechercher la dernière version. Une modification est visible au bout
+   d'une minute.
+
+   C'est une redirection, pas un cadre dans un cadre : Genially n'affiche
+   qu'un seul iframe, et l'activité reste pleinement cliquable.            */
+location.replace('intro-conversation.html?v=' + Math.floor(Date.now() / 60000)
+                 + location.hash);
+</script>
+<noscript>
+  <p style="font-family:system-ui;padding:2rem">
+    <a href="intro-conversation.html">Ouvrir l'activité</a>
+  </p>
+</noscript>
+</body>
+</html>
