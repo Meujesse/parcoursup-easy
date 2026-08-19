@@ -31,7 +31,6 @@ html,body{height:100%;overflow:hidden;background:var(--fond);
 #cadre{position:relative}
 #stage{width:1600px;height:900px;position:absolute;top:0;left:0;
   transform-origin:top left;background:var(--fond);overflow:hidden}
-#decor{position:absolute;inset:0;z-index:0;pointer-events:none}
 
 /* ---------- titre ---------- */
 .titre{position:absolute;left:70px;top:52px;color:var(--blanc);z-index:5}
@@ -76,6 +75,10 @@ html,body{height:100%;overflow:hidden;background:var(--fond);
 .jalon.actif .ico{filter:drop-shadow(0 6px 14px rgba(0,0,0,.35))}
 .jalon.actif .ico path,.jalon.actif .ico circle,.jalon.actif .ico rect,
 .jalon.actif .ico line,.jalon.actif .ico ellipse{stroke-width:3.6}
+/* L'arc de duree est la vraie information de la Question 6 : on l'epaissit
+   et on lui donne des bouts ronds pour qu'il se lise avant le cadran. */
+.jalon .ico .jauge{stroke-width:4.6;stroke-linecap:round}
+.jalon.actif .ico .jauge{stroke-width:5.2}
 
 /* la tige qui relie l'icone a la barre */
 .tige{position:absolute;border-radius:2px;
@@ -309,32 +312,6 @@ body.figee .pose.vu,body.figee .buste,body.figee .tete{animation:none}
 <body>
 <div id="fit"><div id="cadre"><div id="stage">
 
-  <!-- Decor : des anneaux concentriques partant du bas a gauche, la ou
-       commence l'echelle. Ils occupent la bande vide entre le panneau et
-       Lisa sans rien y ajouter de lisible. Blanc a 6 %, donc presents
-       seulement quand on les cherche. Aucun cercle violet ou rouge : la
-       cliente pose les siens par-dessus dans Genially. -->
-  <svg id="decor" viewBox="0 0 1600 900" aria-hidden="true">
-    <defs>
-      <radialGradient id="lueur" cx="33%" cy="55%" r="50%">
-        <stop offset="0" stop-color="#fff" stop-opacity=".085"/>
-        <stop offset="1" stop-color="#fff" stop-opacity="0"/>
-      </radialGradient>
-    </defs>
-    <rect width="1600" height="900" fill="url(#lueur)"/>
-    <g fill="none" stroke="#fff" stroke-opacity=".095" stroke-width="2">
-      <circle cx="150" cy="1010" r="430"/>
-      <circle cx="150" cy="1010" r="580" stroke-dasharray="3 13"/>
-      <circle cx="150" cy="1010" r="730"/>
-      <circle cx="150" cy="1010" r="880" stroke-dasharray="3 13"/>
-      <circle cx="150" cy="1010" r="1030"/>
-      <circle cx="150" cy="1010" r="1180" stroke-dasharray="3 13"/>
-      <circle cx="150" cy="1010" r="1180" stroke-dasharray="3 13"/>
-      <circle cx="150" cy="1010" r="1330"/>
-      <circle cx="150" cy="1010" r="1480" stroke-dasharray="3 13"/>
-    </g>
-  </svg>
-
   <div class="titre">
     <h1 id="tTitre">Question 3</h1>
     <p id="tQuestion"></p>
@@ -547,26 +524,31 @@ let doux = matchMedia('(prefers-reduced-motion: reduce)').matches;
    train, avion, planète — la distance ET la fréquence des retours se
    lisent d'un coup d'œil, ce qui est exactement la question posée.
    Tracé pur (aucun aplat) : la même graisse que le reste du module.  */
-/* Une pile de livres dont la hauteur dit la duree des etudes : deux, quatre,
-   six. Le nombre se lit d'un coup d'oeil, mieux qu'une montre et un sablier
-   qui parlent tous deux de temps sans dire combien. Les largeurs alternent
-   pour que la pile ait l'air empilee a la main. */
-function pileLivres(n){
-  const larg = [40, 34, 38, 32, 36, 30], H = 8.5, base = 55.5;
-  let d = '';
-  for(let i = 0; i < n; i++){
-    const w = larg[i % larg.length], x = 32 - w / 2, y = base - (i + 1) * H;
-    d += `<rect x="${x}" y="${y.toFixed(1)}" width="${w}" height="${H}" rx="2.4"/>`
-       + `<path d="M${(x + 5).toFixed(1)} ${(y + 1.8).toFixed(1)}`
-       + `v${(H - 3.6).toFixed(1)}"/>`;
-  }
-  return '<svg class="ico" viewBox="0 0 64 64" aria-hidden="true">' + d + '</svg>';
+/* La duree des etudes, lue sur un cadran : une horloge, et autour d'elle
+   un arc qui s'allonge a mesure que le cursus est long. L'horloge dit
+   « du temps », l'arc dit « combien ». Les piles de livres disaient la
+   quantite de travail, pas la duree — ce n'etait pas la question posee. */
+function cadran(part){
+  const cx = 32, cy = 32, r = 25.5;
+  const a0 = -Math.PI / 2, a1 = a0 + Math.PI * 2 * part;
+  const x0 = cx + r * Math.cos(a0), y0 = cy + r * Math.sin(a0);
+  const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+  const grand = part > 0.5 ? 1 : 0;
+  // les aiguilles suivent la meme fraction : midi vers l'heure atteinte
+  const ha = a0 + Math.PI * 2 * part;
+  return '<svg class="ico" viewBox="0 0 64 64" aria-hidden="true">'
+    + `<path class="jauge" d="M${x0.toFixed(1)} ${y0.toFixed(1)}`
+    + `A${r} ${r} 0 ${grand} 1 ${x1.toFixed(1)} ${y1.toFixed(1)}"/>`
+    + '<circle cx="32" cy="32" r="16"/>'
+    + '<path d="M32 32V22.5"/>'
+    + `<path d="M32 32l${(8.5*Math.cos(ha)).toFixed(1)} ${(8.5*Math.sin(ha)).toFixed(1)}"/>`
+    + '</svg>';
 }
 
 const ICONES = {
-  livres2: pileLivres(2),
-  livres4: pileLivres(4),
-  livres6: pileLivres(6),
+  cadran1: cadran(0.25),
+  cadran2: cadran(0.55),
+  cadran3: cadran(0.92),
   /* Une piece seule : les seuls frais d'inscription. */
   piece: '<svg class="ico" viewBox="0 0 64 64" aria-hidden="true">'
     + '<circle cx="32" cy="32" r="17"/>'

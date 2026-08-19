@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="fr"><head>
+<html lang="fr">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Question 1 : comment te définis-tu en 3 mots ?</title>
@@ -173,18 +174,30 @@ body.figee .buste,body.figee .oscille{animation:none}
 
 /* ---------- boutons ---------- */
 .btn{font-size:24px;font-weight:700;letter-spacing:.2px;color:var(--blanc);
-  background:var(--rose);border:none;border-radius:999px;padding:15px 34px;cursor:pointer;
-  box-shadow:0 8px 20px rgba(234,31,92,.42);display:inline-flex;align-items:center;gap:12px;
+  background:var(--rose);border:none;border-radius:999px;padding:14px 28px 14px 32px;cursor:pointer;
+  box-shadow:0 8px 20px rgba(234,31,92,.42);display:inline-flex;align-items:center;gap:6px;
   transition:transform .22s cubic-bezier(.34,1.5,.5,1),box-shadow .22s,background .22s}
 .btn:hover{transform:translateY(-3px) scale(1.035);box-shadow:0 13px 28px rgba(234,31,92,.52)}
 .btn:active{transform:translateY(0) scale(.99)}
+.btn .pastille{width:56px;height:56px;margin:-15px -30px -15px 5px;flex:0 0 56px}
+/* ---------- la pastille « Cliquer pour en savoir plus » ----------------
+   Reprise trait pour trait de la legende des boutons du Genially (page 6) :
+   halo gris pale qui bat, disque rose, main blanche qui appuie. Le caractere fleche qui
+   servait avant n'existe nulle part dans cette legende. */
+.pastille{display:block;overflow:visible}
+.pastille .halo{fill:#e0e2eb;opacity:.8;transform-box:fill-box;
+  transform-origin:center;animation:battement 2.4s ease-in-out infinite}
+.pastille .disq{fill:var(--rose)}
+.pastille .main{fill:#fff}
+@keyframes battement{0%,100%{transform:scale(.8);opacity:.85}
+                     55%    {transform:scale(1);opacity:.22}}
+@media (prefers-reduced-motion: reduce){ .pastille .halo{animation:none} }
+
 /* bouton secondaire : fond blanc plein, sinon le teal sur teal clair
    ne fait pas assez de contraste */
 .btn.creux{background:var(--bulle-fond);color:var(--teal);border:2.5px solid var(--teal);
   box-shadow:0 6px 16px rgba(9,58,72,.16)}
 .btn.creux:hover{background:#fff;box-shadow:0 12px 26px rgba(9,58,72,.24)}
-.btn .rond{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.25);
-  display:grid;place-items:center;font-size:19px}
 
 #btnExemple{position:absolute;right:474px;top:366px;z-index:7;
   transition:opacity .4s ease,transform .4s ease}
@@ -416,7 +429,7 @@ body.edition #zone.glisse,body.edition #zone.glisse.pointe{cursor:grabbing}
 
   <div class="bulle bas-d" id="bulleLisa"></div>
 
-  <button class="btn" id="btnExemple"><span id="exLabel"></span><span class="rond">☞</span></button>
+  <button class="btn" id="btnExemple"><span id="exLabel"></span><svg class="pastille" viewBox="0 0 437.5 437.5" aria-hidden="true"><circle class="halo" cx="218.75" cy="218.75" r="218.75"/><circle class="disq" cx="218.75" cy="218.75" r="175"/><g class="main"><path d="M218.11,214V189.87a9.45,9.45,0,0,0-9.42-9.42h0a9.45,9.45,0,0,0-9.43,9.42V238.7l-3.77-4.33a10.67,10.67,0,0,0-13.57-2.17h0a10.85,10.85,0,0,0-4.34,13.67l16.55,37.28a17.82,17.82,0,0,0,16.29,10.6h47a17.17,17.17,0,0,0,17.17-17.17V244.77a16.46,16.46,0,0,0-11.22-15.6Z"/><path d="M173.24,207.5a9.27,9.27,0,0,1-9.14-7.35,46,46,0,1,1,89.74-20.64,9.43,9.43,0,0,1-18.38,4.24,27.22,27.22,0,0,0-53.07,12.16,9.47,9.47,0,0,1-7.07,11.31A7.83,7.83,0,0,1,173.24,207.5Z"/></g></svg></button>
 
   <div id="legende"></div>
 
@@ -444,7 +457,8 @@ body.edition #zone.glisse,body.edition #zone.glisse.pointe{cursor:grabbing}
           <img class="paup clos" src="data:image/webp;base64,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" alt="">
         </div></div></div>
       </div>
-      <div class="bulle bas-d" id="exBulle" style="position:absolute;right:290px;bottom:452px;width:340px"></div>
+      <div class="bulle bas-d" id="exBulle"
+           style="position:absolute;right:290px;bottom:452px;width:340px"></div>
       <button id="fermer" aria-label="Fermer">✕</button>
     </div>
   </div>
@@ -464,10 +478,10 @@ body.edition #zone.glisse,body.edition #zone.glisse.pointe{cursor:grabbing}
 
   <div id="adresses">
     <div class="rang"><b>Adresse à mettre dans Genially</b>
-      <div class="url"><input id="urlApprenant" readonly="">
+      <div class="url"><input id="urlApprenant" readonly>
         <button data-copie="urlApprenant">Copier</button></div></div>
     <div class="rang"><b>Adresse pour venir modifier</b>
-      <div class="url"><input id="urlEditeur" readonly="">
+      <div class="url"><input id="urlEditeur" readonly>
         <button data-copie="urlEditeur">Copier</button></div></div>
     <p>Il n'y a qu'un seul fichier, donc rien à synchroniser. Genially affiche
       toujours la version apprenant. Dès que le fichier modifié remplace l'ancien
@@ -517,8 +531,10 @@ body.edition #zone.glisse,body.edition #zone.glisse.pointe{cursor:grabbing}
   <section>
     <h3>Bulle de dialogue</h3>
     <div class="duo">
-      <div><label>Largeur (px)</label><input type="number" min="280" max="640" step="10" data-bulle="largeur"></div>
-      <div><label>Taille du texte</label><input type="number" min="16" max="34" data-bulle="corps"></div>
+      <div><label>Largeur (px)</label><input type="number" min="280" max="640" step="10"
+        data-bulle="largeur"></div>
+      <div><label>Taille du texte</label><input type="number" min="16" max="34"
+        data-bulle="corps"></div>
     </div>
     <p class="aide">La bulle grandit vers le haut : la queue reste toujours pointée
       sur Lisa. Si le texte devient trop long, le corps se réduit tout seul.</p>
@@ -546,7 +562,8 @@ body.edition #zone.glisse,body.edition #zone.glisse.pointe{cursor:grabbing}
     <h3>Nuage et personnage</h3>
     <div class="duo">
       <div><label>Couleur du nuage</label><input type="color" data-nuage="couleur"></div>
-      <div><label>Opacité du nuage</label><input type="number" min="20" max="100" step="5" data-nuage="opacite"></div>
+      <div><label>Opacité du nuage</label><input type="number" min="20" max="100" step="5"
+        data-nuage="opacite"></div>
     </div>
     <label>Taille de Lisa (px)</label>
     <input type="number" min="520" max="800" step="10" data-lisa="hauteur">
@@ -585,7 +602,8 @@ body.edition #zone.glisse,body.edition #zone.glisse.pointe{cursor:grabbing}
       <p class="aide">La clé reste dans <b>ce navigateur uniquement</b>. Elle n'entre
         jamais dans le fichier publié et n'est jamais transmise ailleurs qu'à GitHub.
         Créez-la sur
-        <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com</a>, en la limitant à ce seul dépôt, avec
+        <a href="https://github.com/settings/personal-access-tokens/new" target="_blank"
+           rel="noopener">github.com</a>, en la limitant à ce seul dépôt, avec
         l'autorisation <b>Contents : Read and write</b>. Elle est révocable à tout
         moment depuis la même page.</p>
       <a id="lienDepot" href="#" target="_blank" rel="noopener">Ouvrir le dépôt →</a>
@@ -1497,7 +1515,7 @@ function telecharge(nom,contenu,type){
    navigateur (localStorage), pas dans la configuration. */
 function fabrique(){
   const json=JSON.stringify(CFG,null,1);
-  return SOURCE.replace(//g,'').replace(
+  return SOURCE.replace(/ data-force-edition="1"/g,'').replace(
     /(<script id="config" type="application\/json">)[\s\S]*?(<\/script>)/,
     function(m,a,b){ return a+json+b; });
 }
@@ -1602,4 +1620,6 @@ rendu();
 lieChamps();
 remplitListe();
 REF=net(CFG); majEtat();
-</script></body></html>
+</script>
+</body>
+</html>

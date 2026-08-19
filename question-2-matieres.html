@@ -225,13 +225,25 @@ body.figee .pose.vu,body.figee .buste,body.figee .tete{animation:none}
 
 /* ---------- boutons ---------- */
 .btn{font-size:23px;font-weight:700;letter-spacing:.2px;color:var(--blanc);
-  background:var(--rose);border:none;border-radius:999px;padding:14px 32px;cursor:pointer;
-  box-shadow:0 8px 20px rgba(234,31,92,.42);display:inline-flex;align-items:center;gap:12px;
+  background:var(--rose);border:none;border-radius:999px;padding:13px 26px 13px 30px;cursor:pointer;
+  box-shadow:0 8px 20px rgba(234,31,92,.42);display:inline-flex;align-items:center;gap:6px;
   transition:transform .22s cubic-bezier(.34,1.5,.5,1),box-shadow .22s,background .22s}
 .btn:hover{transform:translateY(-3px) scale(1.035);box-shadow:0 13px 28px rgba(234,31,92,.52)}
 .btn:active{transform:translateY(0) scale(.99)}
-.btn .rond{width:33px;height:33px;border-radius:50%;background:rgba(255,255,255,.25);
-  display:grid;place-items:center;font-size:18px}
+.btn .pastille{width:54px;height:54px;margin:-15px -28px -15px 5px;flex:0 0 54px}
+/* ---------- la pastille « Cliquer pour en savoir plus » ----------------
+   Reprise trait pour trait de la legende des boutons du Genially (page 6) :
+   halo gris pale qui bat, disque rose, main blanche qui appuie. Le caractere fleche qui
+   servait avant n'existe nulle part dans cette legende. */
+.pastille{display:block;overflow:visible}
+.pastille .halo{fill:#e0e2eb;opacity:.8;transform-box:fill-box;
+  transform-origin:center;animation:battement 2.4s ease-in-out infinite}
+.pastille .disq{fill:var(--rose)}
+.pastille .main{fill:#fff}
+@keyframes battement{0%,100%{transform:scale(.8);opacity:.85}
+                     55%    {transform:scale(1);opacity:.22}}
+@media (prefers-reduced-motion: reduce){ .pastille .halo{animation:none} }
+
 #btnExemple{position:absolute;right:336px;top:352px;z-index:7}
 
 /* Haut-parleur, sous la bulle et a droite du tableau. La bulle est ancree
@@ -356,7 +368,7 @@ body.figee .pose.vu,body.figee .buste,body.figee .tete{animation:none}
 
   <div class="bulle droite" id="bulleLisa"></div>
   <button id="hautParleur" type="button"></button>
-  <button class="btn" id="btnExemple"><span id="exLabel">Exemple</span><span class="rond">☞</span></button>
+  <button class="btn" id="btnExemple"><span id="exLabel">Exemple</span><svg class="pastille" viewBox="0 0 437.5 437.5" aria-hidden="true"><circle class="halo" cx="218.75" cy="218.75" r="218.75"/><circle class="disq" cx="218.75" cy="218.75" r="175"/><g class="main"><path d="M218.11,214V189.87a9.45,9.45,0,0,0-9.42-9.42h0a9.45,9.45,0,0,0-9.43,9.42V238.7l-3.77-4.33a10.67,10.67,0,0,0-13.57-2.17h0a10.85,10.85,0,0,0-4.34,13.67l16.55,37.28a17.82,17.82,0,0,0,16.29,10.6h47a17.17,17.17,0,0,0,17.17-17.17V244.77a16.46,16.46,0,0,0-11.22-15.6Z"/><path d="M173.24,207.5a9.27,9.27,0,0,1-9.14-7.35,46,46,0,1,1,89.74-20.64,9.43,9.43,0,0,1-18.38,4.24,27.22,27.22,0,0,0-53.07,12.16,9.47,9.47,0,0,1-7.07,11.31A7.83,7.83,0,0,1,173.24,207.5Z"/></g></svg></button>
 
   <div id="soustitre"><span class="dit"></span><span class="alerte"></span></div>
   <div id="lisa"></div>
