@@ -956,7 +956,7 @@ if(!aDuSonVoix('accueil') && !aDuSonVoix('exemple') && !aDuSonVoix('fin'))
 /* Le premier geste dans le cadre : c'est lui qui debloque le son pour le
    navigateur. Arriver par la fleche de Genially ne compte pas. */
 const _scene = document.getElementById('stage');
-if(_scene) _scene.addEventListener('pointerdown', premierGesteVoix);
+if(_scene) _scene.addEventListener('pointerdown', premierGesteVoix, true);   // capture : les mots arretent la propagation
 
 /* ================= mise à l'échelle ================= */
 const stage=document.getElementById('stage');

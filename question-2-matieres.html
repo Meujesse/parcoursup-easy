@@ -878,7 +878,7 @@ function premierGeste(){
   parle('accueil');
 }
 const _scene = document.getElementById('stage');
-if(_scene) _scene.addEventListener('pointerdown', premierGeste);
+if(_scene) _scene.addEventListener('pointerdown', premierGeste, true);   // capture : les cases arretent la propagation
 if(!aDuSon('accueil') && !aDuSon('exemple') && !aDuSon('bilan'))
   bouton.style.display = 'none';
 
