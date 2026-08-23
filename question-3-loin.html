@@ -318,6 +318,15 @@ body.figee .pose.vu,body.figee .buste,body.figee .tete{animation:none}
   pointer-events:none;filter:drop-shadow(0 18px 34px rgba(9,58,72,.24))}
 #lisaEx .pose{height:838px;opacity:1;transform:none;
   animation:appui 12.7s ease-in-out infinite alternate}
+/* La main de Lisa passe DEVANT la bulle. On ne peut pas simplement monter
+   Lisa au-dessus : son corps masquerait le texte. On superpose donc une
+   copie d'elle, decoupee a la boite de la bulle et posee par-dessus. Seule
+   la partie qui mord sur la bulle est redessinee ; le reste vient de la
+   couche du dessous, au meme pixel. */
+#lisaExDevant{position:absolute;left:0;right:0;bottom:0;height:838px;z-index:7;
+  pointer-events:none}
+#lisaExDevant .pose{height:838px;opacity:1;transform:none;
+  animation:appui 12.7s ease-in-out infinite alternate}
 </style>
 </head>
 <body>
@@ -1181,6 +1190,40 @@ $('#exSous').textContent  = T.exSous;
 const exCurseur = batitPanneau($('#exPan'), 1, true);
 exCurseur.poseMuette(CFG.exemplePalier);
 dit($('#exBulle'), T.exBulle, MAXH_EX);
+
+/* --- la main devant la bulle -------------------------------------------
+   La copie est creee dans le meme tick que l'originale : leurs animations
+   demarrent a la meme image, donc les deux dessins restent superposes au
+   pixel pres. On les resynchronise quand meme, par precaution. */
+function mainDevant(){
+  const src = $('#lisaEx'), bulle = $('#exBulle'), carte = $('#carte');
+  if(!src || !bulle || !carte) return;
+  const copie = src.cloneNode(true);
+  copie.id = 'lisaExDevant';
+  copie.querySelectorAll('.paup').forEach(e => e.remove());
+  carte.appendChild(copie);
+  const a1 = src.getAnimations({subtree:true});
+  const a2 = copie.getAnimations({subtree:true});
+  a2.forEach((a,i) => { if(a1[i] && a1[i].startTime !== null) a.startTime = a1[i].startTime; });
+  function decoupe(){
+    // inset() se mesure sur la boite de l'element decoupe, PAS sur la carte.
+    // La copie de la question 2 ne fait que 340 px de large : calculer dans
+    // le repere de la carte decoupait 800 px a cote.
+    const rc = carte.getBoundingClientRect();
+    const re = copie.getBoundingClientRect(), rb = bulle.getBoundingClientRect();
+    if(!rb.width || !re.width) return;
+    const k = rc.width / carte.offsetWidth || 1;
+    const x = (rb.left - re.left) / k, y = (rb.top - re.top) / k;
+    const w = rb.width / k, h = rb.height / k;
+    copie.style.clipPath = 'inset(' + y.toFixed(1) + 'px '
+      + (copie.offsetWidth - x - w).toFixed(1) + 'px '
+      + (copie.offsetHeight - y - h).toFixed(1) + 'px ' + x.toFixed(1) + 'px)';
+  }
+  decoupe();
+  addEventListener('resize', decoupe);
+  requestAnimationFrame(decoupe);
+}
+mainDevant();
 
 $('#btnExemple').onclick = () => $('#voile').classList.add('vu');
 $('#fermer').onclick     = () => $('#voile').classList.remove('vu');
