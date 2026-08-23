@@ -284,14 +284,14 @@ body.figee .pose.vu,body.figee .buste,body.figee .tete{animation:none}
 
 
 /* ---------- la voix de Lisa ---------- */
-#hautParleur{position:absolute;right:404px;top:236px;width:46px;height:46px;z-index:9;
-  border-radius:50%;border:2.5px solid var(--teal);background:var(--bulle-fond);
+#hautParleur{position:absolute;right:404px;top:236px;width:58px;height:58px;z-index:9;
+  border-radius:50%;border:3px solid var(--teal);background:var(--bulle-fond);
   cursor:pointer;display:grid;place-items:center;padding:0;
   box-shadow:0 6px 16px rgba(9,58,72,.2);
   transition:background .2s,transform .2s,border-color .2s}
 #hautParleur:hover{background:#fff;transform:scale(1.09);
   box-shadow:0 10px 22px rgba(9,58,72,.28)}
-#hautParleur svg{width:24px;height:24px;display:block;fill:var(--teal)}
+#hautParleur svg{width:30px;height:30px;display:block;fill:var(--teal)}
 #hautParleur .onde{transform-origin:6px 12px;opacity:.9}
 #hautParleur.parle{background:var(--teal);border-color:var(--teal)}
 #hautParleur.parle svg{fill:#fff}
@@ -788,6 +788,19 @@ if(!doux){
 }
 
 /* ---------- bulle qui s'adapte au texte ---------- */
+
+/* Le haut-parleur se colle au coin bas-droit de la bulle. Une position
+   fixe se decroche des que la cliente rallonge ou raccourcit sa
+   consigne : la bulle change de hauteur, le bouton reste en l'air. */
+function caleHautParleur(){
+  const b = document.getElementById('hautParleur');
+  const u = document.getElementById('bulleLisa');
+  if(!b || !u) return;
+  const d = b.offsetWidth || 58;
+  b.style.right = 'auto';
+  b.style.left = (u.offsetLeft + u.offsetWidth + 4 - d / 2) + 'px';
+  b.style.top  = (u.offsetTop  + u.offsetHeight + 11 - d / 2) + 'px';
+}
 function dit(el, html, maxh){
   el.innerHTML = html;
   let c = el.id === 'exBulle' ? 19 : 24;
@@ -796,6 +809,7 @@ function dit(el, html, maxh){
   while(el.offsetHeight > maxh && c > 13 && garde++ < 40){
     c -= 1; el.style.fontSize = c+'px';
   }
+  if(el.id === 'bulleLisa') caleHautParleur();
 }
 const MAXH = 206, MAXH_EX = 206;
 
@@ -1375,7 +1389,13 @@ if(!aDuSonVoix('accueil') && !aDuSonVoix('exemple') && !aDuSonVoix('fin'))
 /* Le premier geste dans le cadre : c'est lui qui debloque le son pour le
    navigateur. Arriver par la fleche de Genially ne compte pas. */
 const _scene = document.getElementById('stage');
-if(_scene) _scene.addEventListener('pointerdown', premierGesteVoix, true);   // capture : le curseur arrete la propagation
+if(_scene) _scene.addEventListener('pointerdown', ev => {
+  /* Un clic SUR le haut-parleur ne compte pas comme premier geste :
+     sinon la voix demarre ici, et le onclick du bouton, qui suit,
+     la remet en pause. Il fallait cliquer deux fois. */
+  if(boutonVoix && boutonVoix.contains(ev.target)) return;
+  premierGesteVoix();
+}, true);   // capture : le curseur arrete la propagation
 
 /* ---------- mise à l'échelle ---------- */
 function ajuste(){
