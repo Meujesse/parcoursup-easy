@@ -234,22 +234,29 @@ body.figee .buste,body.figee .oscille{animation:none}
   opacity:0;pointer-events:none;transition:opacity .35s ease;
   display:grid;place-items:center;backdrop-filter:blur(3px)}
 #voile.vu{opacity:1;pointer-events:auto}
-#carte{width:1300px;height:700px;background:var(--fond);border-radius:26px;position:relative;
+/* La fenetre occupe presque toute la scene et reprend la mise en page de
+   la page principale : meme titre, nuage a l'echelle 1, Lisa de la meme
+   taille, meme corps de texte. Jyn : « qu'elles fassent la meme taille que
+   les pages principales, avec Lisa qui prend beaucoup plus de place ». */
+#carte{position:absolute;left:12px;top:12px;width:1576px;height:876px;
+  background:var(--fond);border-radius:26px;
   overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.4);
-  transform:scale(.94) translateY(14px);transition:transform .42s cubic-bezier(.34,1.3,.5,1)}
+  transform:scale(.985) translateY(14px);transition:transform .42s cubic-bezier(.34,1.3,.5,1)}
 #voile.vu #carte{transform:none}
-#carte h2{position:absolute;left:64px;top:52px;font-size:44px;color:var(--blanc);font-weight:800;
-  text-shadow:0 3px 0 rgba(8,58,69,.3)}
-#carte .ss{position:absolute;left:66px;top:118px;font-size:26px;color:var(--blanc);font-weight:600;
-  text-shadow:0 2px 0 rgba(8,58,69,.2)}
-#mini{position:absolute;left:34px;top:176px;width:722px;height:445px;overflow:hidden}
-#mini .plateau{transform:scale(.7148);transform-origin:top left}
+#carte h2{position:absolute;left:84px;top:66px;font-size:70px;color:var(--blanc);font-weight:800;
+  line-height:.95;letter-spacing:-1px;text-shadow:0 3px 0 rgba(8,58,69,.32)}
+#carte .ss{position:absolute;left:86px;top:158px;font-size:34px;color:var(--blanc);font-weight:600;
+  text-shadow:0 2px 0 rgba(8,58,69,.22)}
+#mini{position:absolute;left:28px;top:232px;width:1050px;height:624px;overflow:hidden}
+#mini .plateau{transform:none;transform-origin:top left}
 #mini .mot:not(.pris){color:rgba(255,255,255,.45)}
-#fermer{position:absolute;right:24px;top:24px;width:52px;height:52px;border-radius:50%;
-  background:rgba(255,255,255,.9);border:none;cursor:pointer;font-size:26px;color:var(--teal);
-  display:grid;place-items:center;transition:transform .2s,background .2s}
+#fermer{position:absolute;right:26px;top:24px;width:56px;height:56px;border-radius:50%;
+  background:rgba(255,255,255,.9);border:none;cursor:pointer;font-size:27px;color:var(--teal);
+  display:grid;place-items:center;z-index:9;transition:transform .2s,background .2s}
 #fermer:hover{transform:rotate(90deg) scale(1.08);background:#fff}
-#lisaEx{position:absolute;right:10px;bottom:0;height:560px}
+#exBulle{right:238px;bottom:588px;z-index:6}
+#lisaEx{position:absolute;right:22px;bottom:0;height:700px;
+  filter:drop-shadow(0 16px 30px rgba(9,58,72,.22))}
 #lisaEx .buste{animation-duration:5.4s}
 #lisaEx .oscille{animation-duration:15s}
 
@@ -849,14 +856,14 @@ function styleMot(e,m){
 function opaciteNuage(){ return (CFG.nuage.opacite==null?100:CFG.nuage.opacite)/100; }
 function ditBulle(el,html,maxh){
   el.innerHTML=html;
-  let c=CFG.bulle.corps * (el.id==='exBulle' ? .92 : 1);
+  let c=CFG.bulle.corps;   // la fenetre Exemple a la taille de la page
   el.style.fontSize=c+'px';
   let garde=0;
   while(el.offsetHeight>maxh && c>15 && garde++<40){
     c-=1; el.style.fontSize=c+'px';
   }
 }
-const MAXH_LISA=268, MAXH_EX=300;
+const MAXH_LISA=268, MAXH_EX=330;
 function dit(html){ ditBulle(bulle,html,MAXH_LISA); }
 
 function remplace(txt,mots){
@@ -890,7 +897,7 @@ function rendu(){
   R.setProperty('--nuage',CFG.nuage.couleur||c.teal);
 
   bulle.style.width=CFG.bulle.largeur+'px';
-  exBulle.style.fontSize=(CFG.bulle.corps*.92)+'px';
+  exBulle.style.fontSize=CFG.bulle.corps+'px';
   document.querySelectorAll('.blob').forEach(s=>s.style.opacity=opaciteNuage());
 
   const pb=CFG.publication, dep=(pb.depot||'').trim();
@@ -1157,7 +1164,7 @@ function calePose(el,cle,hauteur){
   });
 }
 document.querySelectorAll('#lisa .pose').forEach(el=>calePose(el,el.dataset.p,700));
-calePose(document.getElementById('lisaEx'),'exemple',560);
+calePose(document.getElementById('lisaEx'),'exemple',700);
 
 function lisa(k){
   document.querySelectorAll('#lisa .pose')
