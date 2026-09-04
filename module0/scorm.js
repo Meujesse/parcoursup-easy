@@ -83,14 +83,14 @@
   /* ---- etat sauvegarde ---- */
   function litEtat(){
     var brut = null;
-    if(API){ brut = get(version === '2004' ? 'cmi.suspend_data' : 'cmi.suspend_data'); }
-    if(!brut){ try{ brut = localStorage.getItem(CLE_LOCAL); }catch(e){} }
+    if(API){ brut = get('cmi.suspend_data'); }          // dans un LMS, seule la plateforme fait foi
+    else { try{ brut = localStorage.getItem(CLE_LOCAL); }catch(e){} }
     if(!brut) return null;
     try{ return JSON.parse(brut); }catch(e){ return null; }
   }
   function ecritEtat(etat){
     var s = JSON.stringify(etat);
-    try{ localStorage.setItem(CLE_LOCAL, s); }catch(e){}
+    if(!API){ try{ localStorage.setItem(CLE_LOCAL, s); }catch(e){} }
     if(API){
       if(version === '1.2' && s.length > 4000) s = s.slice(0, 4000);
       set('cmi.suspend_data', s);
