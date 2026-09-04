@@ -6,8 +6,8 @@
 <title>Appel avec Lisa</title>
 <style>
 /* ============================================================
-   Simulation d'appel FaceTime avec Lisa — test module 1.
-   Écran de téléphone centré, vidéos Higgsfield en plein cadre,
+   Simulation d'appel vidéo avec Lisa — module 1 (version 16:9).
+   Fenêtre d'appel plein cadre, vidéos Higgsfield 16:9 (Kling Avatars),
    choix qui apparaissent en surimpression façon bulles d'appel.
    ============================================================ */
 :root{
@@ -19,74 +19,74 @@ html,body{height:100%;background:#0b0b0d;overflow:hidden;
   font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;
   -webkit-font-smoothing:antialiased}
 
-#tel{position:fixed;inset:0;display:grid;place-items:center}
-#ecran{position:relative;width:min(94vw,506px);height:min(90vh,900px);
-  aspect-ratio:9/16;background:#000;border-radius:44px;overflow:hidden;
-  box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 0 10px #1c1c1e,0 0 0 11px #3a3a3c}
-#encoche{position:absolute;top:0;left:50%;translate:-50% 0;width:38%;height:26px;
-  background:#000;border-radius:0 0 18px 18px;z-index:50}
+#scene{position:fixed;inset:0;display:grid;place-items:center}
+#ecran{position:relative;width:min(100vw,calc(100vh * 16 / 9));
+  aspect-ratio:16/9;background:#000;border-radius:clamp(10px,1.6vw,22px);overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08)}
 
 video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#1c1c1e}
 
 /* ---------- écran d'appel entrant ---------- */
 #entrant{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;
-  align-items:center;background:linear-gradient(160deg,#3a3a4a,#1c1c26);
+  align-items:center;justify-content:center;gap:0;
+  background:linear-gradient(160deg,#3a3a4a,#1c1c26);
   opacity:1;transition:opacity .5s}
 #entrant.parti{opacity:0;pointer-events:none}
-#entrant .avatar{width:132px;height:132px;border-radius:50%;margin-top:110px;
+#entrant .avatar{width:clamp(90px,16vh,150px);height:clamp(90px,16vh,150px);border-radius:50%;
   background:#2c2c34 center/cover;box-shadow:0 10px 30px rgba(0,0,0,.4);
-  border:3px solid rgba(255,255,255,.15)}
-#entrant .nom{color:#fff;font-size:30px;font-weight:600;margin-top:22px}
-#entrant .sous{color:rgba(255,255,255,.6);font-size:15px;margin-top:6px;
+  border:3px solid rgba(255,255,255,.15);margin-bottom:2.2vh;margin-top:-8vh}
+#entrant .nom{color:#fff;font-size:clamp(22px,4vh,34px);font-weight:600}
+#entrant .sous{color:rgba(255,255,255,.6);font-size:clamp(13px,2vh,17px);margin-top:.8vh;
   animation:clignote 1.6s ease-in-out infinite}
 @keyframes clignote{0%,100%{opacity:.6}50%{opacity:1}}
-#entrant .boutons{position:absolute;bottom:64px;left:0;right:0;
-  display:flex;justify-content:space-around;padding:0 50px}
-.rond{width:64px;height:64px;border-radius:50%;border:none;cursor:pointer;
+#entrant .boutons{position:absolute;bottom:9vh;left:50%;translate:-50% 0;
+  display:flex;gap:clamp(60px,14vw,180px)}
+.rond{width:clamp(54px,9vh,72px);height:clamp(54px,9vh,72px);border-radius:50%;border:none;cursor:pointer;
   display:grid;place-items:center;transition:transform .2s}
 .rond:hover{transform:scale(1.08)}
 .rond.raccrocher{background:var(--rouge)}
 .rond.decrocher{background:var(--vert);animation:pulse 1.4s ease-in-out infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(52,199,89,.5)}
   50%{box-shadow:0 0 0 14px rgba(52,199,89,0)}}
-.rond svg{width:26px;height:26px}
-.rond .etiq{position:absolute;margin-top:78px;color:rgba(255,255,255,.75);font-size:12px}
+.rond svg{width:40%;height:40%}
+.etiq{position:absolute;left:50%;translate:-50% 0;margin-top:clamp(60px,10vh,84px);
+  color:rgba(255,255,255,.75);font-size:clamp(11px,1.7vh,13px);white-space:nowrap}
 
 /* ---------- barre d'appel en cours (haut) ---------- */
-#barre{position:absolute;top:0;left:0;right:0;z-index:30;padding:34px 18px 40px;
-  display:flex;flex-direction:column;align-items:center;color:#fff;
+#barre{position:absolute;top:0;left:0;right:0;z-index:30;padding:2.4vh 2.4vw 5vh;
+  display:flex;flex-direction:column;align-items:flex-start;color:#fff;
   background:linear-gradient(rgba(0,0,0,.55),transparent);
   opacity:0;transition:opacity .4s;pointer-events:none}
 #barre.vu{opacity:1}
-#barre .nom{font-size:19px;font-weight:600}
-#barre .chrono{font-size:13px;color:rgba(255,255,255,.75);margin-top:2px;
+#barre .nom{font-size:clamp(15px,2.6vh,21px);font-weight:600}
+#barre .chrono{font-size:clamp(11px,1.8vh,14px);color:rgba(255,255,255,.75);margin-top:2px;
   font-variant-numeric:tabular-nums}
 
 /* ---------- PIP (vue de l'apprenant, factice) ---------- */
-#pip{position:absolute;top:96px;right:16px;width:74px;height:100px;border-radius:14px;
+#pip{position:absolute;top:2.4vh;right:1.6vw;width:clamp(96px,16vw,190px);aspect-ratio:16/10;
+  border-radius:clamp(8px,1.4vh,14px);
   background:linear-gradient(160deg,#2a2a32,#111114);z-index:30;
   box-shadow:0 6px 18px rgba(0,0,0,.4);display:grid;place-items:center;
   opacity:0;transition:opacity .4s}
 #pip.vu{opacity:1}
-#pip svg{width:30px;height:30px;opacity:.35}
+#pip svg{width:32%;height:32%;opacity:.35}
 
-/* ---------- bulle de texte (remplace une vidéo manquante) ---------- */
-#bulleTexte{position:absolute;left:16px;right:16px;bottom:190px;z-index:32;
-  background:rgba(255,255,255,.96);color:#1c1c1e;border-radius:20px;padding:18px 20px;
-  font-size:16px;font-weight:600;line-height:1.4;box-shadow:0 14px 34px rgba(0,0,0,.35);
+/* ---------- bulle de texte (repli si une vidéo manque) ---------- */
+#bulleTexte{position:absolute;left:3vw;right:3vw;bottom:19vh;z-index:32;
+  background:rgba(255,255,255,.96);color:#1c1c1e;border-radius:20px;padding:2vh 2vw;
+  font-size:clamp(14px,2.3vh,19px);font-weight:600;line-height:1.4;box-shadow:0 14px 34px rgba(0,0,0,.35);
   opacity:0;transform:translateY(14px);transition:opacity .35s,transform .35s}
 #bulleTexte.vu{opacity:1;transform:none}
-#bulleTexte::after{content:"";position:absolute;left:34px;bottom:-9px;width:18px;height:18px;
-  background:inherit;clip-path:polygon(0 0,100% 0,0 100%)}
 
 /* ---------- choix ---------- */
-#choix{position:absolute;left:16px;right:16px;bottom:112px;z-index:35;
-  display:flex;flex-direction:column;gap:10px;opacity:0;pointer-events:none;
+#choix{position:absolute;left:3vw;right:3vw;bottom:14vh;z-index:35;
+  display:flex;justify-content:center;gap:1.6vw;opacity:0;pointer-events:none;
   transition:opacity .35s}
 #choix.vu{opacity:1;pointer-events:auto}
-.rep{font-family:inherit;font-size:15.5px;font-weight:700;color:#fff;text-align:left;
+.rep{font-family:inherit;font-size:clamp(14px,2.3vh,19px);font-weight:700;color:#fff;text-align:center;
+  flex:0 1 46%;
   background:var(--verre);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  border:1px solid rgba(255,255,255,.28);border-radius:18px;padding:14px 18px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.28);border-radius:18px;padding:1.8vh 1.6vw;cursor:pointer;
   animation:arrivee .4s cubic-bezier(.3,1.4,.5,1) both}
 #choix .rep:nth-child(2){animation-delay:.1s}
 @keyframes arrivee{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -95,44 +95,43 @@ video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;backgrou
 .rep.efface{opacity:0}
 
 /* ---------- contrôles bas d'appel ---------- */
-#controles{position:absolute;bottom:0;left:0;right:0;z-index:30;padding:16px 26px 30px;
-  display:flex;justify-content:space-between;align-items:center;
+#controles{position:absolute;bottom:0;left:0;right:0;z-index:30;padding:2vh 0 2.6vh;
+  display:flex;justify-content:center;align-items:center;gap:2vw;
   background:linear-gradient(transparent,rgba(0,0,0,.5));
   opacity:0;transition:opacity .4s;pointer-events:none}
 #controles.vu{opacity:1;pointer-events:auto}
-.mini{width:52px;height:52px;border-radius:50%;border:none;background:var(--verre);
+.mini{width:clamp(40px,7vh,54px);height:clamp(40px,7vh,54px);border-radius:50%;border:none;background:var(--verre);
   backdrop-filter:blur(10px);display:grid;place-items:center;cursor:default}
-.mini svg{width:22px;height:22px;stroke:#fff}
-#raccrocherAppel{width:58px;height:58px;border-radius:50%;border:none;background:var(--rouge);
+.mini svg{width:42%;height:42%;stroke:#fff}
+#raccrocherAppel{width:clamp(46px,8vh,62px);height:clamp(46px,8vh,62px);border-radius:50%;border:none;background:var(--rouge);
   display:grid;place-items:center;cursor:pointer;transition:transform .2s}
 #raccrocherAppel:hover{transform:scale(1.06)}
-#raccrocherAppel svg{width:24px;height:24px}
+#raccrocherAppel svg{width:42%;height:42%}
 
 /* ---------- fin d'appel ---------- */
 #fin{position:absolute;inset:0;z-index:45;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:18px;color:#fff;text-align:center;
+  align-items:center;justify-content:center;gap:1.8vh;color:#fff;text-align:center;
   background:rgba(10,10,12,.92);opacity:0;pointer-events:none;transition:opacity .5s}
 #fin.vu{opacity:1;pointer-events:auto}
-#fin .avatar{width:104px;height:104px;border-radius:50%;background:#2c2c34 center/cover;
+#fin .avatar{width:clamp(80px,14vh,120px);height:clamp(80px,14vh,120px);border-radius:50%;background:#2c2c34 center/cover;
   border:3px solid rgba(255,255,255,.15)}
-#fin h1{font-size:22px;font-weight:600}
-#fin p{font-size:14px;color:rgba(255,255,255,.6);max-width:260px}
-#revoir{margin-top:8px;font-family:inherit;font-size:14px;font-weight:700;color:#fff;
+#fin h1{font-size:clamp(18px,3.2vh,26px);font-weight:600}
+#fin p{font-size:clamp(12px,2vh,15px);color:rgba(255,255,255,.6);max-width:320px}
+#revoir{margin-top:.8vh;font-family:inherit;font-size:clamp(12px,2vh,15px);font-weight:700;color:#fff;
   background:var(--verre);border:1px solid rgba(255,255,255,.28);border-radius:999px;
-  padding:12px 26px;cursor:pointer}
+  padding:1.4vh 2.6vw;cursor:pointer}
 #revoir:hover{background:rgba(255,255,255,.22)}
 </style>
 </head>
 <body>
-<div id="tel"><div id="ecran">
-  <div id="encoche"></div>
+<div id="scene"><div id="ecran">
 
-  <video id="vid" playsinline preload="auto"></video>
+  <video id="vid" playsinline preload="auto" poster="facetime-lisa-poster.png"></video>
 
   <div id="entrant">
-    <div class="avatar" style="background-image:url('facetime-lisa-poster.png')"></div>
+    <div class="avatar" style="background-image:url('facetime-lisa-avatar.png')"></div>
     <div class="nom">Lisa</div>
-    <div class="sous">FaceTime…</div>
+    <div class="sous">Appel vidéo…</div>
     <div class="boutons">
       <div style="position:relative">
         <button class="rond raccrocher" id="refuser" aria-label="Refuser">
@@ -165,7 +164,7 @@ video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;backgrou
   </div>
 
   <div id="fin">
-    <div class="avatar" style="background-image:url('facetime-lisa-poster.png')"></div>
+    <div class="avatar" style="background-image:url('facetime-lisa-avatar.png')"></div>
     <h1>Appel terminé</h1>
     <p id="finDuree">Durée : 0:00</p>
     <button id="revoir">Rappeler Lisa</button>
@@ -176,26 +175,22 @@ video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;backgrou
 const $ = s => document.querySelector(s);
 const vid = $('#vid');
 
-/* Le second choix (C/D) : D n'a pas de vidéo générée pour ce test
-   (budget de crédits épuisé) — sa réaction reste en bulle de texte,
-   exactement le repli prévu si l'arbre complet dépasse le budget. */
+/* Arbre : V1 → choix 1 (A/B) → V2a/V2b → choix 2 (C/D) → V3a/V3b → V4 (commune) */
 const ARBRE = {
-  v1:   { src: 'facetime-lisa-v1.mp4',
-          choix: [
-            { texte: "Whoa, je savais pas du tout, c'est énorme !", suite: 'v2a' },
-            { texte: "Ouais, j'avais déjà entendu ces chiffres.",   suite: 'v2b' },
-          ] },
-  v2a:  { src: 'facetime-lisa-v2a.mp4', choix: 'choix2' },
-  v2b:  { src: 'facetime-lisa-v2b.mp4', choix: 'choix2' },
-  v3a:  { src: 'facetime-lisa-v3a.mp4', suite: 'v4' },
-  v3bTexte: {
-          texte: "T'inquiète, c'est hyper courant au début. En gros il faut un mélange de formations exigeantes, réalistes et de secours, on va voir ça ensemble juste après.",
-          suite: 'v4' },
-  v4:   { src: 'facetime-lisa-v4.mp4', fin: true },
+  v1:  { src: 'facetime-lisa-v1.mp4',
+         choix: [
+           { texte: "Quoi ? Autant que ça ?!",         suite: 'v2a' },
+           { texte: "Ouais, on m'en avait déjà parlé.", suite: 'v2b' },
+         ] },
+  v2a: { src: 'facetime-lisa-v2a.mp4', choix: 'choix2' },
+  v2b: { src: 'facetime-lisa-v2b.mp4', choix: 'choix2' },
+  v3a: { src: 'facetime-lisa-v3a.mp4', suite: 'v4' },
+  v3b: { src: 'facetime-lisa-v3b.mp4', suite: 'v4' },
+  v4:  { src: 'facetime-lisa-v4.mp4', fin: true },
 };
 const CHOIX2 = [
-  { texte: "Comment on fait pour bien les préparer ?", suite: 'v3a' },
-  { texte: "Justement, c'est un peu flou pour moi.",    suite: 'v3bTexte' },
+  { texte: "Et concrètement, on fait comment ?", suite: 'v3a' },
+  { texte: "Ça, c'est encore flou pour moi…",    suite: 'v3b' },
 ];
 
 let debut = null, chronoId = null;
@@ -210,6 +205,9 @@ function lanceChrono(){
     $('#chrono').textContent = formate((Date.now() - debut) / 1000);
   }, 500);
 }
+
+/* Préchargement discret des clips pour éviter les blancs entre deux répliques */
+for(const k in ARBRE){ const l = document.createElement('link'); l.rel = 'preload'; l.as = 'video'; l.href = ARBRE[k].src; document.head.appendChild(l); }
 
 $('#accepter').addEventListener('click', () => {
   $('#entrant').classList.add('parti');
@@ -275,7 +273,7 @@ $('#refuser').addEventListener('click', () => { $('#entrant .sous').textContent 
 $('#revoir').addEventListener('click', () => {
   $('#fin').classList.remove('vu');
   $('#entrant').classList.remove('parti');
-  $('#entrant .sous').textContent = 'FaceTime…';
+  $('#entrant .sous').textContent = 'Appel vidéo…';
   vid.pause(); vid.removeAttribute('src');
   $('#chrono').textContent = '00:00';
 });
