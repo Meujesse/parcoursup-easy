@@ -118,3 +118,6 @@ html,body{height:100%;margin:0;background:#0b1a1f;overflow:hidden;
 /* pulsation du bouton accueil (classe presente dans le SVG Genially) */
 .pulse-home{fill:rgba(234,31,92,.25);animation:pulseHome 1.6s ease-out infinite;transform-origin:50% 50%}
 @keyframes pulseHome{0%{transform:scale(.8);opacity:.9}100%{transform:scale(1.15);opacity:0}}
+
+/* filigrane Meujesse Learning (equivalent du logo Genially en bas a gauche) */
+#filigrane{position:absolute;left:16px;bottom:12px;height:36px;width:auto;z-index:55;pointer-events:none}
