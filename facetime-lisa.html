@@ -39,7 +39,7 @@ video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;backgrou
 #entrant .sous{color:rgba(255,255,255,.6);font-size:clamp(13px,2vh,17px);margin-top:.8vh;
   animation:clignote 1.6s ease-in-out infinite}
 @keyframes clignote{0%,100%{opacity:.6}50%{opacity:1}}
-#entrant .boutons{position:absolute;bottom:9vh;left:50%;translate:-50% 0;
+#entrant .boutons{position:absolute;bottom:13vh;left:50%;translate:-50% 0;
   display:flex;gap:clamp(60px,14vw,180px)}
 .rond{width:clamp(54px,9vh,72px);height:clamp(54px,9vh,72px);border-radius:50%;border:none;cursor:pointer;
   display:grid;place-items:center;transition:transform .2s}
@@ -49,7 +49,7 @@ video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;backgrou
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(52,199,89,.5)}
   50%{box-shadow:0 0 0 14px rgba(52,199,89,0)}}
 .rond svg{width:40%;height:40%}
-.etiq{position:absolute;left:50%;translate:-50% 0;margin-top:clamp(60px,10vh,84px);
+.etiq{position:absolute;left:50%;top:calc(100% + 1vh);translate:-50% 0;
   color:rgba(255,255,255,.75);font-size:clamp(11px,1.7vh,13px);white-space:nowrap}
 
 /* ---------- barre d'appel en cours (haut) ---------- */
