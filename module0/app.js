@@ -66,9 +66,9 @@
     return d;
   }
   function rendImage(e){
-    const d = el('div', 'el image' + (e.frame === 'img-circle' ? ' cercle' : ''));
+    const d = el('div', 'el image' + (e.frame === 'img-circle' ? ' cercle' : '') + (/border-white/.test(e.frame || '') ? ' cadre-blanc' : '') + (/shadow/.test(e.frame || '') ? ' ombre' : ''));
     styleBase(d, e);
-    const im = el('img'); im.src = e.src; im.alt = e.name || ''; im.draggable = false;
+    const im = el('img'); im.src = /\.gif$/i.test(e.src) ? e.src + '?t=' + Date.now() : e.src; im.alt = e.name || ''; im.draggable = false;   // un GIF sans boucle doit repartir du debut a chaque affichage
     if(e.offset){
       const o = e.offset, l = o.left || 0, r = o.right || 0, t = o.top || 0, b = o.bottom || 0;
       im.style.width = (100 - l - r) + '%'; im.style.height = (100 - t - b) + '%';

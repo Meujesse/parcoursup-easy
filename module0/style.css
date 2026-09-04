@@ -9,7 +9,9 @@ html,body{height:100%;margin:0;background:#0b1a1f;overflow:hidden;
 #fit{position:fixed;inset:0;display:grid;place-items:center}
 #cadre{position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45)}
 #stage{position:absolute;left:0;top:0;width:1200px;height:675px;transform-origin:0 0;background:var(--teal-clair);overflow:hidden}
-.slide{position:absolute;inset:0;overflow:hidden}
+.slide{position:absolute;inset:0;overflow:hidden;animation:pageIn .45s ease both}
+@keyframes pageIn{from{opacity:0}to{opacity:1}}
+.sans-anim .slide{animation:none}
 .slide .fond-img{position:absolute;inset:0;background:url(assets/fond-standard.png) center/100% 100% no-repeat;pointer-events:none}
 .el{position:absolute;transform-origin:50% 50%}
 .el.cache{visibility:hidden}
@@ -20,13 +22,15 @@ html,body{height:100%;margin:0;background:#0b1a1f;overflow:hidden;
 .el.image{overflow:hidden}
 .el.image img{position:absolute;left:0;top:0;width:100%;height:100%;display:block;object-fit:fill}
 .el.image.cercle{border-radius:50%}
+.el.image.cadre-blanc{border:16px solid #fff;border-radius:6px;background:#fff}
+.el.image.ombre{box-shadow:0 14px 34px rgba(0,0,0,.28)}
 .el.svg svg{display:block;width:100%;height:100%;overflow:visible}
-.el.svg.composite{display:flex}
+.el.svg.composite{display:flex;justify-content:center}
 .el.svg.composite>div{display:flex;width:100%;height:100%}
 .el.svg.composite svg{width:auto;height:100%;flex:none}
 .el.svg.composite svg[width="100%"]{width:100%;flex:1 1 auto}
 .el.groupe{overflow:visible}
-.el.cadre-video{background:#000;border-radius:14px;overflow:hidden}
+.el.cadre-video{background:#000;overflow:hidden}
 .el.cadre-video video{width:100%;height:100%;display:block;background:#000}
 .el.iframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#fff}
 
@@ -94,24 +98,30 @@ html,body{height:100%;margin:0;background:#0b1a1f;overflow:hidden;
 #reprise .oui{background:var(--rose);color:#fff}
 #reprise .non{background:#e9f1f4;color:#14232b}
 
-/* ---- animations d'entree (equivalents Genially) ---- */
-.fx{animation-fill-mode:both;animation-timing-function:cubic-bezier(.25,.8,.3,1)}
-.fx-fade-in{animation-name:fadeIn}
-.fx-fade-in-bottom{animation-name:fadeInBottom}
-.fx-fade-in-right{animation-name:fadeInRight}
-.fx-fade-in-left{animation-name:fadeInLeft}
-.fx-scale-in-center{animation-name:scaleIn}
-.fx-slide-in-left{animation-name:slideInLeft}
-.fx-slide-in-right{animation-name:slideInRight}
+/* ---- animations d'entree : definitions Animista, celles qu'utilise Genially ---- */
+.fx{animation-fill-mode:both}
+.fx-fade-in{animation-name:fadeIn;animation-timing-function:cubic-bezier(.39,.575,.565,1)}
+.fx-fade-in-bottom{animation-name:fadeInBottom;animation-timing-function:cubic-bezier(.39,.575,.565,1)}
+.fx-fade-in-top{animation-name:fadeInTop;animation-timing-function:cubic-bezier(.39,.575,.565,1)}
+.fx-fade-in-right{animation-name:fadeInRight;animation-timing-function:cubic-bezier(.39,.575,.565,1)}
+.fx-fade-in-left{animation-name:fadeInLeft;animation-timing-function:cubic-bezier(.39,.575,.565,1)}
+.fx-scale-in-center{animation-name:scaleIn;animation-timing-function:cubic-bezier(.25,.46,.45,.94)}
+.fx-slide-in-left{animation-name:slideInLeft;animation-timing-function:cubic-bezier(.25,.46,.45,.94)}
+.fx-slide-in-right{animation-name:slideInRight;animation-timing-function:cubic-bezier(.25,.46,.45,.94)}
+.fx-slide-in-top{animation-name:slideInTop;animation-timing-function:cubic-bezier(.25,.46,.45,.94)}
+.fx-slide-in-bottom{animation-name:slideInBottom;animation-timing-function:cubic-bezier(.25,.46,.45,.94)}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes fadeInBottom{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
-@keyframes fadeInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
-@keyframes fadeInLeft{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
-@keyframes scaleIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
-@keyframes slideInLeft{from{transform:translateX(-120%)}to{transform:none}}
-@keyframes slideInRight{from{transform:translateX(120%)}to{transform:none}}
+@keyframes fadeInBottom{from{opacity:0;transform:translateY(50px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInTop{from{opacity:0;transform:translateY(-50px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInRight{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeInLeft{from{opacity:0;transform:translateX(-50px)}to{opacity:1;transform:translateX(0)}}
+@keyframes scaleIn{from{opacity:1;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-1000px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(1000px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInTop{from{opacity:0;transform:translateY(-1000px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideInBottom{from{opacity:0;transform:translateY(1000px)}to{opacity:1;transform:translateY(0)}}
 .el.tourne.fx-scale-in-center{animation-name:scaleInRot}
-@keyframes scaleInRot{from{opacity:0;transform:rotate(var(--rot)) scale(.6)}to{opacity:1;transform:rotate(var(--rot))}}
+@keyframes scaleInRot{from{opacity:1;transform:rotate(var(--rot)) scale(0)}to{opacity:1;transform:rotate(var(--rot)) scale(1)}}
 @media (prefers-reduced-motion:reduce){.fx{animation:none!important}}
 .sans-anim .fx,.sans-anim #popup .slide{animation:none!important}
 
