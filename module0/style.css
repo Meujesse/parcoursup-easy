@@ -1,0 +1,120 @@
+/* Module 0 Parcoursup'easy — reconstruction autonome (16:9, 1200x675) */
+:root{
+  --rose:#ea1f5c; --teal:#127992; --teal-clair:#6fb3c3; --violet:#7c7baa;
+  --gris:#494949; --blanc:#fff;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:#0b1a1f;overflow:hidden;
+  font-family:Montserrat,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+#fit{position:fixed;inset:0;display:grid;place-items:center}
+#cadre{position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+#stage{position:absolute;left:0;top:0;width:1200px;height:675px;transform-origin:0 0;background:var(--teal-clair);overflow:hidden}
+.slide{position:absolute;inset:0;overflow:hidden}
+.slide .fond-img{position:absolute;inset:0;background:url(assets/fond-standard.png) center/100% 100% no-repeat;pointer-events:none}
+.el{position:absolute;transform-origin:50% 50%}
+.el.cache{visibility:hidden}
+.el.cliquable{cursor:pointer}
+.el.texte p{margin:0}
+.el.texte ul,.el.texte ol{margin:0;padding-left:1.2em}
+.el.texte a{color:inherit}
+.el.image{overflow:hidden}
+.el.image img{position:absolute;left:0;top:0;width:100%;height:100%;display:block;object-fit:fill}
+.el.image.cercle{border-radius:50%}
+.el.svg svg{display:block;width:100%;height:100%;overflow:visible}
+.el.svg.composite{display:flex}
+.el.svg.composite>div{display:flex;width:100%;height:100%}
+.el.svg.composite svg{width:auto;height:100%;flex:none}
+.el.svg.composite svg[width="100%"]{width:100%;flex:1 1 auto}
+.el.groupe{overflow:visible}
+.el.cadre-video{background:#000;border-radius:14px;overflow:hidden}
+.el.cadre-video video{width:100%;height:100%;display:block;background:#000}
+.el.iframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#fff}
+
+/* ---- bulle de Lisa (widget) ---- */
+.bulle-lisa{position:absolute;border-radius:22px;line-height:1.35;box-shadow:0 10px 30px rgba(9,58,72,.10)}
+.bulle-lisa::before{content:"";position:absolute;width:26px;height:26px;background:inherit;border-right:inherit;border-bottom:inherit;
+  transform:rotate(-45deg)}
+.bulle-lisa.queue-right::before{right:-14px;top:50%;margin-top:-13px;border-right:inherit;border-bottom:inherit;transform:rotate(-45deg)}
+.bulle-lisa.queue-left::before{left:-14px;top:50%;margin-top:-13px;border-left:inherit;border-bottom:inherit;transform:rotate(45deg)}
+.bulle-lisa.queue-bottom::before{bottom:-14px;left:50%;margin-left:-13px;transform:rotate(45deg)}
+.bulle-lisa.queue-top::before{top:-14px;left:50%;margin-left:-13px;border-left:inherit;border-top:inherit;border-right:0;border-bottom:0;transform:rotate(45deg)}
+
+/* ---- quiz ---- */
+.quiz{position:absolute;display:flex;flex-direction:column;gap:14px;padding:22px 24px;border:1px solid rgba(255,255,255,.9);border-radius:12px;
+  font-family:"Schibsted Grotesk",Montserrat,system-ui,sans-serif;color:#fff}
+.quiz .q{font-size:24px;line-height:1.33;font-weight:600}
+.quiz .reps{display:flex;flex-direction:column;gap:12px}
+.quiz .rep{display:flex;align-items:center;gap:12px;text-align:left;font:inherit;font-size:20px;line-height:1.3;color:#fff;
+  background:var(--teal);border:2px solid transparent;border-radius:6px;padding:10px 16px;cursor:pointer;transition:border-color .15s,transform .15s}
+.quiz .rep:hover{transform:translateX(3px)}
+.quiz .rep.choisie{border-color:#fff;background:#0f6a80}
+.quiz .rep .puce{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.8);flex:none;display:grid;place-items:center}
+.quiz .rep.choisie .puce::after{content:"";width:10px;height:10px;border-radius:50%;background:#fff}
+.quiz .pied{display:flex;justify-content:flex-end;align-items:center;gap:14px;margin-top:auto}
+.quiz .envoyer{font:inherit;font-size:16px;font-weight:600;color:#f9f8fc;background:var(--rose);border:0;border-radius:999px;padding:9px 22px;cursor:pointer;opacity:.5}
+.quiz .envoyer.pret{opacity:1}
+.quiz .envoyer.fait{background:#25a782}
+.quiz .note{font-size:14px;color:#0b5468;background:rgba(255,255,255,.92);padding:6px 10px;border-radius:8px;opacity:0;transition:opacity .3s}
+.quiz .note.vu{opacity:1}
+
+/* ---- navigation ---- */
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border:0;border-radius:6px;background:rgba(40,52,58,.85);
+  color:#fff;display:grid;place-items:center;cursor:pointer;z-index:60;box-shadow:0 4px 12px rgba(0,0,0,.25);transition:opacity .25s}
+.nav:hover{background:rgba(40,52,58,1)}
+.nav svg{width:18px;height:18px;stroke:#fff;stroke-width:2.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+#navPrec{left:12px}#navSuiv{right:12px}
+.nav[disabled]{opacity:0;pointer-events:none}
+#compteur{position:absolute;right:16px;bottom:12px;z-index:60;font-size:13px;color:#fff;background:rgba(40,52,58,.7);border-radius:999px;padding:4px 10px;
+  font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:8px}
+#compteur .barre{width:70px;height:5px;border-radius:3px;background:rgba(255,255,255,.25);overflow:hidden}
+#compteur .barre i{display:block;height:100%;background:#fff;width:0;transition:width .4s}
+
+/* ---- fenetre (popup) ---- */
+#voile{position:absolute;inset:0;background:rgba(9,30,38,.55);z-index:70;opacity:0;pointer-events:none;transition:opacity .3s}
+#voile.vu{opacity:1;pointer-events:auto}
+#popup{position:absolute;inset:0;z-index:71;pointer-events:none}
+#popup.vu{pointer-events:auto}
+#popup .slide{animation:pop .35s cubic-bezier(.3,1.3,.5,1) both}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+
+/* ---- infobulle ---- */
+#infobulle{position:absolute;z-index:80;max-width:320px;border-radius:14px;box-shadow:0 14px 34px rgba(0,0,0,.25);font-size:18px;line-height:1.35;
+  opacity:0;pointer-events:none;transition:opacity .2s;font-family:Montserrat,system-ui,sans-serif}
+#infobulle.vu{opacity:1}
+#infobulle p{margin:0}
+
+/* ---- reprise ---- */
+#reprise{position:absolute;inset:0;z-index:90;display:none;place-items:center;background:rgba(9,30,38,.6)}
+#reprise.vu{display:grid}
+#reprise .boite{background:#fff;border-radius:18px;padding:28px 32px;max-width:520px;text-align:center;color:#14232b;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+#reprise h2{margin:0 0 8px;font-size:24px}
+#reprise p{margin:0 0 18px;font-size:16px;color:#3e5560}
+#reprise .btns{display:flex;gap:12px;justify-content:center}
+#reprise button{font:inherit;font-weight:700;font-size:15px;border:0;border-radius:999px;padding:11px 22px;cursor:pointer}
+#reprise .oui{background:var(--rose);color:#fff}
+#reprise .non{background:#e9f1f4;color:#14232b}
+
+/* ---- animations d'entree (equivalents Genially) ---- */
+.fx{animation-fill-mode:both;animation-timing-function:cubic-bezier(.25,.8,.3,1)}
+.fx-fade-in{animation-name:fadeIn}
+.fx-fade-in-bottom{animation-name:fadeInBottom}
+.fx-fade-in-right{animation-name:fadeInRight}
+.fx-fade-in-left{animation-name:fadeInLeft}
+.fx-scale-in-center{animation-name:scaleIn}
+.fx-slide-in-left{animation-name:slideInLeft}
+.fx-slide-in-right{animation-name:slideInRight}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeInBottom{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes fadeInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes fadeInLeft{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@keyframes slideInLeft{from{transform:translateX(-120%)}to{transform:none}}
+@keyframes slideInRight{from{transform:translateX(120%)}to{transform:none}}
+.el.tourne.fx-scale-in-center{animation-name:scaleInRot}
+@keyframes scaleInRot{from{opacity:0;transform:rotate(var(--rot)) scale(.6)}to{opacity:1;transform:rotate(var(--rot))}}
+@media (prefers-reduced-motion:reduce){.fx{animation:none!important}}
+.sans-anim .fx,.sans-anim #popup .slide{animation:none!important}
+
+/* pulsation du bouton accueil (classe presente dans le SVG Genially) */
+.pulse-home{fill:rgba(234,31,92,.25);animation:pulseHome 1.6s ease-out infinite;transform-origin:50% 50%}
+@keyframes pulseHome{0%{transform:scale(.8);opacity:.9}100%{transform:scale(1.15);opacity:0}}

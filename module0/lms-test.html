@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Banc d'essai LMS · Module 0</title>
+<style>
+:root{--teal:#127992;--rose:#ea1f5c;--ink:#14232b;--muted:#6b8088;--line:#cfdde2;--panel:#fff;--paper:#f2f6f8}
+*{box-sizing:border-box}
+body{margin:0;height:100vh;display:grid;grid-template-columns:1fr 420px;background:var(--paper);font-family:"Nunito Sans",Montserrat,system-ui,sans-serif;color:var(--ink)}
+#gauche{position:relative;background:#0b1a1f}
+#gauche iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+#droite{display:flex;flex-direction:column;border-left:1px solid var(--line);background:var(--panel);min-height:0}
+header{padding:14px 16px;border-bottom:1px solid var(--line)}
+header h1{margin:0;font-size:16px;font-family:Montserrat,sans-serif}
+header p{margin:4px 0 0;font-size:12.5px;color:var(--muted)}
+.outils{display:flex;flex-wrap:wrap;gap:6px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.outils button,.outils label{font:inherit;font-size:12.5px;font-weight:700;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;cursor:pointer}
+.outils button.rose{background:var(--rose);color:#fff;border-color:transparent}
+main{overflow:auto;padding:12px 16px;font-size:13px;flex:1}
+h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-variant-numeric:tabular-nums}
+.kv b{color:var(--teal);font-weight:700;white-space:nowrap}
+.inter{border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:8px;background:#fbfdfe}
+.inter .id{font-weight:800;color:var(--ink)}
+.inter .q{color:var(--muted);font-size:12px;margin:2px 0}
+.inter .r{color:var(--rose);font-weight:700;word-break:break-word}
+.inter .meta{font-size:11.5px;color:var(--muted)}
+pre{white-space:pre-wrap;word-break:break-word;font-size:11.5px;background:#f2f6f8;padding:8px;border-radius:8px;max-height:200px;overflow:auto}
+.vide{color:var(--muted);font-style:italic}
+</style>
+</head>
+<body>
+<div id="gauche"><iframe id="cours" title="Module 0" allow="autoplay; fullscreen"></iframe></div>
+<div id="droite">
+  <header><h1>Banc d'essai LMS</h1><p>Ce panneau joue le rôle d'une plateforme SCORM et affiche, en direct, tout ce que le module lui envoie.</p></header>
+  <div class="outils">
+    <label><input type="radio" name="v" value="2004" checked> SCORM 2004</label>
+    <label><input type="radio" name="v" value="1.2"> SCORM 1.2</label>
+    <button id="reset">Réinitialiser l'apprenant</button>
+    <button id="export" class="rose">Exporter les données (JSON)</button>
+  </div>
+  <main>
+    <h2>Statut</h2><div class="kv" id="statut"></div>
+    <h2>Interactions (réponses de l'apprenant)</h2><div id="inters"><p class="vide">Aucune interaction pour l'instant.</p></div>
+    <h2>Données brutes (suspend_data, commentaires)</h2><pre id="brut"></pre>
+    <h2>Journal des appels</h2><pre id="journal"></pre>
+  </main>
+</div>
+<script>
+/* ---- faux LMS : implemente les deux API SCORM ---- */
+const data = {}; let journal = []; let version = '2004'; let init = false;
+function log(s){ journal.push(new Date().toTimeString().slice(0,8) + ' ' + s); if(journal.length > 200) journal.shift(); }
+function defaults(){
+  for(const k in data) delete data[k];
+  if(version === '2004'){
+    Object.assign(data, {'cmi.learner_name':'Élève Test', 'cmi.learner_id':'test-001', 'cmi.completion_status':'unknown', 'cmi.success_status':'unknown',
+      'cmi.suspend_data':'', 'cmi.location':'', 'cmi.entry':'ab-initio', 'cmi.mode':'normal', 'cmi.credit':'credit', 'cmi.interactions._count':'0', 'cmi.comments_from_learner._count':'0'});
+  }else{
+    Object.assign(data, {'cmi.core.student_name':'Élève Test', 'cmi.core.student_id':'test-001', 'cmi.core.lesson_status':'not attempted', 'cmi.suspend_data':'',
+      'cmi.core.lesson_location':'', 'cmi.core.entry':'ab-initio', 'cmi.core.lesson_mode':'normal', 'cmi.core.credit':'credit', 'cmi.interactions._count':'0', 'cmi.comments':''});
+  }
+}
+function setValue(k, v){
+  data[k] = String(v);
+  const m = k.match(/^cmi\.interactions\.(\d+)\./); if(m){ data['cmi.interactions._count'] = String(Math.max(parseInt(data['cmi.interactions._count']||'0'), parseInt(m[1]) + 1)); }
+  const c = k.match(/^cmi\.comments_from_learner\.(\d+)\./); if(c){ data['cmi.comments_from_learner._count'] = String(Math.max(parseInt(data['cmi.comments_from_learner._count']||'0'), parseInt(c[1]) + 1)); }
+  log('Set ' + k + ' = ' + String(v).slice(0, 80)); rafraichit(); sauve(); return 'true';
+}
+function getValue(k){ log('Get ' + k + ' → ' + String(data[k] === undefined ? '' : data[k]).slice(0, 60)); return data[k] === undefined ? '' : data[k]; }
+window.API_1484_11 = {Initialize(){ init = true; log('Initialize'); return 'true'; }, Terminate(){ log('Terminate'); return 'true'; }, GetValue:getValue, SetValue:setValue, Commit(){ log('Commit'); return 'true'; }, GetLastError(){ return '0'; }, GetErrorString(){ return ''; }, GetDiagnostic(){ return ''; }};
+window.API = {LMSInitialize(){ init = true; log('LMSInitialize'); return 'true'; }, LMSFinish(){ log('LMSFinish'); return 'true'; }, LMSGetValue:getValue, LMSSetValue:setValue, LMSCommit(){ log('LMSCommit'); return 'true'; }, LMSGetLastError(){ return '0'; }, LMSGetErrorString(){ return ''; }, LMSGetDiagnostic(){ return ''; }};
+/* le module cherche d'abord API_1484_11 : en mode 1.2 on la retire */
+function applique(){
+  if(version === '1.2'){ window.API_1484_11 = undefined; } else if(!window.API_1484_11){ location.reload(); }
+}
+const CLE = 'pe-banc-lms';
+function sauve(){ try{ localStorage.setItem(CLE, JSON.stringify({version, data})); }catch(e){} }
+function charge(){ try{ const s = JSON.parse(localStorage.getItem(CLE)); if(s && s.data){ version = s.version || '2004'; Object.assign(data, s.data); return true; } }catch(e){} return false; }
+
+function rafraichit(){
+  const st = document.getElementById('statut'); st.innerHTML = '';
+  const cles = version === '2004' ? ['cmi.learner_name','cmi.completion_status','cmi.success_status','cmi.score.raw','cmi.score.scaled','cmi.progress_measure','cmi.location','cmi.session_time']
+                                   : ['cmi.core.student_name','cmi.core.lesson_status','cmi.core.score.raw','cmi.core.lesson_location','cmi.core.session_time'];
+  cles.forEach(k => { const b = document.createElement('b'); b.textContent = k.replace('cmi.', ''); const s = document.createElement('span'); s.textContent = data[k] || '—'; st.appendChild(b); st.appendChild(s); });
+  const n = parseInt(data['cmi.interactions._count'] || '0'); const box = document.getElementById('inters'); box.innerHTML = '';
+  if(!n) box.innerHTML = '<p class="vide">Aucune interaction pour l\'instant.</p>';
+  for(let i = 0; i < n; i++){
+    const p = 'cmi.interactions.' + i + '.'; const d = document.createElement('div'); d.className = 'inter';
+    const rep = data[p + (version === '2004' ? 'learner_response' : 'student_response')] || '';
+    d.innerHTML = '<div class="id"></div><div class="q"></div><div class="r"></div><div class="meta"></div>';
+    d.querySelector('.id').textContent = (data[p + 'id'] || '') + ' · ' + (data[p + 'type'] || '');
+    d.querySelector('.q').textContent = data[p + 'description'] || '';
+    d.querySelector('.r').textContent = rep;
+    d.querySelector('.meta').textContent = (data[p + 'timestamp'] || data[p + 'time'] || '') + (data[p + 'latency'] ? ' · durée ' + data[p + 'latency'] : '') + ' · résultat ' + (data[p + 'result'] || '');
+    box.appendChild(d);
+  }
+  const brut = {}; ['cmi.suspend_data','cmi.comments','cmi.comments_from_learner.0.comment'].forEach(k => { if(data[k]) brut[k] = data[k]; });
+  document.getElementById('brut').textContent = Object.keys(brut).length ? JSON.stringify(brut, null, 1) : '—';
+  document.getElementById('journal').textContent = journal.slice(-40).reverse().join('\n');
+}
+document.querySelectorAll('input[name=v]').forEach(r => r.onchange = () => { version = r.value; defaults(); sauve(); location.reload(); });
+document.getElementById('reset').onclick = () => { defaults(); journal = []; sauve(); try{ localStorage.removeItem('pe-module0-v2'); }catch(e){} location.reload(); };
+document.getElementById('export').onclick = () => {
+  const s = JSON.stringify({version, exporte:new Date().toISOString(), donnees:data}, null, 1);
+  const w = window.open('', '_blank'); w.document.write('<pre style="white-space:pre-wrap;font:12px/1.4 monospace">' + s.replace(/</g, '&lt;') + '</pre>');
+};
+if(!charge()) defaults();
+document.querySelector('input[value="' + version + '"]').checked = true;
+applique(); rafraichit();
+document.getElementById('cours').src = 'index.html?banc=' + Date.now();
+setInterval(rafraichit, 1500);
+</script>
+</body>
+</html>
