@@ -39,7 +39,7 @@
     d.style.left = e.x + 'px'; d.style.top = e.y + 'px';
     if(e.w) d.style.width = e.w + 'px';
     if(e.h && e.type !== 'text' && e.type !== 'bubble') d.style.height = e.h + 'px';
-    if(e.opacity !== undefined && e.opacity !== 1) d.style.opacity = e.opacity;
+    if(e.opacity !== undefined && e.opacity !== 1){ d.style.opacity = e.opacity; d.style.setProperty('--op', e.opacity); }
     if(e.rot){ d.style.setProperty('--rot', e.rot + 'deg'); d.style.transform = 'rotate(' + e.rot + 'deg)'; d.classList.add('tourne'); }
     if(e.hidden || e.revealed === false) d.classList.add('cache');
     if(e.fx && e.fx.in && e.fx.in !== 'none'){
