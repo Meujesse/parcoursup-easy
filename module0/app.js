@@ -57,6 +57,7 @@
     d.style.fontSize = e.size + 'px';
     d.style.color = e.color || '#333';
     if(e.lh) d.style.lineHeight = e.lh;
+    if(e.align) d.style.textAlign = e.align;
     if(e.ls && e.ls !== '0') d.style.letterSpacing = e.ls + (String(e.ls).match(/[a-z%]/) ? '' : 'px');
     if(e.pad && e.pad !== '0px') d.style.padding = e.pad;
     if(e.bgc) d.style.background = e.bgc;
