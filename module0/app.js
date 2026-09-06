@@ -300,6 +300,8 @@
     const sauve = SCORM.litEtat();
     const nom = SCORM.apprenant();
     if(nom) $('#reprise p').dataset.nom = nom;
+    const pDirect = parseInt((location.search.match(/[?&]p=(\d+)/) || [])[1] || '0', 10);
+    if(pDirect >= 1 && pDirect <= PAGES.length){ va(pDirect); majCompteur(); return; }   // ?p=N : ouvrir directement une page (tests, captures)
     if(sauve && sauve.page && sauve.page > 1 && (sauve.fait || sauve.reponses)){
       etat = Object.assign(etat, sauve);
       $('#reprise').classList.add('vu');
