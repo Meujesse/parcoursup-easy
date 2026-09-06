@@ -97,7 +97,8 @@
   function rendBulle(e){
     const d = el('div', 'el bulle-lisa queue-' + (e.tail || 'right')); styleBase(d, e);
     d.style.top = Math.max(14, Math.min(e.y, H - 200)) + 'px';
-    d.style.width = Math.min(e.w, 470) + 'px';
+    d.style.left = Math.max(e.x, 520) + 'px';   // ne pas mordre sur le titre « Question N » (fin a x=502)
+    d.style.width = Math.min(e.w, 440) + 'px';
     d.style.padding = e.pad + 'px';
     d.style.background = e.bgc; d.style.color = e.color; d.style.fontSize = e.size + 'px'; d.style.textAlign = e.align;
     d.style.fontFamily = '"' + e.font + '",Montserrat,system-ui,sans-serif';
