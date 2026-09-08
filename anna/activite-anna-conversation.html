@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><title>Anna</title><style>html,body{margin:0;height:100%;background:#1e2229}</style></head>
+<body><script>
+/* Porte d'entrée anti-cache (même patron que les activités Lisa) : redirige vers la dernière
+   version de la page, avec un repère qui change chaque minute. */
+location.replace('anna-conversation.html?v='+Math.floor(Date.now()/60000)+location.hash);
+</script><noscript><a href="anna-conversation.html">Ouvrir l'activité</a></noscript></body></html>

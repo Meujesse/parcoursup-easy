@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anna se présente</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#f28fc3;--brique:#d94a3d;--ardoise:#2f3640}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#1e2229;overflow:hidden;font-family:"Quicksand",system-ui,sans-serif}
+#scene{position:fixed;inset:0;display:grid;place-items:center}
+#cadre{position:relative;width:min(100vw,calc(100vh*16/9));aspect-ratio:16/9;background:#000;overflow:hidden;border-radius:clamp(8px,1.2vw,18px);box-shadow:0 30px 80px rgba(0,0,0,.55)}
+video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+#lance{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2vh;background:rgba(30,34,41,.35);cursor:pointer;transition:opacity .4s}
+#lance.parti{opacity:0;pointer-events:none}
+#lance .btn{width:clamp(70px,16vh,120px);height:clamp(70px,16vh,120px);border-radius:50%;background:var(--brique);display:grid;place-items:center;box-shadow:0 14px 40px rgba(217,74,61,.5);transition:transform .2s}
+#lance:hover .btn{transform:scale(1.08)}
+#lance .btn svg{width:42%;height:42%;margin-left:6%}
+#lance b{color:#fff;font-size:clamp(15px,2.8vh,24px);text-shadow:0 2px 12px rgba(0,0,0,.6);background:rgba(47,54,64,.7);padding:1vh 2vw;border-radius:999px}
+#barre{position:absolute;left:0;right:0;bottom:0;height:.8vh;background:rgba(255,255,255,.2);z-index:9}
+#barre i{display:block;height:100%;width:0;background:var(--rose)}
+#rejouer{position:absolute;right:2vw;bottom:2.4vh;z-index:10;font-family:inherit;font-weight:700;font-size:clamp(12px,2vh,16px);color:#fff;background:rgba(47,54,64,.75);border:2px solid rgba(255,255,255,.5);border-radius:999px;padding:1vh 1.6vw;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s}
+#rejouer.vu{opacity:1;pointer-events:auto}
+</style>
+</head>
+<body>
+<div id="scene"><div id="cadre">
+  <video id="vid" src="INTRO.mp4" playsinline preload="auto" poster="poster-intro.jpg"></video>
+  <div id="lance"><div class="btn"><svg viewBox="0 0 24 24" fill="#fff"><path d="M6 4l14 8-14 8z"/></svg></div><b>Anna a quelque chose à te dire</b></div>
+  <div id="barre"><i id="prog"></i></div>
+  <button id="rejouer">Réécouter Anna</button>
+</div></div>
+<script>
+const v=document.getElementById('vid'),l=document.getElementById('lance'),r=document.getElementById('rejouer'),p=document.getElementById('prog');
+l.onclick=()=>{l.classList.add('parti');v.currentTime=0;v.play().catch(()=>{})};
+v.addEventListener('timeupdate',()=>{p.style.width=(v.duration?100*v.currentTime/v.duration:0)+'%'});
+v.addEventListener('ended',()=>r.classList.add('vu'));
+r.onclick=()=>{r.classList.remove('vu');v.currentTime=0;v.play().catch(()=>{})};
+v.addEventListener('click',()=>{if(v.paused)v.play();else v.pause()});
+</script>
+</body>
+</html>
