@@ -111,8 +111,10 @@ const ARBRE={
   K5:{src:'K5.mp4',choix:[{t:"C'est parti !",s:'K6'},{t:"Oui, allez !",s:'K6'}]},
   K6:{src:'K6.mp4',fin:true},
 };
-/* réchauffe le cache HTTP pour éviter les blancs entre deux répliques */
-for(const k in ARBRE){fetch(ARBRE[k].src).catch(()=>{})}
+/* préchargement à la demande : seulement les répliques qui peuvent suivre (pas tout d'un coup) */
+const deja=new Set();
+function precharge(cles){for(const k of cles){const n=ARBRE[k];if(!n||deja.has(n.src))continue;deja.add(n.src);fetch(n.src,{priority:'low'}).catch(()=>{})}}
+function suivants(n){if(n.choix)return n.choix.map(o=>o.s);if(n.saisie==='prenom')return['K4'];if(n.saisie==='projet')return['K5'];return n.suite?[n.suite]:[]}
 
 function cache(){for(const p of document.querySelectorAll('.panneau'))p.classList.remove('vu')}
 
@@ -120,6 +122,7 @@ function joue(cle){
   cache();
   const n=ARBRE[cle];
   vid.src=n.src; vid.currentTime=0;
+  precharge(suivants(n));
   const p=vid.play(); if(p&&p.catch)p.catch(()=>{});
   vid.onended=()=>{
     if(n.choix)proposeChoix(n.choix);

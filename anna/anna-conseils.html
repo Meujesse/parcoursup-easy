@@ -108,9 +108,9 @@ const ETAPES=[
     "Travaille encore plus tard le soir : il faut souffrir pour réussir.",
     "Laisse tomber quelques semaines, l'envie reviendra toute seule."]},
 ];
-/* réchauffe le cache HTTP pour éviter les blancs entre deux répliques */
-for(const e of ETAPES)for(const k of ['q','ok','ko']){fetch(e[k]).catch(()=>{})}
-fetch('END.mp4').catch(()=>{});
+/* préchargement à la demande : seulement les clips qui peuvent suivre */
+const deja=new Set();
+function precharge(srcs){for(const s of srcs){if(!s||deja.has(s))continue;deja.add(s);fetch(s,{priority:'low'}).catch(()=>{})}}
 const FIN='END.mp4';
 let i=0,essais=0,score=0;const pastilles=[...document.querySelectorAll('#progres span')];
 
@@ -121,6 +121,7 @@ function lit(src,apres){
 }
 function etape(){
   essais=0;pastilles.forEach((s,k)=>s.classList.toggle('encours',k===i));
+  precharge([ETAPES[i].ok,ETAPES[i].ko]);
   lit(ETAPES[i].q,()=>propose());
 }
 function propose(){
@@ -140,6 +141,7 @@ function choisit(k,b){
     if(k===e.bon){
       if(essais===1){score++;pastilles[i].classList.add('ok')}else pastilles[i].classList.add('bof');
       pastilles[i].classList.remove('encours');
+      precharge([i+1<ETAPES.length?ETAPES[i+1].q:FIN]);
       lit(e.ok,()=>{i++;if(i<ETAPES.length)etape();else lit(FIN,termine)});
     }else{
       (e.dejaFaux=e.dejaFaux||[]).push(k);
@@ -152,7 +154,7 @@ function termine(){
   $('#finTitre').textContent='Merci pour tes conseils'+(prenom?', '+prenom:'')+' !';
   $('#fin').classList.add('vu');confettis();
 }
-$('#commencer').addEventListener('click',()=>{$('#debut').classList.remove('vu');$('#poster').classList.add('parti');$('#etiq').classList.add('vu');$('#progres').classList.add('vu');i=0;score=0;ETAPES.forEach(e=>delete e.dejaFaux);pastilles.forEach(s=>s.className='');etape()});
+$('#commencer').addEventListener('click',()=>{precharge([ETAPES[0].q]);$('#debut').classList.remove('vu');$('#poster').classList.add('parti');$('#etiq').classList.add('vu');$('#progres').classList.add('vu');i=0;score=0;ETAPES.forEach(e=>delete e.dejaFaux);pastilles.forEach(s=>s.className='');etape()});
 $('#revoir').addEventListener('click',()=>{$('#fin').classList.remove('vu');i=0;score=0;ETAPES.forEach(e=>delete e.dejaFaux);pastilles.forEach(s=>s.className='');etape()});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&vid.src&&!vid.ended&&vid.paused&&!$('#debut').classList.contains('vu')&&!$('#fin').classList.contains('vu'))vid.play().catch(()=>{})});
 function confettis(){
