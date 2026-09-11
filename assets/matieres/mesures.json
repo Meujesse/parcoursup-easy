@@ -1,0 +1,67 @@
+{
+ "commentaire": "Mesures du dessin de Lisa pour le tableau des matieres. W/H : la taille de la planche d'origine. taille et nuque : les hauteurs des deux raccords, en fraction de la hauteur affichee. appui : l'abscisse du pied porteur, en fraction de la largeur. x/y/w/h : la boite des yeux fermes, dans le repere de la planche.",
+ "anat": {
+  "consigne": {
+   "taille": 0.605,
+   "nuque": 0.787,
+   "appui": 0.7019,
+   "W": 394,
+   "H": 1000
+  },
+  "exemple": {
+   "taille": 0.581,
+   "nuque": 0.771,
+   "appui": 0.5242,
+   "W": 422,
+   "H": 1000
+  },
+  "bilan": {
+   "taille": 0.607,
+   "nuque": 0.788,
+   "appui": 0.5709,
+   "W": 286,
+   "H": 1000
+  },
+  "reprise": {
+   "taille": 0.602,
+   "nuque": 0.783,
+   "appui": 0.5271,
+   "W": 329,
+   "H": 1000
+  }
+ },
+ "yeux": {
+  "consigne": {
+   "x": 209.58,
+   "y": 114.58,
+   "w": 97.08,
+   "h": 53.75,
+   "W": 394,
+   "H": 1000
+  },
+  "exemple": {
+   "x": 169.17,
+   "y": 133.33,
+   "w": 88.75,
+   "h": 40.0,
+   "W": 422,
+   "H": 1000
+  },
+  "bilan": {
+   "x": 91.25,
+   "y": 111.67,
+   "w": 102.5,
+   "h": 56.67,
+   "W": 286,
+   "H": 1000
+  },
+  "reprise": {
+   "x": 105.83,
+   "y": 121.25,
+   "w": 103.33,
+   "h": 51.25,
+   "W": 329,
+   "H": 1000
+  }
+ }
+}
