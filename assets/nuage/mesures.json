@@ -1,0 +1,14 @@
+{
+ "commentaire": "Mesures du dessin de Lisa pour le nuage de mots, relevees a la main sur les planches. W/H : la taille de la planche d'origine. taille : la hauteur du point de taille, en fraction de la hauteur affichee, qui sert de pivot au buste. x/y/w/h : la boite des yeux fermes, dans le repere de la planche d'origine. cercles : les disques qui composent le nuage, dans le repere 1010x620 du plateau.",
+ "yeux": {
+  "consigne": { "x": 223, "y": 213, "w": 204, "h": 112, "W": 685, "H": 950, "taille": 0.2074 },
+  "compte":   { "x": 119, "y": 223, "w": 203, "h":  76, "W": 451, "H": 950, "taille": 0.2147 },
+  "bravo":    { "x": 260, "y": 209, "w": 198, "h":  77, "W": 716, "H": 950, "taille": 0.2505 },
+  "exemple":  { "x": 239, "y": 182, "w": 182, "h":  87, "W": 540, "H": 950, "taille": 0.3211 }
+ },
+ "cercles": [
+  [248,172,152],[472,142,126],[672,180,140],[852,272,130],[148,300,142],
+  [305,375,182],[558,352,186],[758,420,150],[232,468,140],[462,480,140],
+  [648,498,116]
+ ]
+}
