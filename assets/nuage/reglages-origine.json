@@ -1,0 +1,169 @@
+{
+ "titre": "Question 1",
+ "question": "Comment te définis-tu en 3 mots ?",
+ "aChoisir": 3,
+ "publication": {
+  "depot": "Meujesse/parcoursup-easy",
+  "branche": "main",
+  "fichier": "nuage-de-mots.html"
+ },
+ "couleurs": {
+  "teal": "#127992",
+  "tealClair": "#6fb3c3",
+  "rose": "#ea1f5c",
+  "violet": "#7c7baa"
+ },
+ "bulle": {
+  "largeur": 470,
+  "corps": 25
+ },
+ "nuage": {
+  "couleur": "",
+  "opacite": 100
+ },
+ "lisa": {
+  "hauteur": 700
+ },
+ "options": {
+  "exemple": true,
+  "compteur": true,
+  "reprise": true,
+  "rejouer": true,
+  "confettis": true,
+  "cadre": false,
+  "anim": true
+ },
+ "textes": {
+  "consigne": "Clique sur <b>3 mots</b> qui te ressemblent le plus. Choisis ceux qui te parlent vraiment, pas ceux qui font bien !",
+  "confirmation": "Alors comme ça, tu es {1}, {2} et {3} ? C'est bien ça ?",
+  "reprise": "Pas de souci, on refait un tour. Clique sur les <b>3 mots</b> qui te ressemblent le plus.",
+  "final": "Parfait ! Garde ces 3 mots sous la main, ils vont te resservir pour ton projet de formation et ta lettre de motivation.",
+  "legende": "Tes 3 mots",
+  "oui": "Oui, c'est tout à fait moi",
+  "non": "Non, je recommence",
+  "exBouton": "Exemple",
+  "exTitre": "L'exemple de Lisa",
+  "exSous": "Voilà les 3 mots qu'elle a choisis pour elle.",
+  "exBulle": "Moi j'ai choisi {1}, {2} et {3}. Tu vois, mes 3 mots ressortent en couleur. À toi de jouer !",
+  "voixAccueil": "Alors... comment tu te définirais, toi, en trois mots ? Prends ceux qui te parlent vraiment, pas ceux qui sonnent cool.",
+  "voixExemple": "Moi j'ai choisi curieuse, déterminée et patiente. Voilà, tu vois le principe. À toi de jouer !",
+  "voixFin": "Trois mots, c'est déjà un début ! Allez, on continue !",
+  "voixTitre": "Écouter Lisa",
+  "voixEchec": "Le son n'a pas pu démarrer",
+  "voixBloquee": "Ton navigateur bloque le son."
+ },
+ "exemple": [
+  2,
+  3,
+  11
+ ],
+ "mots": [
+  {
+   "t": "Créatif(ve)",
+   "x": 274,
+   "y": 118,
+   "s": 56,
+   "f": "b8",
+   "r": 0
+  },
+  {
+   "t": "Organisé(e)",
+   "x": 658,
+   "y": 152,
+   "s": 38,
+   "f": "m8",
+   "r": -9
+  },
+  {
+   "t": "Curieux(se)",
+   "x": 150,
+   "y": 245,
+   "s": 41,
+   "f": "p4",
+   "r": 0,
+   "v": "Curieuse"
+  },
+  {
+   "t": "Déterminé(e)",
+   "x": 452,
+   "y": 258,
+   "s": 35,
+   "f": "a4",
+   "r": 0,
+   "v": "Déterminée"
+  },
+  {
+   "t": "Rigoureux(se)",
+   "x": 170,
+   "y": 352,
+   "s": 45,
+   "f": "g4",
+   "r": 0
+  },
+  {
+   "t": "Persévérant(e)",
+   "x": 472,
+   "y": 356,
+   "s": 32,
+   "f": "d4",
+   "r": 0
+  },
+  {
+   "t": "Ambitieux(se)",
+   "x": 790,
+   "y": 322,
+   "s": 38,
+   "f": "p7",
+   "r": 0
+  },
+  {
+   "t": "Dynamique",
+   "x": 180,
+   "y": 452,
+   "s": 54,
+   "f": "c7",
+   "r": -3
+  },
+  {
+   "t": "Autonome",
+   "x": 462,
+   "y": 452,
+   "s": 53,
+   "f": "g7",
+   "r": 0
+  },
+  {
+   "t": "Innovant(e)",
+   "x": 768,
+   "y": 466,
+   "s": 42,
+   "f": "b7",
+   "r": -8
+  },
+  {
+   "t": "Responsable",
+   "x": 252,
+   "y": 548,
+   "s": 33,
+   "f": "a4",
+   "r": 0
+  },
+  {
+   "t": "Patient(e)",
+   "x": 552,
+   "y": 556,
+   "s": 38,
+   "f": "m7",
+   "r": 6,
+   "v": "Patiente"
+  },
+  {
+   "t": "Sociable",
+   "x": 751,
+   "y": 227,
+   "s": 38,
+   "f": "b8",
+   "r": 0
+  }
+ ]
+}
