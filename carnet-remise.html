@@ -9,16 +9,16 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--canard);font-fam
 .bulle{position:absolute;border-radius:50%;opacity:.35}
 .b1{width:260px;height:260px;left:-80px;top:-90px;background:var(--clair)}
 .b2{width:140px;height:140px;left:1080px;top:520px;background:var(--rose)}
-h1{position:absolute;left:60px;top:70px;margin:0;font-size:50px;font-weight:800;line-height:1.1;width:520px}
+h1{position:absolute;left:60px;top:60px;margin:0;font-size:36px;font-weight:800;line-height:1.15;width:520px}
 h1 span{color:#ffd0dd}
-#citation{position:absolute;left:60px;top:200px;width:500px;font:700 30px/1.25 Caveat,cursive;color:#fff;opacity:.95}
+#citation{position:absolute;left:60px;top:215px;width:500px;font:700 30px/1.25 Caveat,cursive;color:#fff;opacity:.95}
 #citation:before{content:"“";font-size:60px;color:var(--rose);line-height:0;vertical-align:-20px;margin-right:6px}
-#liste{position:absolute;left:60px;top:305px;width:500px;list-style:none;padding:0;margin:0;font-size:18px;font-weight:600}
+#liste{position:absolute;left:60px;top:310px;width:500px;list-style:none;padding:0;margin:0;font-size:18px;font-weight:600}
 #liste li{margin:0 0 12px;padding-left:34px;position:relative;opacity:0;transform:translateX(-14px);transition:all .5s}
 #liste li:before{content:"✓";position:absolute;left:0;top:-2px;width:24px;height:24px;border-radius:50%;background:var(--rose);color:#fff;font-size:14px;text-align:center;line-height:24px}
 #stage.ouvert #liste li{opacity:1;transform:none}
 #stage.ouvert #liste li:nth-child(2){transition-delay:.15s}#stage.ouvert #liste li:nth-child(3){transition-delay:.3s}#stage.ouvert #liste li:nth-child(4){transition-delay:.45s}
-#btn{position:absolute;left:60px;top:520px;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:16px 28px;font:800 20px Montserrat,sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.25);opacity:0;transition:opacity .5s .6s}
+#btn{position:absolute;left:60px;top:500px;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:16px 28px;font:800 20px Montserrat,sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.25);opacity:0;transition:opacity .5s .6s}
 #stage.ouvert #btn{opacity:1}
 #btn small{display:block;font-size:12px;font-weight:600;opacity:.85}
 /* carnet */
@@ -41,7 +41,7 @@ h1 span{color:#ffd0dd}
 #couv .badge{position:absolute;left:60px;bottom:40px;background:#fff;color:var(--rose);border-radius:999px;padding:6px 14px;font:800 13px Montserrat,sans-serif;letter-spacing:1px}
 #couv .ico{position:absolute;left:60px;top:60px;font-size:54px}
 #stage.ouvert #couv{transform:rotateY(-165deg)}
-#lisa{position:absolute;left:560px;top:355px;width:150px;height:150px;border-radius:50%;border:6px solid #fff;object-fit:cover;box-shadow:0 8px 20px rgba(0,0,0,.3);background:#fff;z-index:5}
+#lisa{position:absolute;left:575px;top:330px;width:150px;height:150px;border-radius:50%;border:6px solid #fff;object-fit:cover;box-shadow:0 8px 20px rgba(0,0,0,.3);background:#fff;z-index:5}
 </style></head>
 <body>
 <div id="stage">
