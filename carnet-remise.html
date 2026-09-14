@@ -41,6 +41,8 @@ h1 span{color:#ffd0dd}
 #couv .badge{position:absolute;left:60px;bottom:40px;background:#fff;color:var(--rose);border-radius:999px;padding:6px 14px;font:800 13px Montserrat,sans-serif;letter-spacing:1px}
 #couv .ico{position:absolute;left:60px;top:60px;font-size:54px}
 #stage.ouvert #couv{transform:rotateY(-165deg)}
+#ecouter{position:absolute;left:590px;top:495px;background:#fff;color:var(--rose);border:0;border-radius:999px;padding:10px 16px;font:800 15px Montserrat,sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.25);z-index:6;display:none}
+#ecouter.dispo{display:inline-block}
 #lisa{position:absolute;left:575px;top:330px;width:150px;height:150px;border-radius:50%;border:6px solid #fff;object-fit:cover;box-shadow:0 8px 20px rgba(0,0,0,.3);background:#fff;z-index:5}
 </style></head>
 <body>
@@ -56,6 +58,8 @@ h1 span{color:#ffd0dd}
  </ul>
  <button id="btn">📥 Télécharger mon Carnet de route<small>PDF interactif · bientôt disponible</small></button>
  <img id="lisa" src="facetime-lisa-avatar.png" alt="Lisa">
+ <button id="ecouter">🔊 Écouter Lisa</button>
+ <audio id="voix" preload="auto" src="audio/lisa-carnet.mp3"></audio>
  <div id="carnet">
   <div class="page p3"></div><div class="page p2"></div>
   <div class="page">
@@ -81,6 +85,11 @@ h1 span{color:#ffd0dd}
  addEventListener('resize',fit);fit();
  carnet.addEventListener('click',function(){ stage.classList.toggle('ouvert'); try{ parent.postMessage({pe:'reponse',id:'CARNET_ouvert',type:'other',reponse:'ouvert'},'*'); }catch(e){} });
  document.getElementById('btn').addEventListener('click',function(){ window.open('carnet-de-route.html','_blank'); });
+ var voix=document.getElementById('voix'),eb=document.getElementById('ecouter');
+ voix.addEventListener('canplaythrough',function(){eb.classList.add('dispo');});
+ voix.addEventListener('error',function(){eb.classList.remove('dispo');});
+ eb.addEventListener('click',function(){ if(voix.paused){voix.currentTime=0;voix.play();eb.textContent='⏸ Pause';} else {voix.pause();eb.textContent='🔊 Écouter Lisa';} });
+ voix.addEventListener('ended',function(){eb.textContent='🔊 Réécouter';});
 })();
 </script>
 </body></html>
