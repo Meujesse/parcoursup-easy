@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Une lettre de Lisa – Parcoursup'easy</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#ea1f5c;--canard:#127992;--clair:#6fb3c3;--papier:#fffdf7}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--clair);font-family:Montserrat,Arial,sans-serif}
+#stage{position:relative;width:1200px;height:675px;transform-origin:top left;background:var(--clair)}
+.bulle{position:absolute;border-radius:50%;opacity:.55}
+.b1{width:120px;height:120px;left:50px;top:60px;background:#7c7baa}
+.b2{width:90px;height:90px;left:1040px;top:420px;background:var(--rose)}
+.b3{width:70px;height:70px;left:130px;top:540px;background:var(--rose)}
+h1{position:absolute;left:0;right:0;top:34px;margin:0;text-align:center;color:#fff;font-size:52px;font-weight:800;letter-spacing:.5px}
+#aide{position:absolute;left:0;right:0;top:112px;text-align:center;color:#fff;font-size:22px;font-weight:600;transition:opacity .4s}
+/* enveloppe */
+#env{position:absolute;left:390px;top:230px;width:420px;height:280px;cursor:pointer;perspective:1200px;z-index:5;transition:transform .6s cubic-bezier(.34,1.56,.64,1)}
+#env:hover{transform:translateY(-6px)}
+.dos{position:absolute;inset:0;background:#f7f1e6;border-radius:14px;box-shadow:0 18px 40px rgba(0,0,0,.22)}
+.rabat{position:absolute;left:0;top:0;width:0;height:0;border-left:210px solid transparent;border-right:210px solid transparent;border-top:170px solid #e9dfcc;transform-origin:top;transition:transform .7s ease;z-index:3}
+.devant{position:absolute;inset:0;border-radius:14px;overflow:hidden;z-index:2}
+.devant:before{content:"";position:absolute;left:-40px;bottom:-60px;width:250px;height:340px;background:#f2eadb;transform:rotate(38deg)}
+.devant:after{content:"";position:absolute;right:-40px;bottom:-60px;width:250px;height:340px;background:#f2eadb;transform:rotate(-38deg)}
+.sceau{position:absolute;left:50%;top:150px;width:64px;height:64px;margin-left:-32px;border-radius:50%;background:var(--rose);color:#fff;font:700 34px Caveat,cursive;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,.25);z-index:4;transition:opacity .3s}
+.pourtoi{position:absolute;right:26px;bottom:20px;font:700 30px Caveat,cursive;color:var(--canard);z-index:3;transform:rotate(-6deg)}
+.timbre{position:absolute;left:22px;top:18px;width:58px;height:66px;background:#fff;border:3px dashed #d9c9a8;border-radius:4px;z-index:3;display:flex;align-items:center;justify-content:center;font-size:30px}
+#env.ouvert .rabat{transform:rotateX(180deg)}
+#env.ouvert .sceau{opacity:0}
+/* lettre */
+#lettre{position:absolute;left:400px;top:262px;width:400px;height:240px;background:var(--papier);border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.2);z-index:1;transition:all .9s cubic-bezier(.2,.8,.2,1);opacity:.95;
+ background-image:repeating-linear-gradient(transparent 0 38px,#dfe8ee 38px 39px);background-position:0 26px}
+#lettre .txt,#lettre #avatar,#lettre #refermer,#lettre #ecouter.dispo{opacity:0;transition:opacity .5s .6s}
+#stage.ouvert #lettre{left:180px;top:140px;width:840px;height:500px;z-index:10;opacity:1}
+#stage.ouvert #lettre .txt,#stage.ouvert #lettre #avatar,#stage.ouvert #lettre #refermer,#stage.ouvert #lettre #ecouter.dispo{opacity:1}
+#stage.ouvert #env{transform:translateY(90px) scale(.72);opacity:.55;pointer-events:none;z-index:1}
+#stage.ouvert #aide{opacity:0}
+.txt{padding:34px 48px 20px 60px;font:500 26px/39px Caveat,cursive;color:#1f3a45;position:relative}
+.txt p{margin:0}
+.txt .sig{font-weight:700;font-size:34px;color:var(--rose);text-align:right;margin-top:6px}
+.marge{position:absolute;left:44px;top:0;bottom:0;width:2px;background:#f2b8c8}
+#avatar{position:absolute;right:26px;top:-40px;width:96px;height:96px;border-radius:50%;border:5px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.25);object-fit:cover;background:#fff}
+#ecouter{position:absolute;right:30px;bottom:18px;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:10px 18px;font:700 16px Montserrat,sans-serif;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.2);display:none}
+#ecouter.dispo{display:inline-block}
+#refermer{position:absolute;left:30px;bottom:18px;background:transparent;color:var(--canard);border:2px solid var(--canard);border-radius:999px;padding:8px 16px;font:700 14px Montserrat,sans-serif;cursor:pointer}
+</style></head>
+<body>
+<div id="stage">
+ <div class="bulle b1"></div><div class="bulle b2"></div><div class="bulle b3"></div>
+ <h1>Tu as reçu une lettre !</h1>
+ <div id="aide">Clique sur l'enveloppe pour l'ouvrir ✉️</div>
+
+ <div id="lettre">
+  <div class="marge"></div>
+  <img id="avatar" src="facetime-lisa-avatar.png" alt="Lisa">
+  <div class="txt">
+   <p>Hey, salut ! Moi, c'est Lisa. Dis, toi, t'y comprends quelque chose à Parcoursup ? Parce que franchement, moi je suis complètement perdue avec toutes ces étapes, ces vœux et ces dates à retenir… C'est un vrai casse-tête !</p>
+   <p>Mais bon, pas de panique, on va y arriver ensemble grâce à ce programme. On va décrypter tout ça et avancer pas à pas.</p>
+   <p>Alors, prêt(e) à commencer cette aventure avec moi ? Ensemble, on va relever plusieurs missions. À chaque étape, tu gagneras de l'expérience, tu débloqueras des badges et, surtout, tu construiras ton propre projet d'avenir.</p>
+   <p class="sig">Lisa ♥</p>
+  </div>
+  <button id="refermer">↩ Refermer</button>
+  <button id="ecouter">🔊 Écouter Lisa</button>
+ </div>
+
+ <div id="env">
+  <div class="dos"></div>
+  <div class="rabat"></div>
+  <div class="devant"></div>
+  <div class="timbre">🧭</div>
+  <div class="sceau">L</div>
+  <div class="pourtoi">Pour toi !</div>
+ </div>
+ <audio id="voix" preload="auto" src="audio/lettre-lisa.mp3"></audio>
+</div>
+<script>
+(function(){
+ var stage=document.getElementById('stage'),env=document.getElementById('env'),voix=document.getElementById('voix'),btn=document.getElementById('ecouter');
+ function fit(){var s=Math.min(innerWidth/1200,innerHeight/675);stage.style.transform='scale('+s+')';stage.style.left=((innerWidth-1200*s)/2)+'px';stage.style.top=((innerHeight-675*s)/2)+'px';}
+ addEventListener('resize',fit);fit();
+ env.addEventListener('click',function(){ if(stage.classList.contains('ouvert')) return; env.classList.add('ouvert'); setTimeout(function(){stage.classList.add('ouvert');},550);
+   try{ parent.postMessage({pe:'reponse',id:'LETTRE_ouverte',type:'other',reponse:'ouverte'},'*'); }catch(e){} });
+ document.getElementById('refermer').addEventListener('click',function(){ stage.classList.remove('ouvert'); voix.pause(); setTimeout(function(){env.classList.remove('ouvert');},400); });
+ voix.addEventListener('canplaythrough',function(){btn.classList.add('dispo');});
+ voix.addEventListener('error',function(){btn.classList.remove('dispo');});
+ btn.addEventListener('click',function(){ if(voix.paused){voix.currentTime=0;voix.play();btn.textContent='⏸ Pause';} else {voix.pause();btn.textContent='🔊 Écouter Lisa';} });
+ voix.addEventListener('ended',function(){btn.textContent='🔊 Réécouter';});
+})();
+</script>
+</body></html>
