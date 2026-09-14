@@ -39,8 +39,14 @@ h1{position:absolute;left:0;right:0;top:34px;margin:0;text-align:center;color:#f
 .txt .sig{font-weight:700;font-size:34px;color:var(--rose);text-align:right;margin-top:6px}
 .marge{position:absolute;left:44px;top:0;bottom:0;width:2px;background:#f2b8c8}
 #avatar{position:absolute;right:20px;top:-46px;width:96px;height:96px;border-radius:50%;border:5px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.25);object-fit:cover;background:#fff}
-#ecouter{position:absolute;right:30px;bottom:18px;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:10px 18px;font:700 16px Montserrat,sans-serif;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.2);display:none}
-#ecouter.dispo{display:inline-block}
+#ecouter{position:absolute;right:26px;bottom:14px}
+.hp{display:none;align-items:center;gap:10px;background:transparent;border:0;padding:0;cursor:pointer;font:700 15px Montserrat,sans-serif;color:var(--canard)}
+.hp.dispo{display:flex}
+.hp svg{width:56px;height:56px;flex:none;transition:transform .2s}
+.hp:hover svg{transform:scale(1.08)}
+.hp-pulse{fill:#ea1f5c;opacity:.35;transform-origin:center;animation:hpPulse 1.8s ease-out infinite}
+@keyframes hpPulse{0%{transform:scale(.8);opacity:.45}100%{transform:scale(1.05);opacity:0}}
+
 #refermer{position:absolute;left:30px;bottom:18px;background:transparent;color:var(--canard);border:2px solid var(--canard);border-radius:999px;padding:8px 16px;font:700 14px Montserrat,sans-serif;cursor:pointer}
 </style></head>
 <body>
@@ -55,11 +61,11 @@ h1{position:absolute;left:0;right:0;top:34px;margin:0;text-align:center;color:#f
   <div class="txt">
    <p>Hey, salut ! Moi, c'est Lisa. Dis, toi, t'y comprends quelque chose à Parcoursup ? Parce que franchement, moi je suis complètement perdue avec toutes ces étapes, ces vœux et ces dates à retenir… C'est un vrai casse-tête !</p>
    <p>Mais bon, pas de panique, on va y arriver ensemble grâce à ce programme. On va décrypter tout ça et avancer pas à pas.</p>
-   <p>Alors, prêt(e) à commencer cette aventure avec moi ? Ensemble, on va relever plusieurs missions. À chaque étape, tu gagneras de l'expérience, tu débloqueras des badges et, surtout, tu construiras ton propre projet d'avenir.</p>
+   <p>Alors, on part à l'aventure ensemble ? On va relever plusieurs missions. À chaque étape, tu gagneras de l'expérience, tu débloqueras des badges et, surtout, tu construiras ton propre projet d'avenir.</p>
    <p class="sig">Lisa ♥</p>
   </div>
   <button id="refermer">↩ Refermer</button>
-  <button id="ecouter">🔊 Écouter Lisa</button>
+  <button id="ecouter" class="hp"><svg viewBox="0 0 437.5 437.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle class="hp-pulse" cx="218.75" cy="218.75" r="218.75"/><circle cx="218.75" cy="218.75" r="175" fill="#ea1f5c"/><path fill="#fff" d="M175.42,190.07l38.22-28.66V276.08l-38.22-28.67H156.31a9.56,9.56,0,0,1-9.56-9.56V199.63a9.56,9.56,0,0,1,9.56-9.56Zm92.79-25.89a9.6,9.6,0,1,0-13.57,13.57,58,58,0,0,1,0,82,9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A77.32,77.32,0,0,0,268.21,164.18Zm-23.89,23.89a9.6,9.6,0,0,0-13.57,13.57,24.19,24.19,0,0,1,0,34.19l0,0a9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A43.38,43.38,0,0,0,244.32,188.07Z"/></svg><span class="lib">Écouter Lisa</span></button>
  </div>
 
  <div id="env">
@@ -82,8 +88,8 @@ h1{position:absolute;left:0;right:0;top:34px;margin:0;text-align:center;color:#f
  document.getElementById('refermer').addEventListener('click',function(){ stage.classList.remove('ouvert'); voix.pause(); setTimeout(function(){env.classList.remove('ouvert');},400); });
  voix.addEventListener('canplaythrough',function(){btn.classList.add('dispo');});
  voix.addEventListener('error',function(){btn.classList.remove('dispo');});
- btn.addEventListener('click',function(){ if(voix.paused){voix.currentTime=0;voix.play();btn.textContent='⏸ Pause';} else {voix.pause();btn.textContent='🔊 Écouter Lisa';} });
- voix.addEventListener('ended',function(){btn.textContent='🔊 Réécouter';});
+ btn.addEventListener('click',function(){ if(voix.paused){voix.currentTime=0;voix.play();btn.querySelector('.lib').textContent='Pause';} else {voix.pause();btn.querySelector('.lib').textContent='Écouter Lisa';} });
+ voix.addEventListener('ended',function(){btn.querySelector('.lib').textContent='Réécouter';});
 })();
 </script>
 </body></html>

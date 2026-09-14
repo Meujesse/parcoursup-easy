@@ -41,8 +41,14 @@ h1 span{color:#ffd0dd}
 #couv .badge{position:absolute;left:60px;bottom:40px;background:#fff;color:var(--rose);border-radius:999px;padding:6px 14px;font:800 13px Montserrat,sans-serif;letter-spacing:1px}
 #couv .ico{position:absolute;left:60px;top:60px;font-size:54px}
 #stage.ouvert #couv{transform:rotateY(-165deg)}
-#ecouter{position:absolute;left:590px;top:495px;background:#fff;color:var(--rose);border:0;border-radius:999px;padding:10px 16px;font:800 15px Montserrat,sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.25);z-index:6;display:none}
-#ecouter.dispo{display:inline-block}
+#ecouter{position:absolute;left:575px;top:495px;z-index:6}
+.hp{display:none;align-items:center;gap:10px;background:transparent;border:0;padding:0;cursor:pointer;font:700 15px Montserrat,sans-serif;color:#fff}
+.hp.dispo{display:flex}
+.hp svg{width:56px;height:56px;flex:none;transition:transform .2s}
+.hp:hover svg{transform:scale(1.08)}
+.hp-pulse{fill:#ea1f5c;opacity:.35;transform-origin:center;animation:hpPulse 1.8s ease-out infinite}
+@keyframes hpPulse{0%{transform:scale(.8);opacity:.45}100%{transform:scale(1.05);opacity:0}}
+
 #lisa{position:absolute;left:575px;top:330px;width:150px;height:150px;border-radius:50%;border:6px solid #fff;object-fit:cover;box-shadow:0 8px 20px rgba(0,0,0,.3);background:#fff;z-index:5}
 </style></head>
 <body>
@@ -58,7 +64,7 @@ h1 span{color:#ffd0dd}
  </ul>
  <button id="btn">📥 Télécharger mon Carnet de route<small>PDF interactif · bientôt disponible</small></button>
  <img id="lisa" src="facetime-lisa-avatar.png" alt="Lisa">
- <button id="ecouter">🔊 Écouter Lisa</button>
+ <button id="ecouter" class="hp"><svg viewBox="0 0 437.5 437.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle class="hp-pulse" cx="218.75" cy="218.75" r="218.75"/><circle cx="218.75" cy="218.75" r="175" fill="#ea1f5c"/><path fill="#fff" d="M175.42,190.07l38.22-28.66V276.08l-38.22-28.67H156.31a9.56,9.56,0,0,1-9.56-9.56V199.63a9.56,9.56,0,0,1,9.56-9.56Zm92.79-25.89a9.6,9.6,0,1,0-13.57,13.57,58,58,0,0,1,0,82,9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A77.32,77.32,0,0,0,268.21,164.18Zm-23.89,23.89a9.6,9.6,0,0,0-13.57,13.57,24.19,24.19,0,0,1,0,34.19l0,0a9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A43.38,43.38,0,0,0,244.32,188.07Z"/></svg><span class="lib">Écouter Lisa</span></button>
  <audio id="voix" preload="auto" src="audio/lisa-carnet.mp3"></audio>
  <div id="carnet">
   <div class="page p3"></div><div class="page p2"></div>
@@ -88,8 +94,8 @@ h1 span{color:#ffd0dd}
  var voix=document.getElementById('voix'),eb=document.getElementById('ecouter');
  voix.addEventListener('canplaythrough',function(){eb.classList.add('dispo');});
  voix.addEventListener('error',function(){eb.classList.remove('dispo');});
- eb.addEventListener('click',function(){ if(voix.paused){voix.currentTime=0;voix.play();eb.textContent='⏸ Pause';} else {voix.pause();eb.textContent='🔊 Écouter Lisa';} });
- voix.addEventListener('ended',function(){eb.textContent='🔊 Réécouter';});
+ eb.addEventListener('click',function(){ if(voix.paused){voix.currentTime=0;voix.play();eb.querySelector('.lib').textContent='Pause';} else {voix.pause();eb.querySelector('.lib').textContent='Écouter Lisa';} });
+ voix.addEventListener('ended',function(){eb.querySelector('.lib').textContent='Réécouter';});
 })();
 </script>
 </body></html>
