@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qui fait vraiment quoi ? — Parcoursup</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--rose:#ea1f5c;--rose-clair:#e94f8a;--teal:#12798f;--teal-fonce:#083a45;
+        --vert:#1e9c72;--vert-clair:#def6ec;--rouge:#d83f55;--gris:#f3f7f8}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%;background:transparent;overflow:hidden;
+    font-family:Montserrat,system-ui,sans-serif;-webkit-tap-highlight-color:transparent;color:var(--teal-fonce)}
+  #wrap{position:relative;width:100%;height:100%;display:flex;flex-direction:column}
+  .consigne{flex:0 0 auto;font-size:15px;font-weight:600;color:#fff;opacity:.95;margin:0 0 10px;text-align:center}
+  .board{position:relative;flex:1 1 auto;display:grid;grid-template-columns:1fr 1fr;gap:70px}
+  .col{display:flex;flex-direction:column;justify-content:space-between;gap:10px;position:relative;z-index:2}
+  .person,.role{background:#fff;border-radius:16px;box-shadow:0 6px 16px rgba(8,58,69,.16);
+    padding:12px 14px;display:flex;align-items:center;gap:12px;font-size:15px;font-weight:700;line-height:1.25;
+    border:3px solid transparent;min-height:62px}
+  .person .emo{font-size:26px;line-height:1}
+  .person.cible{border-color:var(--rose-clair);background:#fff6fa}
+  .person.ok{border-color:var(--vert);background:var(--vert-clair)}
+  .person .sol{margin-left:auto;font-size:12px;font-weight:700;color:var(--vert);opacity:0;max-width:52%;text-align:right;line-height:1.2}
+  .person.ok .sol{opacity:1}
+  .role{cursor:grab;user-select:none;font-weight:600;font-size:14.5px;touch-action:none}
+  .role.sel{border-color:var(--rose);box-shadow:0 8px 22px rgba(234,31,92,.3);transform:translateY(-2px)}
+  .role.drag{position:fixed;z-index:50;pointer-events:none;box-shadow:0 14px 30px rgba(8,58,69,.3);cursor:grabbing;margin:0}
+  .role.done{opacity:0;pointer-events:none;height:0;min-height:0;padding:0;border:0;margin:0}
+  .role.bad{border-color:var(--rouge);animation:shake .4s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+  svg.links{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}
+  .fin{position:absolute;inset:0;background:var(--teal);border-radius:20px;color:#fff;padding:26px 30px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    opacity:0;transform:scale(.97);pointer-events:none;transition:opacity .45s ease, transform .45s ease;z-index:5}
+  .fin.on{opacity:1;transform:none;pointer-events:auto}
+  .fin h3{margin:0 0 6px;font-size:22px;font-weight:800}
+  .fin .voyage{display:flex;gap:10px;margin:16px 0 4px;flex-wrap:wrap;justify-content:center}
+  .etape{background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.35);border-radius:14px;
+    padding:10px 12px;width:150px;font-size:12.5px;font-weight:600;line-height:1.3;opacity:0;transform:translateY(8px);
+    transition:opacity .4s ease, transform .4s ease}
+  .etape.on{opacity:1;transform:none}
+  .etape .n{display:block;font-size:20px;margin-bottom:6px}
+  .fin p{margin:14px 0 0;font-size:14px;max-width:620px;line-height:1.5;opacity:.95}
+  .fin .again{margin-top:16px;border:0;border-radius:999px;background:#fff;color:var(--teal);
+    font-family:inherit;font-weight:800;font-size:14px;padding:10px 20px;cursor:pointer}
+  @media (max-width:700px){ .board{grid-template-columns:1fr;gap:14px} svg.links{display:none} }
+</style>
+</head><body>
+<div id="wrap">
+  <p class="consigne" id="consigne"></p>
+  <div class="board" id="board">
+    <div class="col" id="left"></div>
+    <div class="col" id="right"></div>
+    <svg class="links" id="links"></svg>
+  </div>
+  <div class="fin" id="fin"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var CFG=JSON.parse(document.getElementById('config').textContent);
+  var left=document.getElementById('left'), right=document.getElementById('right');
+  var links=document.getElementById('links'), fin=document.getElementById('fin');
+  document.getElementById('consigne').textContent=CFG.textes.consigne;
+
+  var paires=CFG.paires.slice();
+  var roles=paires.map(function(p,i){return {i:i,texte:p.role};});
+  for(var i=roles.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=roles[i]; roles[i]=roles[j]; roles[j]=t; }
+
+  var pEls=[], rEls=[], sel=null, faits=0;
+
+  paires.forEach(function(p,i){
+    var el=document.createElement('div');
+    el.className='person'; el.dataset.i=i;
+    el.innerHTML='<span class="emo">'+p.emoji+'</span><span>'+p.nom+'</span><span class="sol"></span>';
+    left.appendChild(el); pEls.push(el);
+    el.addEventListener('click',function(){ if(sel!==null) tenter(sel,i); });
+  });
+
+  roles.forEach(function(r){
+    var el=document.createElement('div');
+    el.className='role'; el.dataset.i=r.i; el.textContent=r.texte;
+    right.appendChild(el); rEls.push(el);
+    el.addEventListener('click',function(e){ if(el.dataset.moved==='1'){el.dataset.moved='';return;}
+      if(sel===r.i){ sel=null; el.classList.remove('sel'); }
+      else { sel=r.i; rEls.forEach(function(x){x.classList.remove('sel');}); el.classList.add('sel'); } });
+    // glisser
+    var sx,sy,dragging=false,ghost=null;
+    el.addEventListener('pointerdown',function(e){
+      if(el.classList.contains('done')) return;
+      sx=e.clientX; sy=e.clientY; dragging=false;
+      el.setPointerCapture(e.pointerId);
+      el.onpointermove=function(ev){
+        if(!dragging && Math.abs(ev.clientX-sx)+Math.abs(ev.clientY-sy)<8) return;
+        if(!dragging){ dragging=true; el.dataset.moved='1';
+          var rct=el.getBoundingClientRect(); ghost=el.cloneNode(true);
+          ghost.className='role drag'; ghost.style.width=rct.width+'px';
+          document.body.appendChild(ghost); el.style.opacity=.25; }
+        ghost.style.left=(ev.clientX-60)+'px'; ghost.style.top=(ev.clientY-22)+'px';
+        var over=cible(ev.clientX,ev.clientY);
+        pEls.forEach(function(p,k){ p.classList.toggle('cible', over===k && !p.classList.contains('ok')); });
+      };
+      el.onpointerup=function(ev){
+        el.onpointermove=null; el.onpointerup=null; el.style.opacity='';
+        pEls.forEach(function(p){p.classList.remove('cible');});
+        if(ghost){ ghost.remove(); ghost=null; }
+        if(dragging){ var k=cible(ev.clientX,ev.clientY); if(k!==null) tenter(r.i,k); }
+      };
+    });
+  });
+
+  function cible(x,y){ var res=null; pEls.forEach(function(p,k){ var b=p.getBoundingClientRect();
+    if(x>=b.left-30&&x<=b.right+30&&y>=b.top&&y<=b.bottom) res=k; }); return res; }
+
+  function tenter(roleIdx, persIdx){
+    var rEl=rEls.filter(function(e){return +e.dataset.i===roleIdx;})[0];
+    var pEl=pEls[persIdx];
+    if(!rEl||pEl.classList.contains('ok')) return;
+    sel=null; rEls.forEach(function(x){x.classList.remove('sel');});
+    if(roleIdx===persIdx){
+      pEl.classList.add('ok');
+      pEl.querySelector('.sol').textContent=paires[persIdx].role;
+      rEl.classList.add('done');
+      faits++;
+      if(faits===paires.length) setTimeout(montrerFin,600);
+    } else {
+      rEl.classList.add('bad');
+      setTimeout(function(){ rEl.classList.remove('bad'); },450);
+    }
+  }
+
+  function montrerFin(){
+    fin.innerHTML='<h3>'+CFG.textes.finTitre+'</h3>'+
+      '<div class="voyage">'+CFG.voyage.map(function(v,i){
+        return '<div class="etape" data-i="'+i+'"><span class="n">'+v.emoji+'</span>'+v.texte+'</div>';}).join('')+'</div>'+
+      '<p>'+CFG.textes.finTexte+'</p>'+
+      '<button class="again">'+CFG.textes.recommencer+'</button>';
+    fin.classList.add('on');
+    fin.querySelectorAll('.etape').forEach(function(e,i){ setTimeout(function(){ e.classList.add('on'); }, 280*i+200); });
+    fin.querySelector('.again').addEventListener('click',function(){ location.reload(); });
+  }
+});
+</script>
+
+<script id="config" type="application/json">
+{
+  "textes": {
+    "consigne": "Fais glisser chaque rôle sur le bon personnage (ou clique l'un puis l'autre).",
+    "finTitre": "Tu as tout bon : chacun son rôle !",
+    "finTexte": "Imagine que ton dossier est une enveloppe : tu la déposes sur Parcoursup, la plateforme l'envoie aux établissements, les enseignants l'étudient et établissent leur classement, puis Parcoursup revient vers toi avec la réponse.",
+    "recommencer": "Recommencer"
+  },
+  "paires": [
+    { "emoji": "🎓", "nom": "Toi", "role": "Formuler tes vœux et confirmer ton dossier" },
+    { "emoji": "📬", "nom": "Parcoursup", "role": "Transmettre les dossiers, puis les réponses" },
+    { "emoji": "🏫", "nom": "Les formations", "role": "Établir le classement des candidats" },
+    { "emoji": "👩‍🏫", "nom": "Les enseignants", "role": "Examiner les candidatures reçues" }
+  ],
+  "voyage": [
+    { "emoji": "✉️", "texte": "Tu déposes ton dossier sur Parcoursup" },
+    { "emoji": "📬", "texte": "La plateforme l'envoie aux établissements" },
+    { "emoji": "👩‍🏫", "texte": "Les enseignants l'étudient et classent" },
+    { "emoji": "↩️", "texte": "Parcoursup te rapporte la réponse" }
+  ]
+}
+</script>
+</body></html>
