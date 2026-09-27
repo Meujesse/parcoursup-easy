@@ -8,7 +8,7 @@
     font-family:Montserrat,"DM Sans",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
   #c{display:block;width:100vw;height:100vh;cursor:grab;touch-action:none}
   #c.drag{cursor:grabbing}
-  #hint{position:fixed;left:0;right:0;bottom:14px;text-align:center;color:#fff;font-size:15px;
+  #hint{position:fixed;left:0;right:0;bottom:8px;text-align:center;color:rgba(255,255,255,.9);font-size:13px;
     font-weight:600;letter-spacing:.3px;text-shadow:0 2px 6px rgba(8,58,69,.45);
     transition:opacity .6s ease;pointer-events:none}
   #hint.off{opacity:0}
@@ -35,7 +35,7 @@
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   var scene=new THREE.Scene();
   var camera=new THREE.PerspectiveCamera(34,1,0.1,50);
-  camera.position.set(0,0,4.6);
+  camera.position.set(0,0,3.95);
 
   scene.add(new THREE.HemisphereLight(0xffffff,0x9fd0da,2.1));
   var d1=new THREE.DirectionalLight(0xffffff,2.2); d1.position.set(2.2,2.6,3.4); scene.add(d1);
@@ -86,7 +86,7 @@
   canvas.addEventListener('pointerup',end); canvas.addEventListener('pointercancel',end);
 
   function resize(){ var w=innerWidth,h=innerHeight; renderer.setSize(w,h,false);
-    camera.aspect=w/h; camera.fov = w/h<0.9 ? 40 : 34; camera.updateProjectionMatrix(); }
+    camera.aspect=w/h; camera.fov = w/h<0.9 ? 38 : 33; camera.updateProjectionMatrix(); }
   addEventListener('resize',resize); resize();
 
   var t0=performance.now();
@@ -103,7 +103,7 @@
     renderer.render(scene,camera);
     requestAnimationFrame(loop);
   })(performance.now());
-  setTimeout(off,9000);
+  setTimeout(off,5000);
 })();
 </script>
 </body></html>
