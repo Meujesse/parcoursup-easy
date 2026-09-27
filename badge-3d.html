@@ -30,7 +30,18 @@
 
   var PINK=0xea1c5c, PINK_DARK=0xc21a4d;
   var canvas=document.getElementById('c');
-  var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+  var renderer;
+  try{ renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true}); }catch(e){ renderer=null; }
+  if(!renderer || !renderer.getContext()){
+    // secours : badge en image plate si la 3D n'est pas disponible
+    canvas.style.display='none';
+    var img=document.createElement('img');
+    img.src='badges/'+key+'-full.png'; img.alt='Badge';
+    img.style.cssText='position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);max-width:92%;max-height:92%';
+    document.body.appendChild(img);
+    var h=document.getElementById('hint'); if(h) h.style.display='none';
+    return;
+  }
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   var scene=new THREE.Scene();
