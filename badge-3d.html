@@ -46,7 +46,7 @@
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   var scene=new THREE.Scene();
   var camera=new THREE.PerspectiveCamera(34,1,0.1,50);
-  camera.position.set(0,0,3.95);
+  camera.position.set(0,0,4.75);
 
   scene.add(new THREE.HemisphereLight(0xffffff,0x9fd0da,2.1));
   var d1=new THREE.DirectionalLight(0xffffff,2.2); d1.position.set(2.2,2.6,3.4); scene.add(d1);
@@ -57,13 +57,13 @@
 
   // --- ruban (derrière la médaille)
   var rib=new THREE.Shape();
-  rib.moveTo(-0.50,0.20); rib.lineTo(-0.50,-1.05); rib.lineTo(-0.17,-0.75);
-  rib.lineTo(0,-1.05); rib.lineTo(0.17,-0.75); rib.lineTo(0.50,-1.05);
-  rib.lineTo(0.50,0.20); rib.closePath();
-  var ribGeo=new THREE.ExtrudeGeometry(rib,{depth:0.09,bevelEnabled:false});
-  ribGeo.center();
-  var ribMesh=new THREE.Mesh(ribGeo,new THREE.MeshStandardMaterial({color:PINK,metalness:0.1,roughness:0.6,emissive:PINK,emissiveIntensity:0.22}));
-  ribMesh.position.set(0,-0.70,-0.02);
+  rib.moveTo(-0.42,-0.80); rib.lineTo(-0.42,-1.78); rib.lineTo(-0.15,-1.44);
+  rib.lineTo(0,-1.78); rib.lineTo(0.15,-1.44); rib.lineTo(0.42,-1.78);
+  rib.lineTo(0.42,-0.80); rib.closePath();
+  var ribGeo=new THREE.ExtrudeGeometry(rib,{depth:0.08,bevelEnabled:false});
+  ribGeo.translate(0,0,-0.04);
+  var ribMesh=new THREE.Mesh(ribGeo,new THREE.MeshStandardMaterial({color:PINK,metalness:0.1,roughness:0.6,emissive:PINK,emissiveIntensity:0.22,side:THREE.DoubleSide}));
+  ribMesh.position.set(0,0,-0.10);
   group.add(ribMesh);
 
   // --- médaille
@@ -72,7 +72,7 @@
     t.colorSpace=THREE.SRGBColorSpace; t.anisotropy=8; t.center.set(0.5,0.5); t.rotation=rot;
     if(flip){ t.wrapS=THREE.RepeatWrapping; t.repeat.x=-1; }
     return t; }
-  var texF=mkTex(Math.PI/2,false), texB=mkTex(Math.PI/2,true);
+  var texF=mkTex(Math.PI/2,false), texB=mkTex(Math.PI/2,false);
   function faceMaterial(t){ return new THREE.MeshStandardMaterial({map:t,metalness:0.0,roughness:0.72,
     emissive:0xffffff,emissiveMap:t,emissiveIntensity:0.28}); }
   var faceMat=faceMaterial(texF);
@@ -81,36 +81,48 @@
   var disc=new THREE.Mesh(new THREE.CylinderGeometry(1,1,0.13,96,1,false),[rimMat,faceMat,backMat]);
   disc.rotation.x=Math.PI/2;
   group.add(disc);
-  group.position.y=0.22;
+  group.position.y=0.36;
 
   // --- interaction
-  var vel=0.006, target=0, dragging=false, lastX=0, lastY=0, tiltTarget=0, tilt=0;
+  var rotY=0, angVel=0, dragging=false, lastX=0, lastY=0, tiltTarget=0, tilt=0, idle=0;
   var hint=document.getElementById('hint'), hintOff=false;
   function off(){ if(!hintOff){ hintOff=true; hint.classList.add('off'); } }
-  canvas.addEventListener('pointerdown',function(e){ dragging=true; lastX=e.clientX; lastY=e.clientY;
+  canvas.addEventListener('pointerdown',function(e){ dragging=true; idle=0; lastX=e.clientX; lastY=e.clientY;
     canvas.classList.add('drag'); canvas.setPointerCapture(e.pointerId); off(); });
   canvas.addEventListener('pointermove',function(e){ if(!dragging) return;
     var dx=e.clientX-lastX, dy=e.clientY-lastY; lastX=e.clientX; lastY=e.clientY;
-    group.rotation.y+=dx*0.012; vel=dx*0.012;
-    tiltTarget=Math.max(-0.5,Math.min(0.5,tiltTarget+dy*0.006)); });
+    rotY+=dx*0.013; angVel=dx*0.013;
+    tiltTarget=Math.max(-0.22,Math.min(0.22,tiltTarget+dy*0.005)); });
   function end(){ dragging=false; canvas.classList.remove('drag'); }
   canvas.addEventListener('pointerup',end); canvas.addEventListener('pointercancel',end);
 
   function resize(){ var w=innerWidth,h=innerHeight; renderer.setSize(w,h,false);
-    camera.aspect=w/h; camera.fov = w/h<0.9 ? 38 : 33; camera.updateProjectionMatrix(); }
+    camera.aspect=w/h;
+    // on garde toujours la medaille entiere dans le cadre, meme en format non carre
+    var need=3.15;                       // hauteur occupee par la medaille + le ruban
+    var fovV=2*Math.atan((need/2)/4.75)*180/Math.PI;
+    if(camera.aspect<1){ fovV=2*Math.atan((need/2)/(4.75*camera.aspect))*180/Math.PI; }
+    camera.fov=Math.min(60,fovV); camera.updateProjectionMatrix(); }
   addEventListener('resize',resize); resize();
 
   var t0=performance.now();
   (function loop(now){
     var dt=Math.min(40,now-t0)/16.67; t0=now;
-    if(!dragging){
-      vel += (0.006-vel)*0.03;          // revient à la rotation lente
-      tiltTarget += (0-tiltTarget)*0.02; // se remet droit
+    if(dragging){ idle=0; }
+    else {
+      idle+=dt;
+      angVel*=0.94;                                  // inertie apres le glisser
+      rotY+=angVel*dt;
+      if(Math.abs(angVel)<0.003){                    // puis retour tranquille face au lecteur
+        var sway=Math.sin(now/2800)*0.28;
+        var diff=Math.atan2(Math.sin(sway-rotY),Math.cos(sway-rotY));
+        rotY+=diff*Math.min(0.06,0.012*dt*(idle/40));
+      }
+      tiltTarget+=(0-tiltTarget)*0.02*dt;
     }
-    group.rotation.y += vel*dt;
-    tilt += (tiltTarget-tilt)*0.1;
-    group.rotation.x = tilt;
-    group.position.y = 0.22 + Math.sin(now/1400)*0.035;
+    tilt+=(tiltTarget-tilt)*0.1*dt;
+    group.rotation.y=rotY;
+    group.rotation.x=tilt;
     renderer.render(scene,camera);
     requestAnimationFrame(loop);
   })(performance.now());
