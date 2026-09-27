@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le voyage de l'enveloppe</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--rose:#ea1f5c;--teal:#12798f;--teal-fonce:#083a45}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%;background:transparent;overflow:hidden;
+    font-family:Montserrat,system-ui,sans-serif;color:#fff}
+  .wrap{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:24px 28px}
+  h1{margin:0 0 6px;font-size:24px;font-weight:800}
+  .sous{margin:0 0 20px;font-size:14px;font-weight:600;opacity:.92;max-width:660px;line-height:1.5}
+  .voyage{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  .etape{position:relative;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.4);
+    border-radius:16px;padding:14px 12px;width:158px;font-size:13px;font-weight:700;line-height:1.35;
+    opacity:0;transform:translateY(10px);transition:opacity .45s ease, transform .45s ease}
+  .etape.on{opacity:1;transform:none}
+  .etape .n{display:block;font-size:26px;margin-bottom:8px}
+  .etape:not(:last-child)::after{content:'→';position:absolute;right:-13px;top:50%;transform:translateY(-50%);
+    font-size:16px;opacity:.7}
+  .fin{margin-top:20px;font-size:13.5px;font-weight:600;opacity:0;transition:opacity .5s ease;max-width:640px;line-height:1.5}
+  .fin.on{opacity:.95}
+  @media (max-width:640px){ .etape{width:128px;font-size:12px} .etape::after{display:none} }
+</style>
+</head><body>
+<div class="wrap">
+  <h1 id="t"></h1>
+  <p class="sous" id="s"></p>
+  <div class="voyage" id="v"></div>
+  <p class="fin" id="f"></p>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var C=JSON.parse(document.getElementById('config').textContent);
+  document.getElementById('t').textContent=C.titre;
+  document.getElementById('s').textContent=C.sous;
+  var v=document.getElementById('v');
+  v.innerHTML=C.etapes.map(function(e){return '<div class="etape"><span class="n">'+e.emoji+'</span>'+e.texte+'</div>';}).join('');
+  document.getElementById('f').textContent=C.fin;
+  var els=v.querySelectorAll('.etape');
+  els.forEach(function(e,i){ setTimeout(function(){ e.classList.add('on'); }, 350*i+250); });
+  setTimeout(function(){ document.getElementById('f').classList.add('on'); }, 350*els.length+400);
+});
+</script>
+<script id="config" type="application/json">
+{
+  "titre": "Le voyage de ton dossier",
+  "sous": "Chacun a son rôle : voilà ce qui se passe vraiment quand tu candidates.",
+  "etapes": [
+    { "emoji": "✉️", "texte": "Tu déposes ton dossier sur Parcoursup" },
+    { "emoji": "📬", "texte": "La plateforme l'envoie aux établissements" },
+    { "emoji": "👩‍🏫", "texte": "Les enseignants l'étudient et établissent leur classement" },
+    { "emoji": "↩️", "texte": "Parcoursup te rapporte leur réponse" }
+  ],
+  "fin": "Parcoursup ne juge pas ton dossier : il transmet. C'est déjà une bonne raison d'arrêter de le voir comme une loterie !"
+}
+</script>
+</body></html>
