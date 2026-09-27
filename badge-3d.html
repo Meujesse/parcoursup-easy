@@ -31,18 +31,21 @@
 
   var PINK=0xea1c5c, PINK_DARK=0xc21a4d;
   var canvas=document.getElementById('c');
-  var renderer;
-  try{ renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true}); }catch(e){ renderer=null; }
-  if(!renderer || !renderer.getContext()){
-    // secours : badge en image plate si la 3D n'est pas disponible
+  function secours(){
+    if(document.getElementById('plat')) return;
     canvas.style.display='none';
     var img=document.createElement('img');
-    img.src='badges/'+key+'-full.png'; img.alt='Badge';
-    img.style.cssText='position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);max-width:92%;max-height:92%';
+    img.id='plat'; img.src='badges/'+key+'-full.png'; img.alt='Badge';
+    img.style.cssText='position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);max-width:94%;max-height:94%';
     document.body.appendChild(img);
     var h=document.getElementById('hint'); if(h) h.style.display='none';
-    return;
   }
+  var gl=null;
+  try{ gl=canvas.getContext('webgl2',{alpha:true,antialias:true}) || canvas.getContext('webgl',{alpha:true,antialias:true}); }catch(e){}
+  if(!gl){ secours(); return; }
+  canvas.addEventListener('webglcontextlost',function(e){ e.preventDefault(); secours(); },false);
+  var renderer;
+  try{ renderer=new THREE.WebGLRenderer({canvas:canvas,context:gl,antialias:true,alpha:true}); }catch(e){ secours(); return; }
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   var scene=new THREE.Scene();
