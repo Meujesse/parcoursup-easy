@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vrai ou faux — Parcoursup</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rose:#ea1f5c; --rose-clair:#e94f8a; --teal:#12798f; --teal-fonce:#083a45;
+    --vert:#1e9c72; --vert-clair:#def6ec; --rouge:#d83f55; --rouge-clair:#fdeaed;
+    --blanc:#ffffff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%;background:transparent;font-family:Montserrat,system-ui,sans-serif;
+    -webkit-tap-highlight-color:transparent;overflow:hidden}
+  #scene{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+  .deck{position:relative;width:100%;height:100%;max-width:720px;max-height:480px}
+  .card{position:absolute;inset:0;border-radius:26px;padding:56px 34px 26px;display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 14px 34px rgba(8,58,69,.22);opacity:0;transform:translateX(40px) scale(.97);
+    transition:opacity .35s ease, transform .35s ease;pointer-events:none;overflow:hidden}
+  .card.on{opacity:1;transform:none;pointer-events:auto}
+  .card.out{opacity:0;transform:translateX(-46px) scale(.97)}
+  .card .num{position:absolute;top:24px;left:34px;font-size:13px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.75)}
+  .card h2{margin:0;font-size:27px;line-height:1.25;color:#fff;font-weight:800}
+  .answers{display:flex;gap:16px;margin:18px 0 0}
+  .answer{flex:1;border:3px solid transparent;background:#fff;border-radius:14px;padding:15px 10px;
+    font-family:inherit;font-size:20px;font-weight:700;color:var(--teal-fonce);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .12s ease, border-color .2s ease, background .2s ease}
+  .answer:hover{transform:translateY(-2px)}
+  .answer .ico{font-size:19px;line-height:1;display:none}
+  .answer.bad{border-color:var(--rouge);background:var(--rouge-clair);color:var(--rouge)}
+  .answer.bad .ico{display:inline}
+  .answer.good{border-color:var(--vert);background:var(--vert-clair);color:var(--vert)}
+  .answer.good .ico{display:inline}
+  .locked .answer{cursor:default}
+  .locked .answer:hover{transform:none}
+  .fb{margin-top:16px;font-size:16px;line-height:1.45;color:#fff;font-weight:500;opacity:0;
+    max-height:0;transition:opacity .3s ease}
+  .fb.on{opacity:1;max-height:200px}
+  .fb b{font-weight:800}
+  .next{align-self:flex-end;margin-top:14px;border:0;border-radius:999px;background:#fff;color:var(--rose);
+    font-family:inherit;font-weight:800;font-size:15px;padding:11px 20px;cursor:pointer;opacity:0;
+    transform:translateY(6px);transition:opacity .3s ease, transform .3s ease;pointer-events:none}
+  .next.on{opacity:1;transform:none;pointer-events:auto}
+  .next:hover{background:#fff7fa}
+  .dots{position:absolute;left:0;right:0;bottom:-26px;display:flex;gap:8px;justify-content:center}
+  .dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.45);transition:all .25s ease}
+  .dot.on{background:#fff;width:22px;border-radius:999px}
+  .dot.done{background:rgba(255,255,255,.85)}
+  .end{position:absolute;inset:0;border-radius:26px;background:var(--teal);color:#fff;display:flex;
+    flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;
+    box-shadow:0 14px 34px rgba(8,58,69,.22);opacity:0;transform:scale(.96);pointer-events:none;
+    transition:opacity .4s ease, transform .4s ease}
+  .end.on{opacity:1;transform:none;pointer-events:auto}
+  .end h3{margin:0 0 14px;font-size:28px;font-weight:800}
+  .end p{margin:0;font-size:17px;line-height:1.5;max-width:520px}
+  .end .again{margin-top:22px;border:0;border-radius:999px;background:#fff;color:var(--teal);
+    font-family:inherit;font-weight:800;font-size:15px;padding:11px 22px;cursor:pointer}
+  @media (max-width:560px){ .card h2{font-size:22px} .answer{font-size:17px} .fb{font-size:14px} }
+</style>
+</head><body>
+<div id="scene"><div class="deck" id="deck"><div class="dots" id="dots"></div></div></div>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var CFG=JSON.parse(document.getElementById('config').textContent);
+  var COLORS=['var(--rose)','var(--rose-clair)','var(--teal)','var(--rose)','var(--rose-clair)'];
+  var deck=document.getElementById('deck'), dots=document.getElementById('dots');
+  var cards=[], idx=0;
+
+  CFG.cartes.forEach(function(c,i){
+    var el=document.createElement('div');
+    el.className='card'; el.style.background=COLORS[i%COLORS.length];
+    el.innerHTML=
+      '<div class="num">CARTE '+(i+1)+' / '+CFG.cartes.length+'</div>'+
+      '<h2>'+c.affirmation+'</h2>'+
+      '<div class="answers">'+
+        '<button class="answer" data-v="vrai"><span class="ico"></span>'+CFG.textes.vrai+'</button>'+
+        '<button class="answer" data-v="faux"><span class="ico"></span>'+CFG.textes.faux+'</button>'+
+      '</div>'+
+      '<div class="fb"></div>'+
+      '<button class="next">'+(i===CFG.cartes.length-1?CFG.textes.derniere:CFG.textes.suivante)+' →</button>';
+    deck.appendChild(el); cards.push(el);
+
+    var fb=el.querySelector('.fb'), next=el.querySelector('.next');
+    el.querySelectorAll('.answer').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        if(el.classList.contains('locked')) return;
+        el.classList.add('locked');
+        var choisi=btn.dataset.v, bonne=c.reponse;
+        el.querySelectorAll('.answer').forEach(function(b){
+          if(b.dataset.v===bonne){ b.classList.add('good'); b.querySelector('.ico').textContent='✓'; }
+          else if(b===btn){ b.classList.add('bad'); b.querySelector('.ico').textContent='✗'; }
+        });
+        var juste=(choisi===bonne);
+        fb.innerHTML='<b>'+(juste?CFG.textes.bravo:CFG.textes.rate)+'</b> '+c.explication;
+        fb.classList.add('on'); next.classList.add('on');
+      });
+    });
+    next.addEventListener('click',function(){ go(i+1); });
+
+    var d=document.createElement('div'); d.className='dot'; dots.appendChild(d);
+  });
+
+  var end=document.createElement('div');
+  end.className='end';
+  end.innerHTML='<h3>'+CFG.textes.finTitre+'</h3><p>'+CFG.textes.finTexte+'</p>'+
+                '<button class="again">'+CFG.textes.recommencer+'</button>';
+  deck.appendChild(end);
+  end.querySelector('.again').addEventListener('click',function(){
+    cards.forEach(function(el){
+      el.classList.remove('locked','out');
+      el.querySelector('.fb').classList.remove('on');
+      el.querySelector('.next').classList.remove('on');
+      el.querySelectorAll('.answer').forEach(function(b){ b.classList.remove('good','bad'); b.querySelector('.ico').textContent=''; });
+    });
+    end.classList.remove('on'); go(0,true);
+  });
+
+  function go(n,reset){
+    cards.forEach(function(el,i){
+      el.classList.remove('on','out');
+      if(i<n) el.classList.add('out');
+    });
+    var ds=dots.querySelectorAll('.dot');
+    ds.forEach(function(d,i){ d.className='dot'+(i<n?' done':'')+(i===n?' on':''); });
+    if(n>=cards.length){ end.classList.add('on'); dots.style.opacity=0; return; }
+    dots.style.opacity=1;
+    idx=n; cards[n].classList.add('on');
+    if(reset) cards[n].scrollTop=0;
+  }
+  go(0);
+});
+</script>
+
+<script id="config" type="application/json">
+{
+  "textes": {
+    "vrai": "Vrai",
+    "faux": "Faux",
+    "suivante": "Carte suivante",
+    "derniere": "Voir le résultat",
+    "bravo": "Exact !",
+    "rate": "Eh non !",
+    "recommencer": "Recommencer",
+    "finTitre": "Bravo ! Tu as démonté les 5 idées reçues.",
+    "finTexte": "Beaucoup de candidats commencent leur année avec ces fausses croyances. Toi, tu viens de prendre une longueur d'avance : tu débloques le badge Chasseur de mythes.",
+    "recommencer": "Refaire les cartes"
+  },
+  "cartes": [
+    {
+      "affirmation": "Parcoursup est une loterie.",
+      "reponse": "faux",
+      "explication": "Parcoursup ne décide pas : il transmet. Ce sont les formations qui examinent les candidatures et établissent leur classement. La plateforme joue le facteur."
+    },
+    {
+      "affirmation": "Les meilleurs élèves sont toujours pris partout.",
+      "reponse": "faux",
+      "explication": "Un excellent dossier est un atout, pas une garantie. Chaque formation classe selon ses propres critères, et les plus demandées reçoivent des milliers de candidatures pour quelques dizaines de places."
+    },
+    {
+      "affirmation": "Il suffit d'avoir de bonnes notes.",
+      "reponse": "faux",
+      "explication": "Les notes ne sont qu'une pièce du puzzle : appréciations, progression, spécialités, projet motivé et activités comptent aussi."
+    },
+    {
+      "affirmation": "Toutes les formations regardent les mêmes critères.",
+      "reponse": "faux",
+      "explication": "Chaque formation publie ses propres critères sur sa fiche Parcoursup : lis-les avant de formuler tes vœux."
+    },
+    {
+      "affirmation": "Les lycéens sont les seuls à utiliser Parcoursup.",
+      "reponse": "faux",
+      "explication": "Il y a aussi les réorientations, les reprises d'études et les candidats à l'étranger : près d'un million de candidats chaque année."
+    }
+  ]
+}
+</script>
+</body></html>
