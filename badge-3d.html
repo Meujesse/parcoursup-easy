@@ -27,6 +27,7 @@
   var NAMES={explorateur:'explorateur',chasseur:'chasseur',decrypteur:'decrypteur'};
   var key=NAMES[(P.get('b')||'explorateur').toLowerCase()]||'explorateur';
   var TEX='badges/'+key+'-face.png';
+  var TEX_BACK='badges/'+key+'-back.png';
 
   var PINK=0xea1c5c, PINK_DARK=0xc21a4d;
   var canvas=document.getElementById('c');
@@ -68,17 +69,17 @@
 
   // --- médaille
   var loader=new THREE.TextureLoader();
-  function mkTex(rot,flip){ var t=loader.load(TEX,function(tt){tt.colorSpace=THREE.SRGBColorSpace;});
+  function mkTex(rot,flip,src){ var t=loader.load(src||TEX,function(tt){tt.colorSpace=THREE.SRGBColorSpace;});
     t.colorSpace=THREE.SRGBColorSpace; t.anisotropy=8; t.center.set(0.5,0.5); t.rotation=rot;
     if(flip){ t.wrapS=THREE.RepeatWrapping; t.repeat.x=-1; }
     return t; }
-  var texF=mkTex(Math.PI/2,false), texB=mkTex(Math.PI/2,false);
+  var texF=mkTex(Math.PI/2,false), texB=mkTex(Math.PI/2,false,TEX_BACK);
   function faceMaterial(t){ return new THREE.MeshStandardMaterial({map:t,metalness:0.0,roughness:0.72,
     emissive:0xffffff,emissiveMap:t,emissiveIntensity:0.28}); }
   var faceMat=faceMaterial(texF);
   var backMat=faceMaterial(texB);
-  var rimMat=new THREE.MeshStandardMaterial({color:PINK_DARK,metalness:0.2,roughness:0.5,emissive:PINK_DARK,emissiveIntensity:0.25});
-  var disc=new THREE.Mesh(new THREE.CylinderGeometry(1,1,0.13,96,1,false),[rimMat,faceMat,backMat]);
+  var rimMat=new THREE.MeshStandardMaterial({color:0xd01550,metalness:0.15,roughness:0.55,emissive:0xd01550,emissiveIntensity:0.2});
+  var disc=new THREE.Mesh(new THREE.CylinderGeometry(1,1,0.075,96,1,false),[rimMat,faceMat,backMat]);
   disc.rotation.x=Math.PI/2;
   group.add(disc);
   group.position.y=0.36;
