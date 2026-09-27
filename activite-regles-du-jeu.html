@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Les règles du jeu — le parcours Parcoursup</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--rose:#ea1f5c;--rose-clair:#e94f8a;--teal:#12798f;--teal-fonce:#083a45;
+        --vert:#1e9c72;--vert-clair:#def6ec;--rouge:#d83f55;--blanc:#fff}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%;background:transparent;overflow:hidden;
+    font-family:Montserrat,system-ui,sans-serif;color:var(--teal-fonce);-webkit-tap-highlight-color:transparent}
+  #scene{position:relative;width:100%;height:100%}
+  /* ---- sentier ---- */
+  .trail{position:absolute;inset:0}
+  .trail svg{position:absolute;inset:0;width:100%;height:100%}
+  .stone{position:absolute;transform:translate(-50%,-50%);width:120px;text-align:center;cursor:pointer}
+  .stone .pastille{width:64px;height:64px;margin:0 auto 6px;border-radius:50%;background:#fff;
+    box-shadow:0 8px 18px rgba(8,58,69,.22);display:flex;align-items:center;justify-content:center;
+    font-size:27px;border:4px solid #fff;transition:transform .18s ease, border-color .25s ease, background .25s ease}
+  .stone:hover .pastille{transform:translateY(-3px) scale(1.04)}
+  .stone .lab{font-size:12.5px;font-weight:700;color:#fff;line-height:1.25;text-shadow:0 2px 6px rgba(8,58,69,.35)}
+  .stone .n{position:absolute;top:-6px;left:50%;margin-left:14px;width:24px;height:24px;border-radius:50%;
+    background:var(--rose);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 3px 8px rgba(8,58,69,.25)}
+  .stone.ok .pastille{border-color:var(--vert);background:var(--vert-clair)}
+  .stone.ok .n{background:var(--vert)}
+  /* ---- panneau ---- */
+  .panneau{position:absolute;inset:0;background:#fff;border-radius:22px;box-shadow:0 18px 40px rgba(8,58,69,.28);
+    padding:22px 26px;display:none;flex-direction:column;overflow:hidden}
+  .panneau.on{display:flex}
+  .panneau header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .panneau header .emo{font-size:30px}
+  .panneau header h2{margin:0;font-size:21px;font-weight:800;color:var(--teal)}
+  .panneau .fermer{margin-left:auto;border:0;background:#f0f5f6;border-radius:999px;width:32px;height:32px;
+    font-size:17px;cursor:pointer;color:var(--teal-fonce)}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;flex:1 1 auto;min-height:0}
+  .bloc{min-height:0;overflow:auto}
+  .dit{font-size:13.5px;line-height:1.5;color:#3d5a63;font-weight:500;border-left:4px solid var(--rose-clair);
+    padding-left:12px;margin:0 0 12px}
+  .titre-mini{font-size:11.5px;font-weight:800;letter-spacing:1.4px;color:var(--rose);margin:0 0 6px}
+  ul{margin:0 0 12px;padding:0 0 0 18px;font-size:13px;line-height:1.55;font-weight:600}
+  .attention{background:#fff5e6;border-radius:12px;padding:10px 12px;font-size:12.5px;font-weight:600;color:#8a5a12}
+  .q{font-size:15px;font-weight:800;margin:0 0 10px;line-height:1.3}
+  .opt{display:block;width:100%;text-align:left;border:3px solid #e6eef0;background:#fff;border-radius:12px;
+    padding:10px 12px;margin-bottom:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;
+    transition:border-color .2s ease, background .2s ease}
+  .opt:hover{border-color:var(--rose-clair)}
+  .opt.good{border-color:var(--vert);background:var(--vert-clair);color:var(--vert)}
+  .opt.bad{border-color:var(--rouge);background:#fdeaed;color:var(--rouge)}
+  .fbq{font-size:12.5px;line-height:1.5;font-weight:600;margin-top:8px;display:none}
+  .fbq.on{display:block}
+  .suite{align-self:flex-end;margin-top:10px;border:0;border-radius:999px;background:var(--teal);color:#fff;
+    font-family:inherit;font-weight:800;font-size:13.5px;padding:10px 18px;cursor:pointer;display:none}
+  .suite.on{display:block}
+  /* ---- fin ---- */
+  .carte{position:absolute;inset:0;background:var(--teal);border-radius:22px;color:#fff;padding:24px 28px;
+    display:none;flex-direction:column;align-items:center;text-align:center;overflow:auto}
+  .carte.on{display:flex}
+  .carte h3{margin:0 0 4px;font-size:22px;font-weight:800}
+  .carte .sous{font-size:13px;opacity:.9;margin-bottom:14px;max-width:640px;line-height:1.5}
+  .grille{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:760px}
+  .case{background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);border-radius:14px;padding:10px;
+    font-size:12px;font-weight:700;line-height:1.3}
+  .case .e{display:block;font-size:20px;margin-bottom:4px}
+  .carte .refaire{margin-top:16px;border:0;border-radius:999px;background:#fff;color:var(--teal);
+    font-family:inherit;font-weight:800;font-size:13px;padding:10px 18px;cursor:pointer}
+  @media (max-width:760px){ .cols{grid-template-columns:1fr} .stone{width:86px} .stone .lab{font-size:11px} }
+</style>
+</head><body>
+<div id="scene">
+  <div class="trail" id="trail"><svg id="chemin" viewBox="0 0 1120 520" preserveAspectRatio="none"></svg></div>
+  <div class="panneau" id="panneau"></div>
+  <div class="carte" id="carte"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var CFG=JSON.parse(document.getElementById('config').textContent);
+  var trail=document.getElementById('trail'), svg=document.getElementById('chemin');
+  var panneau=document.getElementById('panneau'), carte=document.getElementById('carte');
+  var faits={}, nb=CFG.cases.length;
+
+  // positions des 6 cases en % (sentier qui monte en zigzag)
+  var POS=[[8,80],[23,57],[39,71],[55,45],[71,59],[87,30]];
+
+  var d='M '+POS.map(function(p){return (p[0]/100*1120)+' '+(p[1]/100*520);}).join(' L ');
+  svg.innerHTML='<path d="'+d+'" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="10" '+
+    'stroke-linecap="round" stroke-dasharray="2 18"/>'+
+    '<path id="fait" d="'+d+'" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" '+
+    'stroke-dasharray="2 18" style="opacity:0"/>';
+
+  CFG.cases.forEach(function(c,i){
+    var el=document.createElement('div');
+    el.className='stone'; el.style.left=POS[i][0]+'%'; el.style.top=POS[i][1]+'%';
+    el.innerHTML='<div class="pastille">'+c.emoji+'<span class="n">'+(i+1)+'</span></div><div class="lab">'+c.titre+'</div>';
+    el.addEventListener('click',function(){ ouvrir(i); });
+    trail.appendChild(el);
+  });
+  var stones=[].slice.call(trail.querySelectorAll('.stone'));
+
+  function ouvrir(i){
+    var c=CFG.cases[i];
+    panneau.innerHTML=
+      '<header><span class="emo">'+c.emoji+'</span><h2>'+(i+1)+'. '+c.titre+'</h2>'+
+        '<button class="fermer" title="Fermer">✕</button></header>'+
+      '<div class="cols">'+
+        '<div class="bloc">'+
+          '<p class="dit">'+c.lisa+'</p>'+
+          '<p class="titre-mini">CE QUE JE RETIENS</p><ul>'+c.retiens.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>'+
+          '<div class="attention">⚠️ '+c.attention+'</div>'+
+        '</div>'+
+        '<div class="bloc">'+
+          '<p class="titre-mini">MINI-QUESTION</p>'+
+          '<p class="q">'+c.question.texte+'</p>'+
+          c.question.options.map(function(o,k){return '<button class="opt" data-k="'+k+'">'+o+'</button>';}).join('')+
+          '<div class="fbq"></div>'+
+        '</div>'+
+      '</div>'+
+      '<button class="suite">'+(Object.keys(faits).length>=nb-1?CFG.textes.voirCarte:CFG.textes.suite)+' →</button>';
+    panneau.classList.add('on');
+    var fbq=panneau.querySelector('.fbq'), suite=panneau.querySelector('.suite');
+    panneau.querySelector('.fermer').addEventListener('click',fermer);
+    panneau.querySelectorAll('.opt').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        if(panneau.dataset.lock==='1') return;
+        panneau.dataset.lock='1';
+        var k=+btn.dataset.k, bonne=c.question.bonne;
+        panneau.querySelectorAll('.opt').forEach(function(b,j){
+          if(j===bonne) b.classList.add('good'); else if(b===btn) b.classList.add('bad');
+        });
+        fbq.style.color=(k===bonne)?'#1e9c72':'#d83f55';
+        fbq.textContent=(k===bonne?'✓ ':'✗ ')+c.question.feedback;
+        fbq.classList.add('on'); suite.classList.add('on');
+        marquer(i);
+      });
+    });
+    suite.addEventListener('click',function(){
+      fermer();
+      if(Object.keys(faits).length>=nb) finir();
+    });
+  }
+  function fermer(){ panneau.classList.remove('on'); panneau.dataset.lock=''; }
+
+  function marquer(i){
+    if(faits[i]) return;
+    faits[i]=true; stones[i].classList.add('ok');
+    document.getElementById('fait').style.opacity=(Object.keys(faits).length/nb).toFixed(2);
+  }
+
+  function finir(){
+    carte.innerHTML='<h3>'+CFG.textes.carteTitre+'</h3>'+
+      '<p class="sous">'+CFG.textes.carteTexte+'</p>'+
+      '<div class="grille">'+CFG.cases.map(function(c,i){
+        return '<div class="case"><span class="e">'+c.emoji+'</span>'+(i+1)+'. '+c.titre+'</div>';}).join('')+'</div>'+
+      '<button class="refaire">'+CFG.textes.refaire+'</button>';
+    carte.classList.add('on');
+    carte.querySelector('.refaire').addEventListener('click',function(){ location.reload(); });
+  }
+});
+</script>
+
+<script id="config" type="application/json">
+{
+  "textes": {
+    "suite": "Continuer le sentier",
+    "voirCarte": "Débloquer la carte",
+    "carteTitre": "Tu débloques la Carte de l'aventure Parcoursup !",
+    "carteTexte": "Tu n'as pas besoin de tout retenir aujourd'hui : l'important, c'est de savoir qu'il existe un chemin clair. Cette carte rejoint ton Carnet de route, et on parcourra chaque étape ensemble au moment où tu en auras besoin.",
+    "refaire": "Refaire le sentier"
+  },
+  "cases": [
+    {
+      "emoji": "🔍", "titre": "Je m'informe",
+      "lisa": "Tout commence ici. Avant de faire le moindre choix, tu explores les formations : les programmes, les attendus, les débouchés, les taux d'accès, les portes ouvertes… Tout est indiqué sur Parcoursup.",
+      "retiens": ["Je découvre les formations", "Je consulte leurs fiches", "Je participe aux JPO et aux salons", "Je commence à remplir mon Carnet de route"],
+      "attention": "Ne choisis jamais une formation uniquement parce que son nom te plaît ou parce que tes amis la demandent.",
+      "question": { "texte": "Quelle est la meilleure façon de découvrir une formation ?",
+        "options": ["Regarder uniquement son nom", "Lire sa fiche Parcoursup et participer à une journée portes ouvertes", "Demander à un copain"],
+        "bonne": 1,
+        "feedback": "La fiche Parcoursup est la mine d'informations de départ : contenu, attendus, critères, débouchés, taux d'accès. Et rien ne remplace une JPO pour sentir l'ambiance. Note tes impressions dans ton Carnet de route !" }
+    },
+    {
+      "emoji": "📝", "titre": "Je crée mon dossier",
+      "lisa": "Une fois ton projet plus clair, tu complètes ton dossier Parcoursup. C'est lui qui sera transmis aux établissements : tes informations, les éléments demandés et les rubriques qui permettent aux formations de mieux te connaître.",
+      "retiens": ["Je complète mon profil", "Je vérifie les informations", "Je prépare les documents nécessaires", "Je prends de l'avance"],
+      "attention": "Ne remets jamais ton dossier au dernier moment.",
+      "question": { "texte": "Que contient principalement ton dossier Parcoursup ?",
+        "options": ["Seulement tes notes", "Plusieurs informations qui permettent aux formations d'étudier ta candidature", "Uniquement ta lettre de motivation"],
+        "bonne": 1,
+        "feedback": "Ton dossier, c'est bien plus que des notes : bulletins, appréciations, rubriques à remplir, projet de formation motivé, activités et centres d'intérêt." }
+    },
+    {
+      "emoji": "🎯", "titre": "Je formule mes vœux",
+      "lisa": "C'est maintenant que tu choisis les formations auxquelles tu souhaites candidater. Tu peux faire plusieurs vœux et construire une stratégie équilibrée entre formations ambitieuses, réalistes et sécurisées.",
+      "retiens": ["Je choisis les formations qui me correspondent", "Je réfléchis à ma stratégie", "Je diversifie mes choix"],
+      "attention": "Ne choisis pas uniquement les formations les plus sélectives.",
+      "question": { "texte": "Pourquoi est-il conseillé de diversifier ses vœux ?",
+        "options": ["Pour augmenter ses chances d'obtenir une proposition adaptée", "Parce que c'est obligatoire", "Parce que tout le monde le fait"],
+        "bonne": 0,
+        "feedback": "Diversifier, c'est mélanger des vœux ambitieux, réalistes et sécurisés : tu gardes des portes ouvertes quelles que soient les réponses." }
+    },
+    {
+      "emoji": "✅", "titre": "Je confirme mes vœux",
+      "lisa": "Attention ! Ajouter un vœu ne suffit pas. Tu dois ensuite confirmer chacun de tes vœux avant la date limite. C'est aussi le moment de vérifier que ton dossier est complet.",
+      "retiens": ["Je relis mon dossier", "Je vérifie les pièces demandées", "Je confirme chacun de mes vœux"],
+      "attention": "Un vœu non confirmé ne sera pas étudié par la formation.",
+      "question": { "texte": "Que se passe-t-il si tu oublies de confirmer un vœu ?",
+        "options": ["Il sera automatiquement confirmé", "Il ne sera pas examiné", "Tu pourras le confirmer plus tard"],
+        "bonne": 1,
+        "feedback": "Un vœu non confirmé avant la date limite disparaît : il n'est jamais transmis à la formation. Mets-toi un rappel dans ton Carnet de route !" }
+    },
+    {
+      "emoji": "📬", "titre": "Je reçois les réponses",
+      "lisa": "Les formations examinent toutes les candidatures et transmettent leurs décisions à Parcoursup. Tu recevras progressivement leurs réponses. Pas de panique : elles n'arrivent pas toutes le même jour.",
+      "retiens": ["Je consulte régulièrement mon dossier", "Je lis attentivement chaque réponse", "Je respecte les délais pour répondre"],
+      "attention": "Ne te décourage pas si tu es en liste d'attente : beaucoup de candidats reçoivent une proposition au fil de la phase d'admission.",
+      "question": { "texte": "Si tu es « En attente », cela signifie que…",
+        "options": ["Tu es définitivement refusé", "Tu peux encore recevoir une proposition", "Tu dois refaire un dossier"],
+        "bonne": 1,
+        "feedback": "« En attente » veut dire que la liste bouge encore : à mesure que les candidats acceptent ou refusent, tu remontes dans le classement." }
+    },
+    {
+      "emoji": "🏁", "titre": "Je choisis ma formation",
+      "lisa": "Dernière étape ! Une fois les réponses reçues, tu fais ton choix définitif, puis tu t'inscris dans ton futur établissement. Félicitations, une nouvelle aventure commence !",
+      "retiens": ["Je choisis la formation qui me correspond", "Je réalise mon inscription administrative", "Je prépare ma rentrée"],
+      "attention": "L'admission sur Parcoursup ne vaut pas inscription : tu dois ensuite effectuer les démarches demandées par ton établissement.",
+      "question": { "texte": "Une fois que tu as accepté définitivement une formation, que reste-t-il à faire ?",
+        "options": ["Plus rien", "M'inscrire auprès de l'établissement", "Attendre septembre"],
+        "bonne": 1,
+        "feedback": "Accepter sur Parcoursup et s'inscrire sont deux choses différentes : l'inscription administrative se fait auprès de l'établissement, avec ses propres dates." }
+    }
+  ]
+}
+</script>
+</body></html>
