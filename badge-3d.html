@@ -58,9 +58,9 @@
 
   // --- ruban (derrière la médaille)
   var rib=new THREE.Shape();
-  rib.moveTo(-0.42,-0.80); rib.lineTo(-0.42,-1.78); rib.lineTo(-0.15,-1.44);
+  rib.moveTo(-0.42,-0.96); rib.lineTo(-0.42,-1.78); rib.lineTo(-0.15,-1.44);
   rib.lineTo(0,-1.78); rib.lineTo(0.15,-1.44); rib.lineTo(0.42,-1.78);
-  rib.lineTo(0.42,-0.80); rib.closePath();
+  rib.lineTo(0.42,-0.96); rib.closePath();
   var ribGeo=new THREE.ExtrudeGeometry(rib,{depth:0.08,bevelEnabled:false});
   ribGeo.translate(0,0,-0.04);
   var ribMesh=new THREE.Mesh(ribGeo,new THREE.MeshStandardMaterial({color:PINK,metalness:0.1,roughness:0.6,emissive:PINK,emissiveIntensity:0.22,side:THREE.DoubleSide}));
@@ -114,10 +114,10 @@
       idle+=dt;
       angVel*=0.94;                                  // inertie apres le glisser
       rotY+=angVel*dt;
-      if(Math.abs(angVel)<0.003){                    // puis retour tranquille face au lecteur
-        var sway=Math.sin(now/2800)*0.28;
+      if(Math.abs(angVel)<0.004){                    // puis retour face au lecteur
+        var sway=Math.sin(now/3000)*0.16;
         var diff=Math.atan2(Math.sin(sway-rotY),Math.cos(sway-rotY));
-        rotY+=diff*Math.min(0.06,0.012*dt*(idle/40));
+        rotY+=diff*Math.min(0.09,0.03*dt);
       }
       tiltTarget+=(0-tiltTarget)*0.02*dt;
     }
