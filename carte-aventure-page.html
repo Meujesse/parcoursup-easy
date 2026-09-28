@@ -1,0 +1,54 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<title>Ma Carte de l'Aventure Parcoursup</title>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+<style>
+@page{size:1200px 675px;margin:0}
+
+html,body{margin:0;background:transparent}
+#s{position:relative;width:1200px;height:675px;overflow:hidden;font-family:'Patrick Hand',cursive;color:#1f3a45}
+.page{position:absolute;top:22px;width:572px;height:632px;background:#fffdf7;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.g{left:26px;border-radius:16px 4px 4px 16px;background:linear-gradient(90deg,#fffdf7 90%,#ece6d8)}
+.d{left:602px;border-radius:4px 16px 16px 4px;background:linear-gradient(270deg,#fffdf7 90%,#ece6d8)}
+.lines{position:absolute;left:40px;right:30px;top:120px;bottom:40px;background:repeating-linear-gradient(transparent 0 33px,#e3ebf0 33px 34px)}
+.sp{position:absolute;left:585px;top:40px;width:30px;height:600px}
+.sp i{display:block;width:34px;height:11px;border:3px solid #b9b2a3;border-radius:7px;background:#fff;margin:0 0 26px -2px;box-sizing:border-box;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+h1{position:absolute;left:70px;top:44px;margin:0;width:460px;font:800 28px Montserrat,sans-serif;color:#ea1f5c;line-height:1.1}
+h1 small{display:block;font:600 15px Montserrat,sans-serif;color:#127992;letter-spacing:2px;margin-bottom:6px}
+.stamp{position:absolute;left:632px;top:34px;width:104px;height:104px;border:4px solid #ea1f5c;border-radius:50%;transform:rotate(-12deg);display:flex;align-items:center;justify-content:center;text-align:center;font:800 13px/1.15 Montserrat,sans-serif;color:#ea1f5c;letter-spacing:1px;opacity:.85}
+.intro{position:absolute;left:70px;top:150px;width:470px;font-size:26px;line-height:34px}
+.intro b{color:#127992}
+svg.map{position:absolute;left:602px;top:22px}
+.retenir{position:absolute;left:70px;top:330px;width:480px;font-size:23px;line-height:34px}
+.retenir li{list-style:none;margin:0;padding-left:0}
+.retenir li::before{content:"✔ ";color:#ea1f5c}
+.astuce{position:absolute;left:70px;top:520px;width:470px;font-size:22px;line-height:30px;padding:8px 14px;border:2px dashed #6fb3c3;border-radius:12px;background:#f3fbfd}
+.foot{position:absolute;left:640px;bottom:12px;width:520px;font:600 12px Montserrat,sans-serif;color:#7a8a92;letter-spacing:1px;text-align:right}
+</style></head><body><div id="s">
+<div class="page g"><div class="lines"></div></div>
+<div class="page d"><div class="lines"></div></div>
+<div class="sp"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<h1><small>CARNET DE ROUTE · MISSION 1</small>Ma Carte de l'Aventure<br>Parcoursup</h1>
+<div class="stamp">DÉBLOQUÉE<br>ÉTAPE 3</div>
+<div class="intro">Six étapes, toujours dans le même ordre. <b>Je n'ai pas besoin de tout retenir</b> : je sais qu'il existe un chemin clair, et je le parcours avec Lisa, mission après mission.</div>
+<ul class="retenir">
+ <li>Je m'informe et je découvre les formations.</li>
+ <li>Je crée mon dossier, puis je formule mes vœux.</li>
+ <li>Je confirme chacun de mes vœux avant la date limite.</li>
+ <li>Je reçois les réponses, je choisis, je m'inscris.</li>
+</ul>
+<div class="astuce">💡 Astuce de Lisa : à chaque mission, on reviendra sur l'étape qui compte, au moment où tu en auras besoin.</div>
+<svg class="map" width="572" height="632" viewBox="0 0 572 632" xmlns="http://www.w3.org/2000/svg">
+ <path d="M200 565 C200 500 380 545 380 480 C380 415 200 460 200 395 C200 330 380 375 380 310 C380 245 200 290 200 225 C200 160 380 205 380 140 C380 100 320 100 300 62" fill="none" stroke="#6fb3c3" stroke-width="6" stroke-dasharray="14 12" stroke-linecap="round"/>
+ <g font-family="Patrick Hand" font-size="21" fill="#1f3a45">
+  <g transform="translate(200,565)"><circle r="26" fill="#ea1f5c"/><text x="0" y="8" text-anchor="middle" font-family="Montserrat" font-weight="800" font-size="22" fill="#fff">1</text><text x="-40" y="8" text-anchor="end">Je m'informe</text></g>
+  <g transform="translate(380,480)"><circle r="26" fill="#ea1f5c"/><text x="0" y="8" text-anchor="middle" font-family="Montserrat" font-weight="800" font-size="22" fill="#fff">2</text><text x="40" y="-4">Je crée<tspan x="40" dy="24">mon dossier</tspan></text></g>
+  <g transform="translate(200,395)"><circle r="26" fill="#ea1f5c"/><text x="0" y="8" text-anchor="middle" font-family="Montserrat" font-weight="800" font-size="22" fill="#fff">3</text><text x="-40" y="-4" text-anchor="end">Je formule<tspan x="-40" dy="24">mes vœux</tspan></text></g>
+  <g transform="translate(380,310)"><circle r="26" fill="#ea1f5c"/><text x="0" y="8" text-anchor="middle" font-family="Montserrat" font-weight="800" font-size="22" fill="#fff">4</text><text x="40" y="-4">Je confirme<tspan x="40" dy="24">mes vœux</tspan></text></g>
+  <g transform="translate(200,225)"><circle r="26" fill="#ea1f5c"/><text x="0" y="8" text-anchor="middle" font-family="Montserrat" font-weight="800" font-size="22" fill="#fff">5</text><text x="-40" y="-4" text-anchor="end">Je reçois<tspan x="-40" dy="24">les réponses</tspan></text></g>
+  <g transform="translate(380,140)"><circle r="26" fill="#ea1f5c"/><text x="0" y="8" text-anchor="middle" font-family="Montserrat" font-weight="800" font-size="22" fill="#fff">6</text><text x="40" y="-4">Je choisis<tspan x="40" dy="24">ma formation</tspan></text></g>
+  <g transform="translate(300,62)"><path d="M0 0 L0 -40" stroke="#127992" stroke-width="4" stroke-linecap="round"/><path d="M0 -40 L32 -30 L0 -20 z" fill="#ea1f5c"/><text x="44" y="-6" font-size="19" fill="#127992">Arrivée : ma rentrée !</text></g>
+  <text x="200" y="614" text-anchor="middle" font-size="17" fill="#7a8a92">Départ : automne de Terminale</text>
+ </g>
+</svg>
+<div class="foot">PARCOURSUP'EASY · COLOMBIS × MEUJESSE LEARNING</div>
+</div></body></html>
