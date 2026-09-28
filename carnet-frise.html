@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ma frise Parcoursup – Carnet de route</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#ea1f5c;--canard:#127992;--clair:#6fb3c3;--papier:#fffdf7}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--canard);font-family:Montserrat,Arial,sans-serif}
+#stage{position:relative;width:1200px;height:675px;transform-origin:top left;background:var(--canard);color:#fff}
+.bulle{position:absolute;border-radius:50%;opacity:.35}
+.b1{width:260px;height:260px;left:-80px;top:-90px;background:var(--clair)}
+.b2{width:140px;height:140px;left:1080px;top:520px;background:var(--rose)}
+h1{position:absolute;left:60px;top:55px;margin:0;font-size:31px;font-weight:800;line-height:1.2;width:560px}
+h1 span{color:#ffd0dd}
+#citation{position:absolute;left:60px;top:200px;width:520px;font:700 30px/1.25 Caveat,cursive;color:#fff;opacity:.95}
+#citation:before{content:"“";font-size:60px;color:var(--rose);line-height:0;vertical-align:-20px;margin-right:6px}
+#liste{position:absolute;left:60px;top:300px;width:500px;list-style:none;padding:0;margin:0;font-size:18px;font-weight:600}
+#liste li{margin:0 0 12px;padding-left:34px;position:relative;opacity:0;transform:translateX(-14px);transition:all .5s}
+#liste li:before{content:"✓";position:absolute;left:0;top:-2px;width:24px;height:24px;border-radius:50%;background:var(--rose);color:#fff;font-size:14px;text-align:center;line-height:24px}
+#stage.ouvert #liste li{opacity:1;transform:none}
+#stage.ouvert #liste li:nth-child(2){transition-delay:.15s}#stage.ouvert #liste li:nth-child(3){transition-delay:.3s}
+#btn{position:absolute;left:60px;top:520px;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:16px 28px;font:800 20px Montserrat,sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.25);opacity:0;transition:opacity .5s .6s}
+#stage.ouvert #btn{opacity:1}
+#btn small{display:block;font-size:12px;font-weight:600;opacity:.85}
+#carnet{position:absolute;left:690px;top:110px;width:380px;height:470px;perspective:1600px;cursor:pointer}
+#aide{position:absolute;left:690px;top:600px;width:380px;text-align:center;font-weight:600;font-size:18px;opacity:.9;transition:opacity .4s}
+#stage.ouvert #aide{opacity:0}
+.page{position:absolute;inset:0;border-radius:6px 18px 18px 6px;background:var(--papier);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.page.p2{transform:translate(6px,6px);background:#f3efe6}
+.page.p3{transform:translate(12px,12px);background:#e9e4d8}
+.interieur{position:absolute;inset:0;padding:40px 30px 30px 44px;box-sizing:border-box;color:#1f3a45;font:700 26px/40px Caveat,cursive;background-image:repeating-linear-gradient(transparent 0 39px,#dfe8ee 39px 40px);background-position:0 34px}
+.interieur .marge{position:absolute;left:32px;top:0;bottom:0;width:2px;background:#f2b8c8}
+.interieur h2{margin:0 0 6px;font:700 36px Caveat,cursive;color:var(--rose)}
+.interieur p{margin:0}
+.spirale{position:absolute;left:-14px;top:30px;bottom:30px;width:28px}
+.spirale i{display:block;width:28px;height:10px;border:3px solid #c8c2b4;border-radius:6px;background:#fff;margin:0 0 22px;box-sizing:border-box}
+#couv{position:absolute;inset:0;border-radius:6px 18px 18px 6px;background:var(--rose);transform-origin:left center;transition:transform 1.1s cubic-bezier(.6,.05,.3,1);box-shadow:0 20px 50px rgba(0,0,0,.35);backface-visibility:hidden;z-index:3}
+#couv:after{content:"";position:absolute;left:34px;top:0;bottom:0;width:2px;background:rgba(255,255,255,.25)}
+#couv .t{position:absolute;left:60px;top:150px;right:30px;font:800 34px/1.15 Montserrat,sans-serif;color:#fff}
+#couv .t b{display:block;font:700 40px Caveat,cursive;color:#ffd0dd;margin-top:10px}
+#couv .badge{position:absolute;left:60px;bottom:40px;background:#fff;color:var(--rose);border-radius:999px;padding:6px 14px;font:800 13px Montserrat,sans-serif;letter-spacing:1px}
+#couv .ico{position:absolute;left:60px;top:60px;font-size:54px}
+#stage.ouvert #couv{transform:rotateY(-165deg)}
+#ecouter{position:absolute;left:60px;top:430px;z-index:6}
+.hp{display:none;align-items:center;gap:10px;background:transparent;border:0;padding:0;cursor:pointer;font:700 15px Montserrat,sans-serif;color:#fff}
+.hp.dispo{display:flex}
+.hp svg{width:56px;height:56px;flex:none;transition:transform .2s}
+.hp:hover svg{transform:scale(1.08)}
+.hp-pulse{fill:#ea1f5c;opacity:.35;transform-origin:center;animation:hpPulse 1.8s ease-out infinite}
+@keyframes hpPulse{0%{transform:scale(.8);opacity:.45}100%{transform:scale(1.05);opacity:0}}
+#lisa{position:absolute;left:575px;top:330px;width:150px;height:150px;border-radius:50%;border:6px solid #fff;object-fit:cover;box-shadow:0 8px 20px rgba(0,0,0,.3);background:#fff;z-index:5}
+/* la page en grand, une fois le carnet ouvert */
+#grand{position:absolute;inset:0;background:rgba(18,121,146,.96);opacity:0;pointer-events:none;transition:opacity .6s;z-index:20}
+#grand.on{opacity:1;pointer-events:auto}
+#grand img{position:absolute;left:0;top:0;width:1200px;height:675px}
+#grand .actions{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:16px}
+#grand button{background:var(--rose);color:#fff;border:0;border-radius:999px;padding:12px 24px;font:800 17px Montserrat,sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+#grand button.sec{background:#fff;color:var(--canard)}
+</style></head>
+<body>
+<div id="stage">
+ <div class="bulle b1"></div><div class="bulle b2"></div>
+ <h1>Bravo ! <span>Ta frise Parcoursup rejoint ton Carnet de route.</span></h1>
+ <div id="citation">Une nouvelle page débloquée : les 3 phases de ton année, en un coup d'œil.</div>
+ <ul id="liste">
+  <li>Je m'informe et je découvre les formations</li>
+  <li>Je m'inscris, je formule mes vœux, je complète mon dossier</li>
+  <li>Je reçois les réponses et je construis la suite</li>
+ </ul>
+ <button id="btn">📥 Télécharger cette page<small>PDF · Ma frise Parcoursup</small></button>
+ <img id="lisa" src="facetime-lisa-avatar.png" alt="Lisa">
+ <button id="ecouter" class="hp"><svg viewBox="0 0 437.5 437.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle class="hp-pulse" cx="218.75" cy="218.75" r="218.75"/><circle cx="218.75" cy="218.75" r="175" fill="#ea1f5c"/><path fill="#fff" d="M175.42,190.07l38.22-28.66V276.08l-38.22-28.67H156.31a9.56,9.56,0,0,1-9.56-9.56V199.63a9.56,9.56,0,0,1,9.56-9.56Zm92.79-25.89a9.6,9.6,0,1,0-13.57,13.57,58,58,0,0,1,0,82,9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A77.32,77.32,0,0,0,268.21,164.18Zm-23.89,23.89a9.6,9.6,0,0,0-13.57,13.57,24.19,24.19,0,0,1,0,34.19l0,0a9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A43.38,43.38,0,0,0,244.32,188.07Z"/></svg><span class="lib">Écouter Lisa</span></button>
+ <audio id="voix" preload="auto" src="audio/lisa-m1-etape4-conclusion.mp3"></audio>
+ <div id="carnet">
+  <div class="page p3"></div><div class="page p2"></div>
+  <div class="page">
+   <div class="interieur"><div class="marge"></div>
+    <h2>Ma frise Parcoursup</h2>
+    <p>1 · Je m'informe</p>
+    <p>2 · Je candidate</p>
+    <p>3 · Je reçois les réponses</p>
+    <p style="margin-top:14px;font-size:22px">Les dates changent, les phases jamais.</p>
+   </div>
+  </div>
+  <div id="couv"><div class="ico">🧭</div><div class="t">CARNET DE ROUTE<b>Mission 1 · Camp de base</b></div><div class="badge">NOUVELLE PAGE</div></div>
+  <div class="spirale"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+ </div>
+ <div id="aide">Clique sur le carnet pour l'ouvrir 👆</div>
+ <div id="grand">
+  <img src="carnet-frise-page.png" alt="Ma frise Parcoursup">
+  <div class="actions"><button id="dl">📥 Télécharger en PDF</button><button class="sec" id="fermer">Refermer le carnet</button></div>
+ </div>
+</div>
+<script>
+(function(){
+ var stage=document.getElementById('stage'),carnet=document.getElementById('carnet'),grand=document.getElementById('grand');
+ function fit(){var s=Math.min(innerWidth/1200,innerHeight/675);stage.style.transform='scale('+s+')';stage.style.left=((innerWidth-1200*s)/2)+'px';stage.style.top=((innerHeight-675*s)/2)+'px';}
+ addEventListener('resize',fit);fit();
+ var timer=null;
+ carnet.addEventListener('click',function(){
+   if(stage.classList.contains('ouvert')){ stage.classList.remove('ouvert'); grand.classList.remove('on'); clearTimeout(timer); return; }
+   stage.classList.add('ouvert');
+   timer=setTimeout(function(){ grand.classList.add('on'); },1000);
+   try{ parent.postMessage({pe:'reponse',id:'CARNET_M1_ouvert',type:'other',reponse:'ouvert'},'*'); }catch(e){}
+ });
+ function pdf(){ window.open('ma-frise-parcoursup.pdf','_blank'); }
+ document.getElementById('btn').addEventListener('click',pdf);
+ document.getElementById('dl').addEventListener('click',pdf);
+ document.getElementById('fermer').addEventListener('click',function(){ grand.classList.remove('on'); stage.classList.remove('ouvert'); });
+ var voix=document.getElementById('voix'),eb=document.getElementById('ecouter');
+ voix.addEventListener('canplaythrough',function(){eb.classList.add('dispo');});
+ voix.addEventListener('error',function(){eb.classList.remove('dispo');});
+ eb.addEventListener('click',function(){ if(voix.paused){voix.currentTime=0;voix.play();eb.querySelector('.lib').textContent='Pause';} else {voix.pause();eb.querySelector('.lib').textContent='Écouter Lisa';} });
+ voix.addEventListener('ended',function(){eb.querySelector('.lib').textContent='Réécouter';});
+})();
+</script>
+</body></html>
