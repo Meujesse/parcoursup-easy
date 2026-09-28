@@ -13,30 +13,30 @@ h1{position:absolute;left:40px;top:22px;margin:0;font-size:30px;font-weight:800}
 h1 small{display:block;font-size:15px;font-weight:600;opacity:.9;margin-top:2px}
 /* carnet ouvert : 2 pages */
 #carnet{position:absolute;left:40px;top:90px;width:820px;height:560px;display:flex;gap:0;filter:drop-shadow(0 22px 40px rgba(0,0,0,.4))}
-.page{width:410px;height:560px;background:var(--papier);color:var(--encre);box-sizing:border-box;padding:24px 22px 20px 26px;position:relative;overflow:hidden}
+.page{width:410px;height:560px;background:var(--papier);color:var(--encre);box-sizing:border-box;padding:22px 40px 16px 28px;position:relative;overflow:hidden}
 .page.g{border-radius:14px 3px 3px 14px;background:linear-gradient(90deg,#fffdf7 92%,#efe9dc)}
-.page.d{border-radius:3px 14px 14px 3px;background:linear-gradient(270deg,#fffdf7 92%,#efe9dc)}
-.page h2{margin:0 0 6px;font:800 17px Montserrat,sans-serif;color:var(--rose);display:flex;align-items:center;gap:8px}
+.page.d{padding-left:44px;padding-right:26px;border-radius:3px 14px 14px 3px;background:linear-gradient(270deg,#fffdf7 92%,#efe9dc)}
+.page h2{margin:0 0 4px;font:800 19px Montserrat,sans-serif;color:var(--rose);display:flex;align-items:center;gap:8px}
 .page h2 .em{font-size:22px}
 .zone{margin:0 0 10px}
-.zone label{display:block;font:700 12px Montserrat,sans-serif;color:var(--canard);letter-spacing:.5px;margin:0 0 3px;text-transform:uppercase}
-.zone textarea,.zone input{width:100%;box-sizing:border-box;border:0;border-bottom:2px solid #dfe8ee;background:transparent;font:600 18px/1.35 Caveat,cursive;font-size:20px;color:var(--encre);padding:2px 4px;resize:none;outline:none}
-.zone textarea{height:54px;background-image:repeating-linear-gradient(transparent 0 26px,#e6eef2 26px 27px);background-position:0 22px}
+.zone label{display:block;font:700 12.5px Montserrat,sans-serif;color:var(--canard);letter-spacing:.5px;margin:0 0 3px;text-transform:uppercase}
+.zone textarea,.zone input{width:100%;box-sizing:border-box;border:0;border-bottom:2px solid #dfe8ee;background:transparent;font:600 24px/1.35 Caveat,cursive;font-size:24px;color:var(--encre);padding:2px 4px;resize:none;outline:none}
+.zone textarea{height:80px;background-image:repeating-linear-gradient(transparent 0 32px,#e6eef2 32px 33px);background-position:0 27px}
 .zone textarea:focus,.zone input:focus{border-bottom-color:var(--rose)}
 .spirale{position:absolute;left:400px;top:100px;height:540px;width:20px;z-index:2}
 .spirale i{display:block;width:26px;height:9px;border:3px solid #c8c2b4;border-radius:6px;background:#fff;margin:0 0 24px -3px;box-sizing:border-box}
 /* Lisa */
-#lisa{position:absolute;right:20px;bottom:0;height:330px;filter:drop-shadow(0 12px 18px rgba(0,0,0,.35));pointer-events:none}
+#lisa{position:absolute;right:10px;bottom:0;height:270px;z-index:4;filter:drop-shadow(0 12px 18px rgba(0,0,0,.35));pointer-events:none}
 #bl{position:absolute;left:885px;top:90px;width:285px;background:#fff;color:var(--encre);border-radius:18px;padding:16px 18px 14px;font-size:15px;line-height:1.35;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.3)}
 #bl:after{content:"";position:absolute;left:190px;bottom:-14px;border:12px solid transparent;border-top-color:#fff;border-bottom:0}
 .hp{margin-top:10px;display:flex;align-items:center;gap:8px;background:transparent;border:0;padding:0;cursor:pointer;font:700 13px Montserrat,sans-serif;color:var(--canard)}
 .hp svg{width:44px;height:44px;flex:none}
 .hp-pulse{fill:#ea1f5c;opacity:.35;transform-origin:center;animation:hpPulse 1.8s ease-out infinite}
 @keyframes hpPulse{0%{transform:scale(.8);opacity:.45}100%{transform:scale(1.05);opacity:0}}
-#actions{position:absolute;left:885px;top:300px;width:285px;display:flex;flex-direction:column;gap:10px;z-index:3}
+#actions{position:absolute;left:885px;top:292px;width:285px;display:flex;flex-direction:column;gap:10px;z-index:3}
 #actions button{background:var(--rose);color:#fff;border:0;border-radius:999px;padding:12px 18px;font:800 15px Montserrat,sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.25);text-align:left}
 #actions button.sec{background:#fff;color:var(--canard)}
-#etat{position:absolute;left:885px;top:400px;width:170px;font-size:13px;font-weight:600;opacity:.9}
+#etat{position:absolute;left:885px;top:386px;width:150px;font-size:13px;font-weight:600;opacity:.9}
 @media print{html,body{overflow:visible;background:#fff}#stage{transform:none!important;left:0!important;top:0!important;background:#fff;color:#000}h1,#lisa,#bl,#actions,#etat,.bulle{display:none}#carnet{left:0;top:0;filter:none}.page{border:1px solid #ccc}}
 </style></head>
 <body>
