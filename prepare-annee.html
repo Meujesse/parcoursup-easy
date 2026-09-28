@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Prépare ton année – Carnet de route</title>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--rose:#ea1f5c;--canard:#127992;--clair:#6fb3c3;--papier:#fffdf7;--encre:#1f3a45}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--canard);font-family:Montserrat,Arial,sans-serif}
@@ -20,14 +20,14 @@ h1 small{display:block;font-size:15px;font-weight:600;opacity:.9;margin-top:2px}
 .page h2 .em{font-size:22px}
 .zone{margin:0 0 10px}
 .zone label{display:block;font:700 12.5px Montserrat,sans-serif;color:var(--canard);letter-spacing:.5px;margin:0 0 3px;text-transform:uppercase}
-.zone textarea,.zone input{width:100%;box-sizing:border-box;border:0;border-bottom:2px solid #dfe8ee;background:transparent;font:600 24px/1.35 Caveat,cursive;font-size:24px;color:var(--encre);padding:2px 4px;resize:none;outline:none}
+.zone textarea,.zone input{width:100%;box-sizing:border-box;border:0;border-bottom:2px solid #dfe8ee;background:transparent;font:400 22px/1.45 'Patrick Hand',cursive;font-size:22px;color:var(--encre);padding:2px 4px;resize:none;outline:none}
 .zone textarea{height:80px;background-image:repeating-linear-gradient(transparent 0 32px,#e6eef2 32px 33px);background-position:0 27px}
 .zone textarea:focus,.zone input:focus{border-bottom-color:var(--rose)}
 .spirale{position:absolute;left:400px;top:100px;height:540px;width:20px;z-index:2}
 .spirale i{display:block;width:26px;height:9px;border:3px solid #c8c2b4;border-radius:6px;background:#fff;margin:0 0 24px -3px;box-sizing:border-box}
 /* Lisa */
-#lisa{position:absolute;right:10px;bottom:0;height:270px;z-index:4;filter:drop-shadow(0 12px 18px rgba(0,0,0,.35));pointer-events:none}
-#bl{position:absolute;left:885px;top:90px;width:285px;background:#fff;color:var(--encre);border-radius:18px;padding:16px 18px 14px;font-size:15px;line-height:1.35;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+#lisa{position:absolute;right:0;bottom:0;height:470px;z-index:4;filter:drop-shadow(0 12px 18px rgba(0,0,0,.35));pointer-events:none}
+#bl{position:absolute;left:870px;top:60px;width:280px;background:#fff;color:var(--encre);border-radius:18px;padding:16px 18px 14px;font-size:15px;line-height:1.35;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.3)}
 #bl:after{content:"";position:absolute;left:190px;bottom:-14px;border:12px solid transparent;border-top-color:#fff;border-bottom:0}
 .hp{margin-top:10px;display:flex;align-items:center;gap:8px;background:transparent;border:0;padding:0;cursor:pointer;font:700 13px Montserrat,sans-serif;color:var(--canard)}
 .hp svg{width:44px;height:44px;flex:none}
@@ -60,8 +60,8 @@ h1 small{display:block;font-size:15px;font-weight:600;opacity:.9;margin-top:2px}
   <button id="ecouter" class="hp"><svg viewBox="0 0 437.5 437.5" aria-hidden="true"><circle class="hp-pulse" cx="218.75" cy="218.75" r="218.75"/><circle cx="218.75" cy="218.75" r="175" fill="#ea1f5c"/><path fill="#fff" d="M175.42,190.07l38.22-28.66V276.08l-38.22-28.67H156.31a9.56,9.56,0,0,1-9.56-9.56V199.63a9.56,9.56,0,0,1,9.56-9.56Zm92.79-25.89a9.6,9.6,0,1,0-13.57,13.57,58,58,0,0,1,0,82,9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A77.32,77.32,0,0,0,268.21,164.18Zm-23.89,23.89a9.6,9.6,0,0,0-13.57,13.57,24.19,24.19,0,0,1,0,34.19l0,0a9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A43.38,43.38,0,0,0,244.32,188.07Z"/></svg><span class="lib">Écouter Lisa</span></button>
  </div>
  <audio id="voix" preload="auto" src="audio/lisa-m1-etape9-carnet.mp3"></audio>
- <div id="actions"><button id="imprimer">📥 Enregistrer mes pages en PDF</button><button class="sec" id="effacer">Tout effacer</button></div>
- <div id="etat">✍️ Tes notes sont sauvegardées automatiquement sur cet appareil.</div>
+ 
+ 
  <img id="lisa" src="lisa/lisa_13_assise-chaise-mug.png" alt="Lisa">
 </div>
 <script>
@@ -71,8 +71,8 @@ h1 small{display:block;font-size:15px;font-weight:600;opacity:.9;margin-top:2px}
  addEventListener('resize',fit);fit();
  var data={}; try{ data=JSON.parse(localStorage.getItem('pe_carnet_m1')||'{}'); }catch(e){}
  champs.forEach(function(id){ var el=document.getElementById(id); el.value=data[id]||''; el.addEventListener('input',function(){ data[id]=el.value; try{localStorage.setItem('pe_carnet_m1',JSON.stringify(data));}catch(e){} var n=champs.filter(function(c){return (data[c]||'').trim();}).length; try{ parent.postMessage({pe:'reponse',id:'CARNET_M1_REMPLI',type:'other',reponse:n+'/6'},'*'); }catch(e){} }); });
- document.getElementById('imprimer').addEventListener('click',function(){ window.print(); });
- document.getElementById('effacer').addEventListener('click',function(){ if(confirm('Effacer toutes tes notes ?')){ champs.forEach(function(id){document.getElementById(id).value='';}); data={}; try{localStorage.removeItem('pe_carnet_m1');}catch(e){} } });
+ 
+ 
  var voix=document.getElementById('voix'),eb=document.getElementById('ecouter');
  eb.addEventListener('click',function(){ if(voix.paused){voix.currentTime=0;voix.play();eb.querySelector('.lib').textContent='Pause';} else {voix.pause();eb.querySelector('.lib').textContent='Écouter Lisa';} });
  voix.addEventListener('ended',function(){eb.querySelector('.lib').textContent='Réécouter';});
