@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prépare ton année – Carnet de route</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#ea1f5c;--canard:#127992;--clair:#6fb3c3;--papier:#fffdf7;--encre:#1f3a45}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--canard);font-family:Montserrat,Arial,sans-serif}
+#stage{position:relative;width:1200px;height:675px;transform-origin:top left;background:var(--canard);color:#fff;overflow:hidden}
+.bulle{position:absolute;border-radius:50%;opacity:.35}
+.b1{width:260px;height:260px;left:-80px;top:-90px;background:var(--clair)}
+.b2{width:140px;height:140px;left:1080px;top:520px;background:var(--rose)}
+h1{position:absolute;left:40px;top:22px;margin:0;font-size:30px;font-weight:800}
+h1 small{display:block;font-size:15px;font-weight:600;opacity:.9;margin-top:2px}
+/* carnet ouvert : 2 pages */
+#carnet{position:absolute;left:40px;top:90px;width:820px;height:560px;display:flex;gap:0;filter:drop-shadow(0 22px 40px rgba(0,0,0,.4))}
+.page{width:410px;height:560px;background:var(--papier);color:var(--encre);box-sizing:border-box;padding:24px 22px 20px 26px;position:relative;overflow:hidden}
+.page.g{border-radius:14px 3px 3px 14px;background:linear-gradient(90deg,#fffdf7 92%,#efe9dc)}
+.page.d{border-radius:3px 14px 14px 3px;background:linear-gradient(270deg,#fffdf7 92%,#efe9dc)}
+.page h2{margin:0 0 6px;font:800 17px Montserrat,sans-serif;color:var(--rose);display:flex;align-items:center;gap:8px}
+.page h2 .em{font-size:22px}
+.zone{margin:0 0 10px}
+.zone label{display:block;font:700 12px Montserrat,sans-serif;color:var(--canard);letter-spacing:.5px;margin:0 0 3px;text-transform:uppercase}
+.zone textarea,.zone input{width:100%;box-sizing:border-box;border:0;border-bottom:2px solid #dfe8ee;background:transparent;font:600 18px/1.35 Caveat,cursive;font-size:20px;color:var(--encre);padding:2px 4px;resize:none;outline:none}
+.zone textarea{height:54px;background-image:repeating-linear-gradient(transparent 0 26px,#e6eef2 26px 27px);background-position:0 22px}
+.zone textarea:focus,.zone input:focus{border-bottom-color:var(--rose)}
+.spirale{position:absolute;left:400px;top:100px;height:540px;width:20px;z-index:2}
+.spirale i{display:block;width:26px;height:9px;border:3px solid #c8c2b4;border-radius:6px;background:#fff;margin:0 0 24px -3px;box-sizing:border-box}
+/* Lisa */
+#lisa{position:absolute;right:20px;bottom:0;height:330px;filter:drop-shadow(0 12px 18px rgba(0,0,0,.35));pointer-events:none}
+#bl{position:absolute;left:885px;top:90px;width:285px;background:#fff;color:var(--encre);border-radius:18px;padding:16px 18px 14px;font-size:15px;line-height:1.35;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+#bl:after{content:"";position:absolute;left:190px;bottom:-14px;border:12px solid transparent;border-top-color:#fff;border-bottom:0}
+.hp{margin-top:10px;display:flex;align-items:center;gap:8px;background:transparent;border:0;padding:0;cursor:pointer;font:700 13px Montserrat,sans-serif;color:var(--canard)}
+.hp svg{width:44px;height:44px;flex:none}
+.hp-pulse{fill:#ea1f5c;opacity:.35;transform-origin:center;animation:hpPulse 1.8s ease-out infinite}
+@keyframes hpPulse{0%{transform:scale(.8);opacity:.45}100%{transform:scale(1.05);opacity:0}}
+#actions{position:absolute;left:885px;top:300px;width:285px;display:flex;flex-direction:column;gap:10px;z-index:3}
+#actions button{background:var(--rose);color:#fff;border:0;border-radius:999px;padding:12px 18px;font:800 15px Montserrat,sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.25);text-align:left}
+#actions button.sec{background:#fff;color:var(--canard)}
+#etat{position:absolute;left:885px;top:400px;width:170px;font-size:13px;font-weight:600;opacity:.9}
+@media print{html,body{overflow:visible;background:#fff}#stage{transform:none!important;left:0!important;top:0!important;background:#fff;color:#000}h1,#lisa,#bl,#actions,#etat,.bulle{display:none}#carnet{left:0;top:0;filter:none}.page{border:1px solid #ccc}}
+</style></head>
+<body>
+<div id="stage">
+ <div class="bulle b1"></div><div class="bulle b2"></div>
+ <h1>Prépare ton année<small>Ouvre ton Carnet et remplis-le : tu ressors avec quelque chose de concret.</small></h1>
+ <div id="carnet">
+  <div class="page g">
+   <h2><span class="em">🏫</span>Mes JPO</h2><div class="zone"><label>Journées portes ouvertes à ne pas manquer</label><textarea id="jpo" placeholder="Établissement, date, ce que je veux vérifier sur place…"></textarea></div>
+   <h2><span class="em">🎪</span>Mes salons</h2><div class="zone"><label>Salons étudiants où je vais aller</label><textarea id="salons" placeholder="Nom du salon, date, formations à rencontrer…"></textarea></div>
+   <h2><span class="em">🧪</span>Mes immersions</h2><div class="zone"><label>Immersions, stages, rencontres d'étudiants</label><textarea id="immersions" placeholder="Où, quand, avec qui…"></textarea></div>
+  </div>
+  <div class="page d">
+   <h2><span class="em">📅</span>Mon calendrier</h2><div class="zone"><label>Mes rendez-vous de l'année (par période)</label><textarea id="calendrier" placeholder="Automne : … · Décembre-janvier : … · Printemps : …"></textarea></div>
+   <h2><span class="em">🔎</span>Mes recherches</h2><div class="zone"><label>Formations à explorer en priorité</label><textarea id="recherches" placeholder="Formation, établissement, ce qui m'attire…"></textarea></div>
+   <h2><span class="em">🎯</span>Mes objectifs</h2><div class="zone"><label>Ce que je veux avoir fait avant l'ouverture de Parcoursup</label><textarea id="objectifs" placeholder="Ex. : visiter 2 JPO, comparer 5 fiches, rencontrer un étudiant…"></textarea></div>
+  </div>
+ </div>
+ <div class="spirale"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+ <div id="bl"><span>Seulement maintenant, ouvre ton Carnet : tes JPO, tes salons, tes immersions, ton calendrier, tes recherches, tes objectifs. Écris-les : c'est ton plan concret pour l'année.</span>
+  <button id="ecouter" class="hp"><svg viewBox="0 0 437.5 437.5" aria-hidden="true"><circle class="hp-pulse" cx="218.75" cy="218.75" r="218.75"/><circle cx="218.75" cy="218.75" r="175" fill="#ea1f5c"/><path fill="#fff" d="M175.42,190.07l38.22-28.66V276.08l-38.22-28.67H156.31a9.56,9.56,0,0,1-9.56-9.56V199.63a9.56,9.56,0,0,1,9.56-9.56Zm92.79-25.89a9.6,9.6,0,1,0-13.57,13.57,58,58,0,0,1,0,82,9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A77.32,77.32,0,0,0,268.21,164.18Zm-23.89,23.89a9.6,9.6,0,0,0-13.57,13.57,24.19,24.19,0,0,1,0,34.19l0,0a9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A43.38,43.38,0,0,0,244.32,188.07Z"/></svg><span class="lib">Écouter Lisa</span></button>
+ </div>
+ <audio id="voix" preload="auto" src="audio/lisa-m1-etape9-carnet.mp3"></audio>
+ <div id="actions"><button id="imprimer">📥 Enregistrer mes pages en PDF</button><button class="sec" id="effacer">Tout effacer</button></div>
+ <div id="etat">✍️ Tes notes sont sauvegardées automatiquement sur cet appareil.</div>
+ <img id="lisa" src="lisa/lisa_13_assise-chaise-mug.png" alt="Lisa">
+</div>
+<script>
+(function(){
+ var stage=document.getElementById('stage'); var champs=['jpo','salons','immersions','calendrier','recherches','objectifs'];
+ function fit(){var s=Math.min(innerWidth/1200,innerHeight/675);stage.style.transform='scale('+s+')';stage.style.left=((innerWidth-1200*s)/2)+'px';stage.style.top=((innerHeight-675*s)/2)+'px';}
+ addEventListener('resize',fit);fit();
+ var data={}; try{ data=JSON.parse(localStorage.getItem('pe_carnet_m1')||'{}'); }catch(e){}
+ champs.forEach(function(id){ var el=document.getElementById(id); el.value=data[id]||''; el.addEventListener('input',function(){ data[id]=el.value; try{localStorage.setItem('pe_carnet_m1',JSON.stringify(data));}catch(e){} var n=champs.filter(function(c){return (data[c]||'').trim();}).length; try{ parent.postMessage({pe:'reponse',id:'CARNET_M1_REMPLI',type:'other',reponse:n+'/6'},'*'); }catch(e){} }); });
+ document.getElementById('imprimer').addEventListener('click',function(){ window.print(); });
+ document.getElementById('effacer').addEventListener('click',function(){ if(confirm('Effacer toutes tes notes ?')){ champs.forEach(function(id){document.getElementById(id).value='';}); data={}; try{localStorage.removeItem('pe_carnet_m1');}catch(e){} } });
+ var voix=document.getElementById('voix'),eb=document.getElementById('ecouter');
+ eb.addEventListener('click',function(){ if(voix.paused){voix.currentTime=0;voix.play();eb.querySelector('.lib').textContent='Pause';} else {voix.pause();eb.querySelector('.lib').textContent='Écouter Lisa';} });
+ voix.addEventListener('ended',function(){eb.querySelector('.lib').textContent='Réécouter';});
+})();
+</script>
+</body></html>

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La salle des 10 pièges – Parcoursup'easy</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#ea1f5c;--canard:#127992;--clair:#6fb3c3;--fonce:#0b4d5c;--papier:#fffdf7;--encre:#1f3a45}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--fonce);font-family:Montserrat,Arial,sans-serif}
+#stage{position:relative;width:1200px;height:675px;transform-origin:top left;color:#fff;overflow:hidden;
+ background:radial-gradient(ellipse at 50% 20%,#1a7f96 0%,#0f5f70 45%,#0a4351 100%)}
+/* sol + murs de la salle */
+#sol{position:absolute;left:-200px;right:-200px;bottom:0;height:230px;background:linear-gradient(#0d5566,#083a46);transform:perspective(600px) rotateX(35deg);transform-origin:top;opacity:.9}
+#sol:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 118px,rgba(255,255,255,.06) 118px 120px),repeating-linear-gradient(0deg,transparent 0 58px,rgba(255,255,255,.06) 58px 60px)}
+.lampe{position:absolute;top:-40px;width:520px;height:420px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.14),transparent 70%);pointer-events:none}
+h1{position:absolute;left:40px;top:26px;margin:0;font-size:34px;font-weight:800;letter-spacing:.5px}
+h1 small{display:block;font-size:16px;font-weight:600;opacity:.85;margin-top:4px}
+#compteur{position:absolute;right:40px;top:30px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.35);border-radius:999px;padding:10px 20px;font-weight:800;font-size:18px}
+#compteur b{color:#ffd0dd}
+/* Lisa + bulle */
+#lisa{position:absolute;left:18px;bottom:0;height:400px;pointer-events:none;filter:drop-shadow(0 12px 18px rgba(0,0,0,.35))}
+#bulle{position:absolute;left:150px;top:118px;width:300px;background:#fff;color:var(--encre);border-radius:18px;padding:16px 18px 14px;font-size:15px;line-height:1.35;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+#bulle:after{content:"";position:absolute;left:-14px;top:36px;border:12px solid transparent;border-right-color:#fff;border-left:0}
+#bulle .hp{margin-top:10px;display:flex;align-items:center;gap:8px;background:transparent;border:0;padding:0;cursor:pointer;font:700 13px Montserrat,sans-serif;color:var(--canard)}
+#bulle .hp svg{width:44px;height:44px;flex:none}
+.hp-pulse{fill:#ea1f5c;opacity:.35;transform-origin:center;animation:hpPulse 1.8s ease-out infinite}
+@keyframes hpPulse{0%{transform:scale(.8);opacity:.45}100%{transform:scale(1.05);opacity:0}}
+/* grille des trappes */
+#grille{position:absolute;left:480px;top:120px;width:690px;display:grid;grid-template-columns:repeat(5,120px);gap:22px 22px;justify-content:space-between}
+.trappe{position:relative;width:120px;height:120px;border-radius:18px;background:linear-gradient(160deg,#ea1f5c,#b8123f);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 2px 0 rgba(255,255,255,.25);cursor:pointer;transition:transform .2s,box-shadow .2s;border:0;color:#fff;font-family:inherit}
+.trappe:hover{transform:translateY(-4px);box-shadow:0 16px 30px rgba(0,0,0,.4),inset 0 2px 0 rgba(255,255,255,.25)}
+.trappe .num{position:absolute;left:0;right:0;top:12px;font-size:38px;font-weight:800;text-shadow:0 2px 0 rgba(0,0,0,.2)}
+.trappe .cadenas{position:absolute;left:0;right:0;bottom:12px;font-size:30px;transition:transform .4s}
+.trappe .lib{position:absolute;left:6px;right:6px;bottom:8px;font-size:11px;font-weight:700;line-height:1.15;display:none}
+.trappe.ok{background:linear-gradient(160deg,#6fb3c3,#127992)}
+.trappe.ok .cadenas{display:none}
+.trappe.ok .lib{display:block}
+.trappe.ok .num{top:8px;font-size:26px}
+.trappe.ok:after{content:"✔";position:absolute;right:8px;top:6px;width:24px;height:24px;border-radius:50%;background:#fff;color:var(--canard);font-size:15px;font-weight:800;line-height:24px}
+#final{position:absolute;left:480px;top:420px;width:690px;height:120px;border-radius:18px;background:linear-gradient(160deg,#ffd0dd,#fff);color:var(--encre);display:none;align-items:center;justify-content:space-between;padding:0 26px;box-sizing:border-box;box-shadow:0 12px 30px rgba(0,0,0,.35);cursor:pointer}
+#final.on{display:flex}
+#final h3{margin:0;font-size:22px;color:var(--rose)}
+#final p{margin:4px 0 0;font-size:15px;font-weight:600}
+#final .go{background:var(--rose);color:#fff;border-radius:999px;padding:12px 22px;font-weight:800;font-size:16px;white-space:nowrap}
+/* panneau piège */
+#voile{position:absolute;inset:0;background:rgba(8,50,60,.8);opacity:0;pointer-events:none;transition:opacity .35s;z-index:20}
+#voile.on{opacity:1;pointer-events:auto}
+#panneau{position:absolute;left:110px;top:34px;width:980px;height:607px;background:var(--papier);color:var(--encre);border-radius:22px;box-shadow:0 30px 60px rgba(0,0,0,.5);transform:translateY(30px) scale(.97);opacity:0;transition:all .35s;z-index:21;pointer-events:none;overflow:hidden}
+#panneau.on{transform:none;opacity:1;pointer-events:auto}
+#panneau .tete{background:var(--rose);color:#fff;padding:18px 70px 16px 30px;font-size:24px;font-weight:800;position:relative}
+#panneau .tete small{display:block;font-size:14px;font-weight:600;opacity:.9;letter-spacing:1px}
+#fermer{position:absolute;right:16px;top:14px;width:40px;height:40px;border-radius:12px;background:#0e3a46;color:#fff;border:0;font-size:22px;cursor:pointer}
+#corps{position:absolute;left:0;right:0;top:86px;bottom:0;overflow:auto;padding:22px 30px 26px;box-sizing:border-box}
+.situ{font:700 26px/1.3 Caveat,cursive;font-size:30px;color:var(--canard);background:#e9f3f6;border-left:6px solid var(--canard);padding:14px 18px;border-radius:0 14px 14px 0;margin:0 0 16px}
+.q{font-size:20px;font-weight:800;margin:0 0 12px}
+.choix{display:flex;gap:16px;margin:0 0 10px}
+.choix button{flex:1;padding:16px;border-radius:14px;border:3px solid var(--canard);background:#fff;color:var(--canard);font:800 20px Montserrat,sans-serif;cursor:pointer;transition:all .2s}
+.choix button:hover{background:var(--canard);color:#fff}
+.choix button.pris{background:var(--canard);color:#fff}
+.verdict{font-size:19px;font-weight:800;margin:14px 0 6px;color:var(--rose)}
+.suite{display:none}
+.suite.on{display:block;animation:app .4s}
+@keyframes app{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.bloc{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:6px}
+.histoire{background:#fff;border:2px solid #dfe8ee;border-radius:14px;padding:14px 16px;font-size:15.5px;line-height:1.45}
+.histoire h4,.lisa h4,.retenir h4{margin:0 0 8px;font-size:17px;font-weight:800;color:var(--canard)}
+.histoire p{margin:0 0 8px}
+.lisa{background:#fff0f4;border-radius:14px;padding:14px 16px;font-size:16px;line-height:1.45;font-weight:600;color:var(--encre)}
+.lisa .cit{font:700 22px/1.3 Caveat,cursive;color:var(--rose)}
+.retenir{background:var(--canard);color:#fff;border-radius:14px;padding:14px 16px;font-size:16px;line-height:1.5;font-weight:600;margin-top:14px;white-space:pre-line}
+.retenir h4{color:#fff}
+.suivant{display:block;margin:16px auto 0;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:14px 30px;font:800 18px Montserrat,sans-serif;cursor:pointer}
+/* défi final */
+.cand{display:flex;align-items:center;gap:16px;background:#fff;border:2px solid #dfe8ee;border-radius:14px;padding:12px 16px;margin:0 0 12px}
+.cand .em{font-size:36px}
+.cand .txt{flex:1}
+.cand .txt b{display:block;font-size:17px;color:var(--canard)}
+.cand .txt i{font:700 22px/1.25 Caveat,cursive;font-style:normal}
+.cand select{font:700 16px Montserrat,sans-serif;padding:10px 12px;border-radius:10px;border:2px solid var(--canard);color:var(--canard);background:#fff}
+.cand .res{width:36px;text-align:center;font-size:24px}
+#etoiles{font-size:34px;letter-spacing:4px;text-align:center;margin:8px 0}
+#bilan{text-align:center;font-size:20px;font-weight:800;color:var(--rose);min-height:30px}
+</style></head>
+<body>
+<div id="stage">
+ <div class="lampe" style="left:320px"></div><div class="lampe" style="left:760px"></div>
+ <div id="sol"></div>
+ <h1>La salle des 10 pièges<small>Chaque piège est verrouillé. Réponds à la question pour l'ouvrir.</small></h1>
+ <div id="compteur"><b id="n">0</b> / 10 pièges déjoués</div>
+ <img id="lisa" src="lisa/lisa_03_index-leve.png" alt="Lisa">
+ <div id="bulle"><span id="bulle-txt">Attention, explorateur ! Parcoursup est rempli de petits pièges. Dix situations : à toi de repérer le piège avant de découvrir l'histoire du candidat qui est tombé dedans.</span>
+  <button id="ecouter" class="hp"><svg viewBox="0 0 437.5 437.5" aria-hidden="true"><circle class="hp-pulse" cx="218.75" cy="218.75" r="218.75"/><circle cx="218.75" cy="218.75" r="175" fill="#ea1f5c"/><path fill="#fff" d="M175.42,190.07l38.22-28.66V276.08l-38.22-28.67H156.31a9.56,9.56,0,0,1-9.56-9.56V199.63a9.56,9.56,0,0,1,9.56-9.56Zm92.79-25.89a9.6,9.6,0,1,0-13.57,13.57,58,58,0,0,1,0,82,9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A77.32,77.32,0,0,0,268.21,164.18Zm-23.89,23.89a9.6,9.6,0,0,0-13.57,13.57,24.19,24.19,0,0,1,0,34.19l0,0a9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A43.38,43.38,0,0,0,244.32,188.07Z"/></svg><span class="lib">Écouter Lisa</span></button>
+ </div>
+ <audio id="voix" preload="auto" src="audio/lisa-m1-etape8-intro.mp3"></audio>
+ <div id="grille"></div>
+ <div id="final"><div><h3>🏆 Le défi final : « Sauras-tu éviter les 10 pièges ? »</h3><p>Trois nouveaux candidats. À toi de repérer le piège dans lequel chacun risque de tomber.</p></div><span class="go">Relever le défi ➜</span></div>
+ <div id="voile"></div>
+ <div id="panneau"><div class="tete"><small id="p-sur">PIÈGE 1</small><span id="p-titre"></span><button id="fermer" aria-label="Fermer">✕</button></div><div id="corps"></div></div>
+</div>
+<script>
+var PIEGES=[
+{t:"Attendre janvier pour commencer",s:"« Je commencerai à réfléchir à mon orientation quand Parcoursup ouvrira. »",e:"👩‍🎓",h:"L'histoire de Tom",hist:["Tom est en Terminale. En septembre, il se dit qu'il a largement le temps.","En décembre, il n'a toujours pas regardé les formations.","En janvier, Parcoursup ouvre et il découvre des dizaines de formations qui pourraient l'intéresser. Il doit maintenant comparer les programmes, regarder les débouchés, repérer les JPO et réfléchir à ses vœux… tout en gérant ses cours et ses examens.","Résultat : il choisit dans l'urgence des formations qu'il connaît déjà, sans avoir vraiment pris le temps d'explorer."],l:"« Le piège, ce n'est pas de ne pas connaître ton orientation en septembre. Le piège, c'est d'attendre janvier pour commencer à chercher. »",r:"Septembre → j'explore.\nAutomne → je découvre.\nJanvier → je candidate."},
+{t:"Choisir les mêmes formations que ses copains",s:"« Mon meilleur ami veut faire ce BTS, alors je vais le mettre aussi. Au moins, je ne serai pas tout seul ! »",e:"👩‍🎓",h:"L'histoire de Léa",hist:["Léa et sa meilleure amie sont inséparables. Quand son amie lui annonce qu'elle veut faire un BTS à Lyon, Léa se dit que ce serait génial de continuer ensemble.","Elle ajoute donc la formation à ses recherches… sans vraiment regarder le programme.","Quelques semaines plus tard, elle découvre que les matières proposées ne lui plaisent pas vraiment et que le métier auquel elle mène ne correspond pas à ce qu'elle imagine.","Son amie, elle, est toujours enthousiaste."],l:"« Une formation peut être parfaite pour ton copain ou ta copine… et ne pas être faite pour toi. Ton orientation doit partir de TON profil, de tes envies et de ton projet. »",r:"Ton meilleur ami peut t'accompagner dans tes recherches. Il ne doit pas choisir à ta place."},
+{t:"Ne regarder que les formations les plus connues",s:"« Je connais cette école, donc c'est forcément une bonne formation. »",e:"👩‍🎓",h:"L'histoire de Hugo",hist:["Hugo veut travailler dans le numérique. Il connaît trois grandes écoles parce qu'il en a beaucoup entendu parler.","Il prépare donc uniquement des vœux vers ces établissements.","En faisant ses recherches plus sérieusement, il découvre finalement un BUT et plusieurs écoles moins connues dont les programmes correspondent davantage à ce qu'il recherche.","Il réalise qu'il était passé à côté de plusieurs possibilités simplement parce qu'il ne les connaissait pas."],l:"« Ce n'est pas parce qu'une formation est connue qu'elle est forcément la plus adaptée à toi. Et ce n'est pas parce que tu n'en as jamais entendu parler qu'elle ne mérite pas d'être découverte. »",r:"Ne cherche pas seulement ce que tu connais. Cherche ce qui te correspond."},
+{t:"Miser uniquement sur les formations très sélectives",s:"« J'ai de bonnes notes, alors je ne vais demander que les formations les plus sélectives. »",e:"👨‍🎓",h:"L'histoire de Lucas",hist:["Lucas a 16 de moyenne. Il se dit qu'il a un très bon dossier.","Il sélectionne donc uniquement des formations très demandées.","Il est persuadé qu'avec ses notes, il aura forcément une proposition.","Au moment des réponses, plusieurs établissements le refusent et il reste en attente ailleurs.","Son problème n'était pas d'avoir trop d'ambition. C'était de ne pas avoir suffisamment diversifié ses choix."],l:"« Avoir de l'ambition, c'est très bien. Mais une bonne stratégie de vœux doit aussi prévoir des choix réalistes et des solutions de repli qui te plaisent vraiment. »",r:"🏔️ Ambitieux\n🎯 Réalistes\n🛟 Sécurisés\nLes trois ont leur place dans une bonne stratégie de vœux."},
+{t:"Choisir uniquement en fonction du taux d'accès",s:"« Cette formation a un taux d'accès de 85 %, donc je suis quasiment certain d'être pris. »",e:"👩‍🎓",h:"L'histoire de Sarah",hist:["Sarah trouve deux formations qui lui plaisent.","La première affiche un taux d'accès élevé. La seconde affiche un taux beaucoup plus faible.","Elle choisit immédiatement la première en pensant que ce sera plus facile.","Mais en étudiant les deux programmes, elle découvre que la seconde correspond beaucoup mieux à ses spécialités, à son projet et à sa façon d'apprendre.","Elle avait confondu un indicateur utile avec une garantie d'admission."],l:"« Le taux d'accès est une information intéressante pour analyser une formation et construire ta stratégie. Mais il ne prédit pas à lui seul ton résultat. »",r:"Un taux d'accès est un indicateur, pas une promesse."},
+{t:"Se fier uniquement à l'intitulé d'une formation",s:"« Ça s'appelle BUT Techniques de commercialisation, donc je sais forcément ce qu'on va y étudier. »",e:"👨‍🎓",h:"L'histoire de Nathan",hist:["Nathan veut étudier le commerce.","Il regarde rapidement plusieurs BUT et pense qu'ils sont tous identiques.","En lisant leurs fiches plus attentivement, il découvre pourtant des enseignements, des parcours et des environnements différents.","Certaines formations proposent également des options ou des parcours spécifiques.","Il comprend qu'un intitulé ne suffit jamais pour choisir une formation."],l:"« Le nom de la formation te donne une première indication. Sa fiche te raconte toute l'histoire. »",r:"Avant de retenir une formation :\n🔎 Programme\n🎯 Attendus\n📚 Critères d'examen\n🌍 Localisation\n🎓 Poursuites d'études\n💼 Débouchés"},
+{t:"Penser que les notes suffisent",s:"« J'ai de bonnes notes, donc mon dossier est forcément bon. »",e:"👩‍🎓",h:"L'histoire d'Emma",hist:["Emma travaille beaucoup et obtient de très bonnes notes.","Elle pense donc que son dossier est terminé.","Elle découvre ensuite que les formations peuvent également examiner différents éléments de son dossier selon leurs critères : appréciations, spécialités suivies, motivation, activités et autres éléments demandés.","Elle comprend que les notes sont importantes, mais qu'elles ne racontent pas toute son histoire."],l:"« Ton dossier, c'est un peu comme un puzzle. Les notes sont importantes, mais elles ne sont qu'une partie de l'image. »",r:"Ne cherche pas seulement à montrer ce que tu sais. Montre aussi qui tu es, ce que tu as fait et pourquoi tu souhaites rejoindre cette formation."},
+{t:"Ne pas vérifier les critères de sélection",s:"« Cette formation me plaît, je la mets dans mes vœux. Je regarderai les détails plus tard. »",e:"👨‍🎓",h:"L'histoire de Yanis",hist:["Yanis repère une formation qui lui plaît beaucoup.","Il ajoute son vœu sans lire attentivement sa fiche.","Plus tard, il découvre que la formation accorde une importance particulière à certaines matières et à certains critères qu'il n'avait pas regardés.","Il aurait pu utiliser ces informations beaucoup plus tôt pour mieux comprendre la formation et vérifier qu'elle correspondait réellement à son profil."],l:"« La fiche Parcoursup n'est pas juste une fiche descriptive. C'est une véritable boîte à outils pour comprendre ce que recherche la formation. »",r:"Avant de formuler un vœu :\nJe lis → je compare → je comprends → je décide."},
+{t:"Oublier une échéance",s:"« Je sais que j'ai encore le temps, je ferai ça ce week-end. »",e:"👩‍🎓",h:"L'histoire de Chloé",hist:["Chloé avait préparé son dossier. Il ne lui restait qu'à finaliser certaines informations et confirmer ses vœux.","Elle repousse plusieurs fois.","Puis arrive la date limite.","Elle se connecte trop tard.","Tout son travail préparatoire risque alors de ne pas aboutir comme prévu."],l:"« Sur Parcoursup, certaines dates sont de vraies dates limites. Pas de prolongation magique parce que tu as oublié ! »",r:"📅 Note les échéances.\n🔔 Programme des rappels.\n✅ Ne valide jamais au dernier moment."},
+{t:"Penser que tout est terminé après les premières réponses",s:"« Je suis en attente, donc c'est terminé pour moi. »",e:"👨‍🎓",h:"L'histoire de Mehdi",hist:["Mehdi reçoit ses premières réponses.","Certaines formations le refusent. Pour d'autres, il est en attente.","Il pense que son orientation est déjà jouée.","Mais il découvre qu'une liste d'attente peut encore évoluer et qu'il existe également une phase complémentaire.","Il comprend qu'une réponse Parcoursup n'est pas toujours la fin de l'histoire."],l:"« Une réponse qui ne correspond pas encore à ce que tu espérais ne signifie pas forcément que toutes les portes sont fermées. Il existe différentes possibilités pour poursuivre ton parcours. »",r:"📬 Je lis la réponse.\n⏳ Je comprends ma situation.\n🧭 J'étudie mes possibilités.\n🔄 Je sais qu'il existe une phase complémentaire.\n\n« Et justement, nous consacrerons une partie de notre dernière mission à comprendre les réponses Parcoursup et à savoir quoi faire lorsqu'elles ne correspondent pas exactement à ce que tu espérais. »"}
+];
+var DEFI=[{e:"🧑‍🎓",n:"Paul",s:"« Je commencerai mes recherches quand Parcoursup ouvrira. »",ok:1},{e:"👩‍🎓",n:"Inès",s:"« Ma meilleure amie veut faire médecine, alors je vais tenter médecine aussi. »",ok:2},{e:"🧑‍🎓",n:"Louis",s:"« Je ne demande que les écoles les plus prestigieuses. »",ok:4}];
+(function(){
+ var stage=document.getElementById('stage'),grille=document.getElementById('grille'),voile=document.getElementById('voile'),pan=document.getElementById('panneau'),corps=document.getElementById('corps'),n=document.getElementById('n'),fin=document.getElementById('final');
+ function fit(){var s=Math.min(innerWidth/1200,innerHeight/675);stage.style.transform='scale('+s+')';stage.style.left=((innerWidth-1200*s)/2)+'px';stage.style.top=((innerHeight-675*s)/2)+'px';}
+ addEventListener('resize',fit);fit();
+ var ok={}; try{ ok=JSON.parse(localStorage.getItem('pe_pieges')||'{}'); }catch(e){}
+ function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+ function maj(){ var k=Object.keys(ok).length; n.textContent=k; if(k>=10) fin.classList.add('on'); try{localStorage.setItem('pe_pieges',JSON.stringify(ok));}catch(e){} try{ parent.postMessage({pe:'reponse',id:'PIEGES_'+k,type:'other',reponse:k+'/10'},'*'); }catch(e){} }
+ PIEGES.forEach(function(p,i){ var b=document.createElement('button'); b.className='trappe'+(ok[i+1]?' ok':''); b.innerHTML='<div class="num">'+(i+1)+'</div><div class="cadenas">🔒</div><div class="lib">'+esc(p.t)+'</div>'; b.addEventListener('click',function(){ouvre(i);}); grille.appendChild(b); });
+ maj();
+ function ferme(){ voile.classList.remove('on'); pan.classList.remove('on'); }
+ voile.addEventListener('click',ferme); document.getElementById('fermer').addEventListener('click',ferme);
+ function ouvre(i){ var p=PIEGES[i];
+  document.getElementById('p-sur').textContent='🕳️ PIÈGE '+(i+1); document.getElementById('p-titre').textContent=p.t;
+  corps.innerHTML='<div class="situ">🎴 '+esc(p.s)+'</div><p class="q">Bonne ou mauvaise idée ?</p><div class="choix"><button data-v="b">👍 Bonne idée</button><button data-v="m">👎 Mauvaise idée</button></div><div class="verdict" id="verdict"></div>'+
+   '<div class="suite" id="suite"><div class="bloc"><div class="histoire"><h4>'+p.e+' '+esc(p.h)+'</h4>'+p.hist.map(function(x){return '<p>'+esc(x)+'</p>';}).join('')+'</div><div class="lisa"><h4>💡 Lisa</h4><div class="cit">'+esc(p.l)+'</div></div></div><div class="retenir"><h4>🎯 À retenir</h4>'+esc(p.r)+'</div><button class="suivant" id="suivant">'+(i<9?'Piège suivant ➜':'Retour à la salle ➜')+'</button></div>';
+  corps.scrollTop=0;
+  Array.prototype.forEach.call(corps.querySelectorAll('.choix button'),function(btn){ btn.addEventListener('click',function(){ Array.prototype.forEach.call(corps.querySelectorAll('.choix button'),function(x){x.disabled=true;}); btn.classList.add('pris'); var v=btn.getAttribute('data-v'); document.getElementById('verdict').textContent=(v==='m'?'✅ Exact, c\'est un piège ! Voici ce qui est arrivé…':'❌ Hmm… c\'est justement un piège. Regarde ce qui est arrivé…'); document.getElementById('suite').classList.add('on'); ok[i+1]=true; grille.children[i].classList.add('ok'); grille.children[i].querySelector('.cadenas').textContent='🔓'; maj(); }); });
+  document.getElementById('suivant').addEventListener('click',function(){ if(i<9) ouvre(i+1); else ferme(); });
+  if(ok[i+1]){ /* déjà déjoué : on montre directement l'histoire */ Array.prototype.forEach.call(corps.querySelectorAll('.choix button'),function(x){x.disabled=true;}); document.getElementById('verdict').textContent='✅ Piège déjà déjoué.'; document.getElementById('suite').classList.add('on'); }
+  voile.classList.add('on'); pan.classList.add('on');
+ }
+ // défi final
+ fin.addEventListener('click',function(){
+  document.getElementById('p-sur').textContent='🏆 LE DÉFI FINAL'; document.getElementById('p-titre').textContent='« Sauras-tu éviter les 10 pièges ? »';
+  var opts='<option value="">Piège n°…</option>'; PIEGES.forEach(function(p,i){opts+='<option value="'+(i+1)+'">'+(i+1)+' · '+esc(p.t)+'</option>';});
+  corps.innerHTML='<div class="lisa" style="margin-bottom:14px"><h4>💡 Lisa</h4><div class="cit">« Maintenant, c\'est à toi ! Je vais te présenter 3 nouveaux candidats. À toi de repérer le piège dans lequel chacun risque de tomber. »</div></div>'+
+   DEFI.map(function(c,k){return '<div class="cand"><div class="em">'+c.e+'</div><div class="txt"><b>'+c.n+'</b><i>'+esc(c.s)+'</i></div><select data-k="'+k+'">'+opts+'</select><div class="res" id="res'+k+'"></div></div>';}).join('')+
+   '<div id="etoiles">☆ ☆ ☆</div><div id="bilan"></div><button class="suivant" id="valider">Valider mes réponses</button>';
+  corps.scrollTop=0;
+  document.getElementById('valider').addEventListener('click',function(){ var pts=0; DEFI.forEach(function(c,k){ var sel=corps.querySelector('select[data-k="'+k+'"]'); var v=parseInt(sel.value,10); var r=document.getElementById('res'+k); if(v===c.ok){pts++; r.textContent='⭐';} else { r.textContent='✖'; } });
+   document.getElementById('etoiles').textContent=(pts>=1?'⭐':'☆')+' '+(pts>=2?'⭐':'☆')+' '+(pts>=3?'⭐':'☆');
+   var bl=document.getElementById('bilan'); if(pts===3){ bl.textContent='🏆 Tu as évité tous les pièges !'; this.textContent='Continuer ➜'; this.onclick=ferme; } else { bl.textContent='Pas grave ! Tu viens justement d\'identifier les pièges à éviter. Tu peux refaire le défi si tu veux décrocher toutes tes étoiles.'; this.textContent='Refaire le défi'; this.onclick=function(){ fin.click(); }; }
+   try{ parent.postMessage({pe:'reponse',id:'PIEGES_DEFI',type:'other',reponse:pts+'/3'},'*'); }catch(e){} });
+  voile.classList.add('on'); pan.classList.add('on');
+ });
+ var voix=document.getElementById('voix'),eb=document.getElementById('ecouter');
+ eb.addEventListener('click',function(){ if(voix.paused){voix.currentTime=0;voix.play();eb.querySelector('.lib').textContent='Pause';} else {voix.pause();eb.querySelector('.lib').textContent='Écouter Lisa';} });
+ voix.addEventListener('ended',function(){eb.querySelector('.lib').textContent='Réécouter';});
+})();
+</script>
+</body></html>

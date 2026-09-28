@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mes 10 règles d'or Parcoursup – Carnet de route</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#ea1f5c;--canard:#127992;--clair:#6fb3c3;--papier:#fffdf7;--encre:#1f3a45}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--canard);font-family:Montserrat,Arial,sans-serif}
+#stage{position:relative;width:1200px;height:675px;transform-origin:top left;background:var(--canard);color:#fff;overflow:hidden}
+.bulle{position:absolute;border-radius:50%;opacity:.35}
+.b1{width:260px;height:260px;left:-80px;top:-90px;background:var(--clair)}
+.b2{width:140px;height:140px;left:1080px;top:520px;background:var(--rose)}
+/* feuille détachable */
+#feuille{position:absolute;left:60px;top:40px;width:640px;height:600px;background:var(--papier);color:var(--encre);border-radius:8px 22px 22px 8px;box-shadow:0 24px 50px rgba(0,0,0,.35);transform:rotate(-1.2deg);padding:34px 34px 30px 70px;box-sizing:border-box}
+#feuille:before{content:"";position:absolute;left:44px;top:0;bottom:0;width:2px;background:#f2b8c8}
+#feuille .perf{position:absolute;left:-14px;top:0;bottom:0;width:28px;display:flex;flex-direction:column;justify-content:space-around;padding:20px 0;box-sizing:border-box}
+#feuille .perf i{display:block;width:16px;height:16px;border-radius:50%;background:var(--canard);margin-left:6px;box-shadow:inset 0 2px 3px rgba(0,0,0,.35)}
+#feuille h2{margin:0 0 4px;font:800 24px Montserrat,sans-serif;color:var(--rose)}
+#feuille .sous{font:700 20px Caveat,cursive;color:var(--canard);margin:0 0 12px}
+#regles{list-style:none;margin:0;padding:0}
+#regles li{display:flex;align-items:center;gap:12px;font-size:16.5px;font-weight:600;line-height:1.25;padding:6px 0;border-bottom:1px dashed #dfe8ee;cursor:pointer;user-select:none}
+#regles li .cb{flex:none;width:26px;height:26px;border:3px solid var(--canard);border-radius:7px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;transition:all .2s}
+#regles li.ok .cb{background:var(--rose);border-color:var(--rose)}
+#regles li.ok{color:#6a8791}
+#regles li .n{flex:none;width:24px;font:700 18px Caveat,cursive;color:var(--rose)}
+#tampon{position:absolute;right:26px;bottom:24px;transform:rotate(-10deg);border:4px solid var(--rose);color:var(--rose);border-radius:10px;padding:8px 14px;font:800 13px Montserrat,sans-serif;letter-spacing:1px;opacity:0;transition:opacity .5s}
+#tampon.on{opacity:1}
+/* colonne droite */
+#droite{position:absolute;left:740px;top:40px;width:420px}
+#droite h1{margin:0 0 10px;font-size:30px;font-weight:800;line-height:1.2}
+#droite h1 span{color:#ffd0dd}
+#lisa{position:absolute;left:820px;bottom:0;height:330px;filter:drop-shadow(0 12px 18px rgba(0,0,0,.35));pointer-events:none}
+#bl{position:absolute;left:740px;top:150px;width:300px;background:#fff;color:var(--encre);border-radius:18px;padding:16px 18px 14px;font-size:15px;line-height:1.35;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+#bl:after{content:"";position:absolute;left:150px;bottom:-14px;border:12px solid transparent;border-top-color:#fff;border-bottom:0}
+.hp{margin-top:10px;display:flex;align-items:center;gap:8px;background:transparent;border:0;padding:0;cursor:pointer;font:700 13px Montserrat,sans-serif;color:var(--canard)}
+.hp svg{width:44px;height:44px;flex:none}
+.hp-pulse{fill:#ea1f5c;opacity:.35;transform-origin:center;animation:hpPulse 1.8s ease-out infinite}
+@keyframes hpPulse{0%{transform:scale(.8);opacity:.45}100%{transform:scale(1.05);opacity:0}}
+#btn{position:absolute;left:740px;top:560px;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:14px 24px;font:800 17px Montserrat,sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.25);z-index:3}
+#btn small{display:block;font-size:12px;font-weight:600;opacity:.85}
+@media print{html,body{overflow:visible;background:#fff}#stage{transform:none!important;left:0!important;top:0!important;background:#fff}#droite,#lisa,#bl,#btn,.bulle{display:none}#feuille{transform:none;left:20px;top:20px;box-shadow:none}}
+</style></head>
+<body>
+<div id="stage">
+ <div class="bulle b1"></div><div class="bulle b2"></div>
+ <div id="feuille"><div class="perf"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <h2>🚨 MES 10 RÈGLES D'OR PARCOURSUP</h2>
+  <div class="sous">Page détachable de mon Carnet de route · coche celles que tu t'engages à suivre</div>
+  <ul id="regles"></ul>
+  <div id="tampon">10 / 10 · RÈGLES ADOPTÉES ✔</div>
+ </div>
+ <div id="droite"><h1>Une page détachable <span>pour ton Carnet de route.</span></h1></div>
+ <div id="bl"><span>Tu connais maintenant les pièges. Tu n'as pas besoin d'être un expert pour les éviter : savoir où regarder, quand agir, et ne pas rester seul face à tes questions.</span>
+  <button id="ecouter" class="hp"><svg viewBox="0 0 437.5 437.5" aria-hidden="true"><circle class="hp-pulse" cx="218.75" cy="218.75" r="218.75"/><circle cx="218.75" cy="218.75" r="175" fill="#ea1f5c"/><path fill="#fff" d="M175.42,190.07l38.22-28.66V276.08l-38.22-28.67H156.31a9.56,9.56,0,0,1-9.56-9.56V199.63a9.56,9.56,0,0,1,9.56-9.56Zm92.79-25.89a9.6,9.6,0,1,0-13.57,13.57,58,58,0,0,1,0,82,9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A77.32,77.32,0,0,0,268.21,164.18Zm-23.89,23.89a9.6,9.6,0,0,0-13.57,13.57,24.19,24.19,0,0,1,0,34.19l0,0a9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A43.38,43.38,0,0,0,244.32,188.07Z"/></svg><span class="lib">Écouter Lisa</span></button>
+ </div>
+ <audio id="voix" preload="auto" src="audio/lisa-m1-etape8-regles.mp3"></audio>
+ <img id="lisa" src="lisa/lisa_21_joie-douce.png" alt="Lisa">
+ <button id="btn">📥 Télécharger la page<small>PDF · Mes 10 règles d'or</small></button>
+</div>
+<script>
+(function(){
+ var R=["Je commence à explorer avant l'ouverture de Parcoursup.","Je construis mon propre projet, pas celui de mes copains.","Je regarde au-delà des formations que je connais déjà.","J'équilibre mes vœux.","Je ne me fie pas uniquement au taux d'accès.","Je lis attentivement chaque fiche formation.","Je regarde les critères d'examen des candidatures.","Je note toutes les échéances.","Je vérifie et confirme mon dossier dans les temps.","Je garde des solutions ouvertes jusqu'au bout."];
+ var stage=document.getElementById('stage'),ul=document.getElementById('regles'),tampon=document.getElementById('tampon');
+ function fit(){var s=Math.min(innerWidth/1200,innerHeight/675);stage.style.transform='scale('+s+')';stage.style.left=((innerWidth-1200*s)/2)+'px';stage.style.top=((innerHeight-675*s)/2)+'px';}
+ addEventListener('resize',fit);fit();
+ var etat={}; try{ etat=JSON.parse(localStorage.getItem('pe_regles')||'{}'); }catch(e){}
+ R.forEach(function(t,i){ var li=document.createElement('li'); li.innerHTML='<span class="cb">✔</span><span class="n">'+(i+1)+'</span><span>'+t+'</span>'; if(etat[i]) li.classList.add('ok'); li.addEventListener('click',function(){ li.classList.toggle('ok'); etat[i]=li.classList.contains('ok'); try{localStorage.setItem('pe_regles',JSON.stringify(etat));}catch(e){} maj(); }); ul.appendChild(li); });
+ function maj(){ var k=ul.querySelectorAll('li.ok').length; tampon.classList.toggle('on',k===10); try{ parent.postMessage({pe:'reponse',id:'REGLES_OR',type:'other',reponse:k+'/10'},'*'); }catch(e){} }
+ maj();
+ document.getElementById('btn').addEventListener('click',function(){ window.open('mes-10-regles-or.pdf','_blank'); });
+ var voix=document.getElementById('voix'),eb=document.getElementById('ecouter');
+ eb.addEventListener('click',function(){ if(voix.paused){voix.currentTime=0;voix.play();eb.querySelector('.lib').textContent='Pause';} else {voix.pause();eb.querySelector('.lib').textContent='Écouter Lisa';} });
+ voix.addEventListener('ended',function(){eb.querySelector('.lib').textContent='Réécouter';});
+})();
+</script>
+</body></html>

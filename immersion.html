@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Es-tu prêt à entrer dans Parcoursup ? – Mission d'immersion</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#ea1f5c;--canard:#127992;--clair:#6fb3c3;--papier:#fffdf7;--encre:#1f3a45;--fonce:#0b4d5c}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--fonce);font-family:Montserrat,Arial,sans-serif}
+#stage{position:relative;width:1200px;height:675px;transform-origin:top left;color:#fff;overflow:hidden;background:radial-gradient(ellipse at 30% 0%,#1a7f96 0%,#0f5f70 50%,#0a4351 100%)}
+h1{position:absolute;left:40px;top:22px;margin:0;font-size:28px;font-weight:800}
+h1 small{display:block;font-size:14px;font-weight:600;opacity:.9;margin-top:2px}
+#lisa{position:absolute;left:10px;bottom:0;height:420px;filter:drop-shadow(0 12px 18px rgba(0,0,0,.35));pointer-events:none;transition:opacity .4s}
+/* écran "Parcoursup" façon fenêtre de navigateur */
+#ecran{position:absolute;left:330px;top:90px;width:830px;height:560px;background:var(--papier);color:var(--encre);border-radius:16px;box-shadow:0 26px 60px rgba(0,0,0,.45);overflow:hidden}
+#ecran .barre{height:40px;background:#e9f3f6;display:flex;align-items:center;gap:8px;padding:0 14px;font-size:13px;font-weight:700;color:var(--canard)}
+#ecran .barre i{width:12px;height:12px;border-radius:50%;background:#c9d8de;display:inline-block}
+#ecran .barre .url{flex:1;background:#fff;border-radius:8px;padding:6px 12px;margin-left:8px;color:#6a8791}
+#chat{position:absolute;left:0;right:0;top:40px;bottom:0;overflow:auto;padding:18px 22px 22px;box-sizing:border-box}
+.msg{max-width:88%;margin:0 0 12px;padding:12px 16px;border-radius:16px;font-size:16px;line-height:1.4;font-weight:600;animation:app .35s}
+.msg.lisa{background:#fff;border:2px solid #dfe8ee;border-top-left-radius:4px;color:var(--encre)}
+.msg.lisa b{color:var(--rose)}
+.msg.moi{background:var(--canard);color:#fff;margin-left:auto;border-top-right-radius:4px}
+.msg.sit{background:#fff0f4;border:2px solid #ffd0dd;font-size:17px}
+.msg.sit .num{display:inline-block;background:var(--rose);color:#fff;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:6px}
+.choix{display:flex;flex-direction:column;gap:8px;margin:0 0 14px;animation:app .35s}
+.choix button{text-align:left;background:#fff;border:2px solid var(--canard);color:var(--canard);border-radius:12px;padding:11px 14px;font:700 15.5px Montserrat,sans-serif;cursor:pointer;transition:all .15s}
+.choix button:hover{background:var(--canard);color:#fff}
+.choix button.pris{background:var(--rose);border-color:var(--rose);color:#fff}
+.choix button:disabled{cursor:default;opacity:.55}
+.choix button.pris:disabled{opacity:1}
+#suivant,#fin{display:none;margin:4px auto 0;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:12px 26px;font:800 16px Montserrat,sans-serif;cursor:pointer}
+#suivant.on,#fin.on{display:block}
+@keyframes app{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#bl{position:absolute;left:60px;top:90px;width:250px;background:#fff;color:var(--encre);border-radius:18px;padding:14px 16px 12px;font-size:14.5px;line-height:1.35;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+#bl:after{content:"";position:absolute;left:110px;bottom:-14px;border:12px solid transparent;border-top-color:#fff;border-bottom:0}
+.hp{margin-top:8px;display:flex;align-items:center;gap:8px;background:transparent;border:0;padding:0;cursor:pointer;font:700 13px Montserrat,sans-serif;color:var(--canard)}
+.hp svg{width:42px;height:42px;flex:none}
+.hp-pulse{fill:#ea1f5c;opacity:.35;transform-origin:center;animation:hpPulse 1.8s ease-out infinite}
+@keyframes hpPulse{0%{transform:scale(.8);opacity:.45}100%{transform:scale(1.05);opacity:0}}
+#badge{position:absolute;left:330px;top:90px;width:830px;height:560px;border-radius:16px;background:linear-gradient(160deg,#127992,#0b4d5c);display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:30px;box-sizing:border-box;box-shadow:0 26px 60px rgba(0,0,0,.45)}
+#badge.on{display:flex;animation:app .6s}
+#badge h2{margin:0 0 10px;font-size:30px}
+#badge p{margin:0 0 18px;font-size:18px;line-height:1.45;font-weight:600;max-width:640px}
+#badge .med{font-size:90px;line-height:1;margin-bottom:10px;animation:tourne 1.6s ease-out}
+@keyframes tourne{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+</style></head>
+<body>
+<div id="stage">
+ <h1>Le grand défi final<small>« Es-tu prêt à entrer dans Parcoursup ? » · une mission d'immersion</small></h1>
+ <div id="bl"><span>Imagine que nous sommes début janvier. Tu viens d'ouvrir Parcoursup. Je te pose quelques situations : à toi de prendre les bonnes décisions.</span>
+  <button id="ecouter" class="hp"><svg viewBox="0 0 437.5 437.5" aria-hidden="true"><circle class="hp-pulse" cx="218.75" cy="218.75" r="218.75"/><circle cx="218.75" cy="218.75" r="175" fill="#ea1f5c"/><path fill="#fff" d="M175.42,190.07l38.22-28.66V276.08l-38.22-28.67H156.31a9.56,9.56,0,0,1-9.56-9.56V199.63a9.56,9.56,0,0,1,9.56-9.56Zm92.79-25.89a9.6,9.6,0,1,0-13.57,13.57,58,58,0,0,1,0,82,9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A77.32,77.32,0,0,0,268.21,164.18Zm-23.89,23.89a9.6,9.6,0,0,0-13.57,13.57,24.19,24.19,0,0,1,0,34.19l0,0a9.55,9.55,0,0,0-.06,13.51l.06.06a9.55,9.55,0,0,0,13.51.05l.06-.05A43.38,43.38,0,0,0,244.32,188.07Z"/></svg><span class="lib">Écouter Lisa</span></button>
+ </div>
+ <audio id="voix" preload="auto" src="audio/lisa-m1-etape9-intro.mp3"></audio>
+ <audio id="voixfin" preload="auto" src="audio/lisa-m1-etape9-conclusion.mp3"></audio>
+ <img id="lisa" src="lisa/lisa_28_parle-accueil.png" alt="Lisa">
+ <div id="ecran"><div class="barre"><i></i><i></i><i></i><span class="url">parcoursup.gouv.fr · début janvier · la plateforme vient d'ouvrir</span></div><div id="chat"></div></div>
+ <div id="badge"><div class="med">🏅</div><h2>Badge Décrypteur Parcoursup débloqué !</h2><p id="badge-txt"></p><p style="font-size:15px;opacity:.9">Clique sur la flèche pour recevoir ta médaille ➜</p></div>
+</div>
+<script>
+var SIT=[
+ {q:"Tu découvres une formation qui t'intéresse. Que fais-tu en premier ?",c:[
+  {t:"Je regarde uniquement son nom.",l:"Son nom, c'est une première indication… mais derrière un même intitulé se cachent des programmes très différents. Sa fiche te raconte toute l'histoire."},
+  {t:"Je consulte sa fiche détaillée.",ok:true,l:"Exactement ! Programme, attendus, critères d'examen, débouchés, JPO… tout est là. C'est le meilleur point de départ."},
+  {t:"J'attends que mes amis me donnent leur avis.",l:"Tes amis peuvent t'accompagner dans tes recherches, mais ton orientation part de TON profil, de tes envies et de ton projet."}]},
+ {q:"Tu hésites entre deux BTS. Quelle information peut t'aider à comparer ?",c:[
+  {t:"Le programme.",l:"Le programme, oui… mais pas seulement : programme, attendus, débouchés, taux d'accès. Tu dois tout prendre en compte."},
+  {t:"Les attendus.",l:"Les attendus, oui… mais pas seulement : programme, attendus, débouchés, taux d'accès. Tu dois tout prendre en compte."},
+  {t:"Les débouchés.",l:"Les débouchés, oui… mais pas seulement : programme, attendus, débouchés, taux d'accès. Tu dois tout prendre en compte."},
+  {t:"Le taux d'accès.",l:"Le taux d'accès, oui… mais pas seulement : programme, attendus, débouchés, taux d'accès. Tu dois tout prendre en compte."},
+  {t:"Tout ça à la fois.",ok:true,l:"Bravo, c'est exactement ça : tu dois tout prendre en compte. Aucune de ces informations ne suffit à elle seule."}]},
+ {q:"Tu entends un camarade dire : « Parcoursup choisit les candidats au hasard. » Comment lui réponds-tu ?",c:[
+  {t:"« C'est vrai, c'est une loterie, on n'y peut rien. »",l:"Tu te souviens de l'étape 1 ? Ce ne sont pas les algorithmes de Parcoursup qui décident : ce sont les formations qui examinent les candidatures et établissent leur classement. Parcoursup transmet."},
+  {t:"« Non : ce sont les formations qui examinent les dossiers et font leur classement. Parcoursup ne fait que transmettre. »",ok:true,l:"Parfaitement expliqué ! Parcoursup joue le rôle de messager : il transmet les dossiers et les réponses. Chaque formation classe selon ses propres critères."},
+  {t:"« Je ne sais pas, on verra bien. »",l:"Pas de panique, tu peux lui répondre : ce sont les formations qui examinent les dossiers et font leur classement, Parcoursup transmet. Ce n'est pas le hasard."}]},
+ {q:"Tu constates qu'une formation n'a qu'un taux d'accès de 18 %. Que décides-tu ?",c:[
+  {t:"Je la retire tout de suite : c'est impossible pour moi.",l:"Pas si vite ! Un taux d'accès est un indicateur, pas une promesse… ni une condamnation. Si elle te correspond, elle a sa place parmi tes vœux ambitieux."},
+  {t:"Je la garde si elle me correspond, et j'équilibre mes vœux avec des choix réalistes et sécurisés.",ok:true,l:"C'est la bonne stratégie : ambitieux, réalistes, sécurisés. Les trois ont leur place. Et ton dossier, tes spécialités et les critères de la formation restent déterminants."},
+  {t:"Je ne mets que des formations à plus de 80 % pour être tranquille.",l:"Le taux d'accès ne prédit pas ton résultat à lui seul. Choisir uniquement sur ce chiffre, c'est le piège n°5 : tu risques de passer à côté d'une formation qui te correspond vraiment."}]}
+];
+var FIN="Bravo ! Tu connais maintenant les règles du jeu. Beaucoup de candidats se lancent dans Parcoursup sans les comprendre. Toi, tu viens de construire un véritable camp de base. Dans la prochaine mission, nous allons partir explorer les milliers de formations... et surtout apprendre à repérer celles qui te correspondent vraiment.";
+(function(){
+ var stage=document.getElementById('stage'),chat=document.getElementById('chat'),i=0,score=0;
+ function fit(){var s=Math.min(innerWidth/1200,innerHeight/675);stage.style.transform='scale('+s+')';stage.style.left=((innerWidth-1200*s)/2)+'px';stage.style.top=((innerHeight-675*s)/2)+'px';}
+ addEventListener('resize',fit);fit();
+ function add(cls,html){ var d=document.createElement('div'); d.className='msg '+cls; d.innerHTML=html; chat.appendChild(d); chat.scrollTop=chat.scrollHeight; return d; }
+ function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+ function situation(){ var s=SIT[i]; add('sit','<span class="num">SITUATION '+(i+1)+' / '+SIT.length+'</span><br>'+esc(s.q)); var box=document.createElement('div'); box.className='choix'; s.c.forEach(function(c){ var b=document.createElement('button'); b.textContent=c.t; b.addEventListener('click',function(){ Array.prototype.forEach.call(box.querySelectorAll('button'),function(x){x.disabled=true;}); b.classList.add('pris'); if(c.ok) score++; add('moi',esc(c.t)); setTimeout(function(){ add('lisa','<b>Lisa :</b> '+esc(c.l)); try{ parent.postMessage({pe:'reponse',id:'IMMERSION_'+(i+1),type:'other',reponse:c.ok?'ok':'ko'},'*'); }catch(e){} var nb=document.createElement('button'); nb.id='suivant'; nb.className='on'; nb.textContent=(i<SIT.length-1?'Situation suivante ➜':'Voir la conclusion ➜'); nb.addEventListener('click',function(){ nb.remove(); i++; if(i<SIT.length) situation(); else fin(); }); chat.appendChild(nb); chat.scrollTop=chat.scrollHeight; },500); }); box.appendChild(b); }); chat.appendChild(box); chat.scrollTop=chat.scrollHeight; }
+ function fin(){ add('lisa','<b>Lisa :</b> '+esc(FIN)); var vf=document.getElementById('voixfin'); try{ vf.currentTime=0; vf.play(); }catch(e){} var b=document.createElement('button'); b.id='fin'; b.className='on'; b.textContent='🏅 Débloquer mon badge'; b.addEventListener('click',function(){ document.getElementById('badge-txt').textContent=FIN; document.getElementById('badge').classList.add('on'); try{ parent.postMessage({pe:'reponse',id:'IMMERSION_FIN',type:'other',reponse:score+'/'+SIT.length},'*'); }catch(e){} }); chat.appendChild(b); chat.scrollTop=chat.scrollHeight; }
+ add('lisa','<b>Lisa :</b> Imagine que nous sommes début janvier. Tu viens d\'ouvrir Parcoursup. Je vais te poser quelques situations. À toi de prendre les bonnes décisions.');
+ setTimeout(situation,600);
+ var voix=document.getElementById('voix'),eb=document.getElementById('ecouter');
+ eb.addEventListener('click',function(){ if(voix.paused){voix.currentTime=0;voix.play();eb.querySelector('.lib').textContent='Pause';} else {voix.pause();eb.querySelector('.lib').textContent='Écouter Lisa';} });
+ voix.addEventListener('ended',function(){eb.querySelector('.lib').textContent='Réécouter';});
+})();
+</script>
+</body></html>
