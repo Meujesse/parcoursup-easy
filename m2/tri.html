@@ -1,0 +1,39 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Mon premier tri – Mission 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_commun.css"><style>
+#tete{position:absolute;left:40px;top:24px;width:860px}
+#ajout{position:absolute;left:40px;top:118px;width:860px;display:flex;gap:10px;align-items:center}
+#ajout input{flex:1;border:0;border-radius:12px;padding:12px 16px;font:500 18px 'Patrick Hand',cursive;color:var(--encre);background:#fff}
+#cols{position:absolute;left:40px;top:184px;width:860px;display:flex;gap:14px;height:400px}
+.col{flex:1;border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:8px;background:rgba(255,255,255,.18);border:2px dashed rgba(255,255,255,.6)}
+.col.over{background:rgba(255,255,255,.35)}
+.col h3{margin:0 0 4px;color:#fff;font:800 16px Montserrat,sans-serif}.col h3 small{display:block;font:500 12px/1.3 Montserrat,sans-serif;opacity:.95;margin-top:4px}
+.col .zone{flex:1;overflow:auto;display:flex;flex-direction:column;gap:8px;min-height:40px}
+.pi{background:#fff;border-radius:10px;padding:9px 12px;font:600 15px 'Patrick Hand',cursive;font-size:19px;color:var(--encre);cursor:grab;box-shadow:0 4px 10px rgba(0,0,0,.12);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pi b{font:700 11px Montserrat,sans-serif;color:var(--canard);white-space:nowrap}.pi i{cursor:pointer;color:#b9b2a3;font-style:normal}
+.pi .mv{display:flex;gap:4px}.pi .mv button{border:0;background:#f2f7f9;border-radius:6px;width:24px;height:24px;cursor:pointer;font-size:12px}
+#lisa{right:0;height:430px}#bulle{right:270px;bottom:300px;max-width:260px}
+#note{position:absolute;left:40px;bottom:14px;width:860px}
+</style></head><body><div id="s">
+<div id="tete"><h1>🎯 Mon premier tri</h1><div class="sous">Reprends les formations que tu as découvertes et répartis-les : <b>J'ose</b>, <b>Je cible</b>, <b>Je sécurise</b>. Tu pourras modifier ce tri à tout moment.</div></div>
+<div id="ajout"><input id="inp" placeholder="Écris une formation découverte (ex. BUT Techniques de commercialisation, Lille)…" maxlength="70"><button class="btn" id="add">＋ Ajouter</button></div>
+<div id="cols">
+ <div class="col" data-c="ose" style="--c:#d9334f"><h3>🔴 J'OSE<small>Les formations qui me font vraiment envie, même si elles sont plus difficiles à intégrer.</small></h3><div class="zone"></div></div>
+ <div class="col" data-c="cible" style="--c:#e07b2a"><h3>🟠 JE CIBLE<small>Les formations qui correspondent bien à mon profil, mon projet et mes attentes. Le cœur de ma liste.</small></h3><div class="zone"></div></div>
+ <div class="col" data-c="secu" style="--c:#1f9d6a"><h3>🟢 JE SÉCURISE<small>Des formations qui augmentent mes chances. Un choix que je serais quand même prêt·e à accepter.</small></h3><div class="zone"></div></div>
+</div>
+<div id="note" class="postit" style="max-width:860px;transform:none">⚠️ Ce classement n'est jamais une vérité absolue : une formation n'est pas « ambitieuse » ou « sécurisée » en soi. Cela dépend de ton profil, de ton dossier, de la sélection et de la formation concernée.</div>
+<img class="lisa" id="lisa" alt=""><div class="bulle" id="bulle">Un plan B n'est pas une punition. C'est une autre façon d'avancer vers ton objectif.</div>
+</div>
+<script src="_commun.js"></script><script>
+document.getElementById('lisa').src=LISA+'lisa_33_decompte-doigts.gif';
+let P=PE.get('pe_m2_tri',[]);
+const C=['ose','cible','secu'],LB={ose:"J'ose",cible:'Je cible',secu:'Je sécurise'};
+function paint(){ C.forEach(c=>{ document.querySelector('.col[data-c='+c+'] .zone').innerHTML=P.filter(p=>p.c===c).map(p=>'<div class="pi" draggable="true" data-id="'+p.id+'"><span>'+p.t+'</span><span class="mv">'+C.filter(x=>x!==c).map(x=>'<button title="'+LB[x]+'" data-to="'+x+'">'+(x==='ose'?'🔴':x==='cible'?'🟠':'🟢')+'</button>').join('')+'<i title="Retirer">✕</i></span></div>').join('')||'<div style="color:#fff;font:500 13px Montserrat;opacity:.8;text-align:center;padding:14px 0">Glisse une formation ici</div>'; }); PE.set('pe_m2_tri',P); }
+document.getElementById('add').onclick=()=>{ const v=document.getElementById('inp').value.trim(); if(!v) return; P.push({id:Date.now(),t:v,c:'cible'}); document.getElementById('inp').value=''; paint(); };
+document.getElementById('inp').onkeydown=e=>{ if(e.key==='Enter') document.getElementById('add').click(); };
+document.getElementById('cols').onclick=e=>{ const pi=e.target.closest('.pi'); if(!pi) return; const id=+pi.dataset.id; if(e.target.matches('button[data-to]')){ P.find(p=>p.id===id).c=e.target.dataset.to; paint(); } if(e.target.matches('i')){ P=P.filter(p=>p.id!==id); paint(); } };
+let drag=null; document.addEventListener('dragstart',e=>{const pi=e.target.closest('.pi'); if(pi){drag=+pi.dataset.id; e.dataTransfer.setData('text','x');}});
+document.querySelectorAll('.col').forEach(col=>{ col.addEventListener('dragover',e=>{e.preventDefault(); col.classList.add('over');}); col.addEventListener('dragleave',()=>col.classList.remove('over')); col.addEventListener('drop',e=>{e.preventDefault(); col.classList.remove('over'); const p=P.find(p=>p.id===drag); if(p){p.c=col.dataset.c; paint();}}); });
+paint();
+</script></body></html>

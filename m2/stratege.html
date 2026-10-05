@@ -1,0 +1,28 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Le Stratège – défi final</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_commun.css"><style>
+#tete{position:absolute;left:40px;top:24px;width:760px}
+#liste{position:absolute;left:40px;top:150px;width:760px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.it{background:#fff;border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:center;cursor:pointer;border:3px solid transparent;font:600 15px/1.3 Montserrat,sans-serif;color:var(--encre)}
+.it i{flex:none;width:28px;height:28px;border:3px solid var(--canard);border-radius:8px;font-style:normal;text-align:center;line-height:22px;color:#fff;font-weight:800}
+.it.on{border-color:var(--vert)}.it.on i{background:var(--vert);border-color:var(--vert)}
+#val{position:absolute;left:40px;bottom:30px;display:flex;align-items:center;gap:16px}
+#score{color:#fff;font:700 16px Montserrat,sans-serif}
+#lisa{right:0;height:430px}#bulle{right:300px;bottom:300px;max-width:300px}
+#bravo{display:none;position:absolute;left:40px;top:150px;width:760px;background:#fff;border-radius:18px;padding:26px 30px;font:600 18px/1.45 Montserrat,sans-serif;color:var(--encre);box-shadow:0 12px 30px rgba(0,0,0,.2)}
+#bravo h2{margin:0 0 8px;color:var(--rose);font:800 28px Montserrat,sans-serif}
+</style></head><body><div id="s">
+<div id="tete"><h1>🏔️ Défi final · Le Stratège</h1><div class="sous">Un bon stratège ne cherche pas le chemin parfait. Il prépare plusieurs chemins qui peuvent tous l'amener vers un projet qui lui plaît. Coche ce que tu as vraiment fait.</div></div>
+<div id="liste"></div>
+<div id="bravo"><h2>Mission validée !</h2>Tu ne regardes plus les formations comme une simple liste de noms. Tu sais chercher les chemins possibles, comparer les formations et construire une stratégie. <b>Clique sur la flèche pour recevoir ton badge Stratège.</b></div>
+<div id="val"><button class="btn" id="go" disabled>🏔️ VALIDER MA MISSION</button><span id="score"></span></div>
+<img class="lisa" id="lisa" alt=""><div class="bulle" id="bulle">Dernière étape de cette mission. Sois honnête avec toi-même : chaque case cochée est une vraie étape franchie.</div>
+</div>
+<script src="_commun.js"></script><script>
+const L=["J'ai exploré plusieurs formations.","J'ai découvert au moins un chemin auquel je n'avais pas pensé.","Je sais ce que j'étudierais dans mes formations préférées.","J'ai vérifié les modalités d'admission.","J'ai regardé ce qui est possible après.","J'ai vérifié le coût lorsque nécessaire.","J'ai identifié au moins une alternative.","Mes solutions de sécurité me donnent quand même envie."];
+let S=PE.get('pe_m2_stratege',[]); const lisa=document.getElementById('lisa'); lisa.src=LISA+'lisa_03_index-leve.gif';
+function paint(){ document.getElementById('liste').innerHTML=L.map((t,i)=>'<div class="it'+(S.includes(i)?' on':'')+'" data-i="'+i+'"><i>'+(S.includes(i)?'✔':'')+'</i>'+t+'</div>').join(''); document.getElementById('score').textContent=S.length+' / '+L.length; document.getElementById('go').disabled=S.length<L.length; }
+document.getElementById('liste').onclick=e=>{ const it=e.target.closest('.it'); if(!it) return; const i=+it.dataset.i; S=S.includes(i)?S.filter(x=>x!==i):[...S,i]; PE.set('pe_m2_stratege',S); paint(); };
+document.getElementById('go').onclick=()=>{ document.getElementById('liste').style.display='none'; document.getElementById('bravo').style.display='block'; document.getElementById('val').style.display='none'; lisa.src=LISA+'lisa_34_bascule-enthousiaste.gif'; document.getElementById('bulle').textContent='Bravo ! Et surtout, tu sais maintenant qu\'un plan B peut être une vraie opportunité.'; };
+paint();
+</script></body></html>
