@@ -1,6 +1,6 @@
 <!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Trouve ton territoire – Mission 2</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="_commun.css"><style>
+<link rel="stylesheet" href="commun.css"><style>
 #q{position:absolute;left:60px;top:40px;width:720px}
 .rep{display:block;width:100%;text-align:left;margin:10px 0;border:2px solid #e3eef2;border-radius:14px;background:#fff;padding:13px 18px;font:600 17px Montserrat,sans-serif;color:var(--encre);cursor:pointer;transition:.15s}
 .rep:hover{border-color:var(--rose);transform:translateX(4px)}
@@ -39,7 +39,7 @@
 <img class="lisa" id="lisa" alt="">
 <div class="bulle" id="bulle" style="right:300px;bottom:330px;display:none"></div>
 </div>
-<script src="_commun.js"></script><script>
+<script src="commun.js"></script><script>
 const T={U:['🟦 Université','Approfondir, analyser, devenir autonome','#2f6f8f'],P:['🟩 Formations professionnalisantes','Concret, projets, stages, alternance','#1f9d6a'],C:['🟥 Grandes écoles / commerce','Management, projets, international','#d9334f'],I:['🟨 Écoles d’ingénieurs','Sciences, concevoir, résoudre','#c8911d'],S:['🟪 Santé','Soin, sciences, accompagnement','#7a4fb3'],R:['🟧 Prépas','Apprendre intensément, rythme soutenu','#e07b2a']};
 const Q=[
  {t:"J'aime surtout…",r:[["apprendre en faisant",'P'],["comprendre en profondeur",'U'],["résoudre des problèmes",'I'],["créer / imaginer",'C'],["travailler avec les autres",'S']]},

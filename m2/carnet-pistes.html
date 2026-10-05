@@ -1,6 +1,6 @@
 <!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Mes pistes – Carnet de route</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="_commun.css"><style>
+<link rel="stylesheet" href="commun.css"><style>
 #page{position:absolute;left:40px;top:22px;width:1120px;height:632px;background:var(--papier);border-radius:16px;box-shadow:0 18px 40px rgba(0,0,0,.3);padding:26px 30px 20px 40px;overflow:hidden}
 #page:before{content:"";position:absolute;left:28px;top:0;bottom:0;width:2px;background:#f4b3c6}
 h2{margin:0;font:800 24px Montserrat,sans-serif;color:var(--rose)}
@@ -29,7 +29,7 @@ td select{font-size:15px;font-family:Montserrat,sans-serif;font-weight:600;heigh
 </div>
 <div id="tamp">Parcoursup'easy · Mission 2</div>
 </div></div>
-<script src="_commun.js"></script><script>
+<script src="commun.js"></script><script>
 const N=6; let D=PE.get('pe_m2_pistes',{rows:[],rech:['','','']});
 function row(i){ const r=D.rows[i]||{}; return '<tr>'+['d','f','p'].map(k=>'<td><input data-i="'+i+'" data-k="'+k+'" value="'+(r[k]||'').replace(/"/g,'&quot;')+'"></td>').join('')+'<td><select data-i="'+i+'" data-k="c"><option value="">—</option><option'+(r.c==='ose'?' selected':'')+' value="ose">🔴 J\'ose</option><option'+(r.c==='cible'?' selected':'')+' value="cible">🟠 Je cible</option><option'+(r.c==='secu'?' selected':'')+' value="secu">🟢 Je sécurise</option></select></td><td><input data-i="'+i+'" data-k="v" value="'+(r.v||'').replace(/"/g,'&quot;')+'"></td></tr>'; }
 function paint(){ document.getElementById('tb').innerHTML=Array.from({length:N},(_,i)=>row(i)).join(''); document.querySelectorAll('#rech input').forEach(x=>x.value=D.rech[+x.dataset.r]||''); }

@@ -1,6 +1,6 @@
 <!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Mon détecteur de vigilance – Mission 2</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="_commun.css"><style>
+<link rel="stylesheet" href="commun.css"><style>
 #tete{position:absolute;left:40px;top:24px;width:800px}
 #qs{position:absolute;left:40px;top:120px;width:800px;display:flex;flex-direction:column;gap:10px}
 .q{background:#fff;border-radius:14px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px}
@@ -19,7 +19,7 @@
 <div id="feu"><div id="titrefeu">Résultat</div><div class="lamp v" id="lv"></div><div class="lamp o" id="lo"></div><div class="lamp r" id="lr"></div><div id="msg">Réponds aux 5 questions pour allumer ton feu.</div></div>
 <img class="lisa" id="lisa" alt="">
 </div>
-<script src="_commun.js"></script><script>
+<script src="commun.js"></script><script>
 const Q=["Cette formation me plaît-elle vraiment ?","Est-ce que je sais ce que j'y étudierai ?","Est-ce que je sais comment on y entre ?","Est-ce que j'ai vérifié ce qu'il est possible de faire après ?","Ai-je plusieurs chemins possibles vers mon objectif ?"];
 let R=PE.get('pe_m2_detecteur',{});
 const lisa=document.getElementById('lisa'); lisa.src=LISA+'lisa_11_reflexion.gif';

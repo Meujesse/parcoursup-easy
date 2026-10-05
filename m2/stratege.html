@@ -1,6 +1,6 @@
 <!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Le Stratège – défi final</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="_commun.css"><style>
+<link rel="stylesheet" href="commun.css"><style>
 #tete{position:absolute;left:40px;top:24px;width:760px}
 #liste{position:absolute;left:40px;top:150px;width:760px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .it{background:#fff;border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:center;cursor:pointer;border:3px solid transparent;font:600 15px/1.3 Montserrat,sans-serif;color:var(--encre)}
@@ -18,7 +18,7 @@
 <div id="val"><button class="btn" id="go" disabled>🏔️ VALIDER MA MISSION</button><span id="score"></span></div>
 <img class="lisa" id="lisa" alt=""><div class="bulle" id="bulle">Dernière étape de cette mission. Sois honnête avec toi-même : chaque case cochée est une vraie étape franchie.</div>
 </div>
-<script src="_commun.js"></script><script>
+<script src="commun.js"></script><script>
 const L=["J'ai exploré plusieurs formations.","J'ai découvert au moins un chemin auquel je n'avais pas pensé.","Je sais ce que j'étudierais dans mes formations préférées.","J'ai vérifié les modalités d'admission.","J'ai regardé ce qui est possible après.","J'ai vérifié le coût lorsque nécessaire.","J'ai identifié au moins une alternative.","Mes solutions de sécurité me donnent quand même envie."];
 let S=PE.get('pe_m2_stratege',[]); const lisa=document.getElementById('lisa'); lisa.src=LISA+'lisa_03_index-leve.gif';
 function paint(){ document.getElementById('liste').innerHTML=L.map((t,i)=>'<div class="it'+(S.includes(i)?' on':'')+'" data-i="'+i+'"><i>'+(S.includes(i)?'✔':'')+'</i>'+t+'</div>').join(''); document.getElementById('score').textContent=S.length+' / '+L.length; document.getElementById('go').disabled=S.length<L.length; }
