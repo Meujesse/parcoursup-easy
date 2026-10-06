@@ -24,7 +24,7 @@
 (function(){
   var P=new URLSearchParams(location.search);
   if(P.get('bg')==='test') document.body.classList.add('test');
-  var NAMES={explorateur:'explorateur',chasseur:'chasseur',decrypteur:'decrypteur'};
+  var NAMES={explorateur:'explorateur',chasseur:'chasseur',decrypteur:'decrypteur','explorateur-m2':'explorateur-m2',detecteur:'detecteur',stratege:'stratege'};
   var key=NAMES[(P.get('b')||'explorateur').toLowerCase()]||'explorateur';
   var TEX='badges/'+key+'-face.png';
   var TEX_BACK='badges/'+key+'-back.png';
