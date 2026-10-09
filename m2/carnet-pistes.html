@@ -17,22 +17,23 @@ td select{font-size:15px;font-family:Montserrat,sans-serif;font-weight:600;heigh
 #actions{position:absolute;right:30px;top:22px;display:flex;gap:8px}
 #tamp{position:absolute;right:40px;bottom:22px;font:700 13px Montserrat,sans-serif;color:var(--canard);opacity:.6}
 @media print{body{background:#fff}#s{transform:none;position:static;width:auto;height:auto}#page{position:static;box-shadow:none;width:auto;height:auto}#actions{display:none}}
+#rech textarea{display:block;width:100%;border:0;border-bottom:1px solid #d9c9c9;background:repeating-linear-gradient(transparent 0 25px,#e8dcdc 25px 26px);line-height:26px;font:18px/26px "Patrick Hand",cursive;color:#1f3a45;resize:none;padding:0 4px;outline:none;height:80px}
 </style></head><body data-voix="e17-carnet" data-voix-pos="right:16px;bottom:44px" data-zone-fin="6" data-zone-pos="left:36px;bottom:16px"><div id="s"><div id="page">
 <div id="actions"><button class="btn sec" id="import">⤓ Reprendre mon tri</button><button class="btn" onclick="window.print()">🖨 Imprimer / PDF</button></div>
 <h2>🎒 Mes pistes</h2><div class="st">Carnet de route Terminale · Mission 2 · On passe de l'exploration à l'action.</div>
 <table><thead><tr><th style="width:17%">Domaine</th><th style="width:25%">Formation</th><th style="width:25%">Pourquoi elle m'intéresse</th><th style="width:15%">J'ose / Je cible / Je sécurise</th><th>Ce que je dois vérifier</th></tr></thead><tbody id="tb"></tbody></table>
 <h2 style="margin-top:14px;font-size:20px">🔎 Mes 3 prochaines recherches</h2>
 <div id="rech">
- <div><b>1 · Une formation que je connaissais déjà</b><input data-r="0"></div>
- <div><b>2 · Une formation que je viens de découvrir</b><input data-r="1"></div>
- <div><b>3 · Une formation alternative à mon premier choix</b><input data-r="2"></div>
+ <div><b>1 · Une formation que je connaissais déjà</b><textarea data-r="0" rows="3"></textarea></div>
+ <div><b>2 · Une formation que je viens de découvrir</b><textarea data-r="1" rows="3"></textarea></div>
+ <div><b>3 · Une formation alternative à mon premier choix</b><textarea data-r="2" rows="3"></textarea></div>
 </div>
 <div id="tamp">Parcoursup'easy · Mission 2</div>
 </div></div>
 <script src="commun.js"></script><script>
 const N=6; let D=PE.get('pe_m2_pistes',{rows:[],rech:['','','']});
 function row(i){ const r=D.rows[i]||{}; return '<tr>'+['d','f','p'].map(k=>'<td><input data-i="'+i+'" data-k="'+k+'" value="'+(r[k]||'').replace(/"/g,'&quot;')+'"></td>').join('')+'<td><select data-i="'+i+'" data-k="c"><option value="">—</option><option'+(r.c==='ose'?' selected':'')+' value="ose">🔴 J\'ose</option><option'+(r.c==='cible'?' selected':'')+' value="cible">🟠 Je cible</option><option'+(r.c==='secu'?' selected':'')+' value="secu">🟢 Je sécurise</option></select></td><td><input data-i="'+i+'" data-k="v" value="'+(r.v||'').replace(/"/g,'&quot;')+'"></td></tr>'; }
-function paint(){ document.getElementById('tb').innerHTML=Array.from({length:N},(_,i)=>row(i)).join(''); document.querySelectorAll('#rech input').forEach(x=>x.value=D.rech[+x.dataset.r]||''); }
+function paint(){ document.getElementById('tb').innerHTML=Array.from({length:N},(_,i)=>row(i)).join(''); document.querySelectorAll('#rech textarea').forEach(x=>x.value=D.rech[+x.dataset.r]||''); }
 document.body.addEventListener('input',e=>{ const t=e.target; if(t.dataset.k){ D.rows[+t.dataset.i]=D.rows[+t.dataset.i]||{}; D.rows[+t.dataset.i][t.dataset.k]=t.value; } if(t.dataset.r!==undefined) D.rech[+t.dataset.r]=t.value; PE.set('pe_m2_pistes',D); });
 document.getElementById('import').onclick=()=>{ const tri=PE.get('pe_m2_tri',[]); const dom=PE.get('pe_m2_domaines',[]); if(!tri.length){ alert('Ton tri « J\'ose / Je cible / Je sécurise » est vide pour le moment.'); return; } tri.slice(0,N).forEach((p,i)=>{ D.rows[i]={...(D.rows[i]||{}),f:p.t,c:p.c}; }); PE.set('pe_m2_pistes',D); paint(); };
 paint();

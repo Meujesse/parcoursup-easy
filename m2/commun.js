@@ -18,7 +18,7 @@ PE.goCarte=function(){PE.goSlide(PE.CARTE_SLIDE);};
 var fin=document.body&&document.body.getAttribute('data-zone-fin'); if(!fin) return;
 PE.zoneDone(+fin);
 var s=document.getElementById('s'); if(!s) return;
-var b=document.createElement('button'); b.type='button'; b.className='btn'; b.id='retourcarte'; b.innerHTML='🗺️ Retour à la carte';
+var b=document.createElement('button'); b.type='button'; b.className='btn'; b.id='retourcarte'; b.innerHTML='🗺️ Retour à la carte de l’ascension';
 var pos=document.body.getAttribute('data-zone-pos')||'left:16px;bottom:16px'; b.style.cssText='position:absolute;'+pos+';z-index:60;font-size:15px;padding:10px 18px';
 b.onclick=PE.goCarte; s.appendChild(b);
 })();

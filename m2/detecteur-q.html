@@ -1,0 +1,17 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Détecteur – réponse</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+<style>html,body{margin:0;background:transparent;overflow:hidden;font-family:Montserrat,sans-serif}
+#w{display:flex;gap:18px;padding:4px}
+button{flex:1;height:64px;border:3px solid #fff;border-radius:999px;font:800 20px Montserrat,sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.2);transition:transform .15s}
+button:hover{transform:translateY(-3px)}
+#oui{background:#25a782;color:#fff}#non{background:#fff;color:#ea1f5c;border-color:#ea1f5c}
+button.on{outline:4px solid rgba(255,255,255,.7)}
+</style></head><body><div id="w"><button id="oui" type="button">✅ Oui</button><button id="non" type="button">🕒 Pas encore</button></div>
+<script src="commun.js"></script><script>
+var p=new URLSearchParams(location.search), q=p.get('q')||'1', next=p.get('next')||'';
+var R=PE.get('pe_m2_detecteur',{});
+function paint(){ document.getElementById('oui').classList.toggle('on',R[q-1]==='1'); document.getElementById('non').classList.toggle('on',R[q-1]==='0'); }
+function go(v){ R[q-1]=v; PE.set('pe_m2_detecteur',R); paint(); if(next) setTimeout(function(){ PE.goSlide(next); },350); }
+document.getElementById('oui').onclick=function(){go('1');}; document.getElementById('non').onclick=function(){go('0');};
+paint();
+</script></body></html>
