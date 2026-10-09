@@ -14,6 +14,7 @@
 .pi .mv{display:flex;gap:4px}.pi .mv button{border:0;background:#f2f7f9;border-radius:6px;width:24px;height:24px;cursor:pointer;font-size:12px}
 #lisa{right:0;height:430px}#bulle{right:24px;bottom:436px;max-width:290px}#bulle:after{display:none}
 #note{position:absolute;left:40px;bottom:14px;width:860px}
+body.compact #lisa,#bulle,body.compact #voix,body.compact .lisa,body.compact .bulle{display:none!important}
 </style></head><body data-voix="e15-tri" data-voix-pos="right:16px;top:50px"><div id="s">
 <div id="tete"><h1>🎯 Mon premier tri</h1><div class="sous">Reprends les formations que tu as découvertes et répartis-les : <b>J'ose</b>, <b>Je cible</b>, <b>Je sécurise</b>. Tu pourras modifier ce tri à tout moment.</div></div>
 <div id="ajout"><input id="inp" placeholder="Écris une formation découverte (ex. BUT Techniques de commercialisation, Lille)…" maxlength="70"><button class="btn" id="add">＋ Ajouter</button></div>
@@ -25,7 +26,7 @@
 <div id="note" class="postit" style="max-width:860px;transform:none">⚠️ Ce classement n'est jamais une vérité absolue : une formation n'est pas « ambitieuse » ou « sécurisée » en soi. Cela dépend de ton profil, de ton dossier, de la sélection et de la formation concernée.</div>
 <img class="lisa" id="lisa" alt=""><div class="bulle" id="bulle">Un plan B n'est pas une punition. C'est une autre façon d'avancer vers ton objectif.</div>
 </div>
-<script src="commun.js"></script><script>
+<script>if(new URLSearchParams(location.search).get('mode')==='compact'){document.body.classList.add('compact');document.body.removeAttribute('data-voix');}</script><script src="commun.js"></script><script>
 document.getElementById('lisa').src=LISA+'lisa_33_decompte-doigts.gif';
 let P=PE.get('pe_m2_tri',[]);
 const C=['ose','cible','secu'],LB={ose:"J'ose",cible:'Je cible',secu:'Je sécurise'};

@@ -18,6 +18,7 @@
 .slot.on{border-style:solid;border-color:var(--rose)}
 .slot b{display:block;font-size:13px;color:var(--canard);margin-bottom:6px}
 .slot span{display:block;font-family:'Patrick Hand',cursive;font-size:20px;color:var(--encre)}
+body.compact #lisa,#bulle,body.compact #voix,body.compact .lisa,body.compact .bulle{display:none!important}
 </style></head><body data-voix="e4-defi" data-voix-pos="right:16px;top:50px" data-zone-fin="1" data-zone-pos="left:16px;bottom:16px"><div id="s">
 <div id="q">
  <div id="prog"></div>
@@ -39,7 +40,7 @@
 <img class="lisa" id="lisa" alt="">
 <div class="bulle" id="bulle" style="right:300px;bottom:330px;display:none"></div>
 </div>
-<script src="commun.js"></script><script>
+<script>if(new URLSearchParams(location.search).get('mode')==='compact'){document.body.classList.add('compact');document.body.removeAttribute('data-voix');}</script><script src="commun.js"></script><script>
 const T={U:['🟦 Université','Approfondir, analyser, devenir autonome','#2f6f8f'],P:['🟩 Formations professionnalisantes','Concret, projets, stages, alternance','#1f9d6a'],C:['🟥 Grandes écoles / commerce','Management, projets, international','#d9334f'],I:['🟨 Écoles d’ingénieurs','Sciences, concevoir, résoudre','#c8911d'],S:['🟪 Santé','Soin, sciences, accompagnement','#7a4fb3'],R:['🟧 Prépas','Apprendre intensément, rythme soutenu','#e07b2a']};
 const Q=[
  {t:"J'aime surtout…",r:[["apprendre en faisant",'P'],["comprendre en profondeur",'U'],["résoudre des problèmes",'I'],["créer / imaginer",'C'],["travailler avec les autres",'S']]},

@@ -13,13 +13,14 @@
 #msg{font:600 14px/1.4 Montserrat,sans-serif;color:var(--encre);margin-top:8px;min-height:60px}
 #titrefeu{font:800 18px Montserrat,sans-serif;color:var(--canard)}
 #lisa{right:30px;height:235px}
+body.compact #lisa,#bulle,body.compact #voix,body.compact .lisa,body.compact .bulle{display:none!important}
 </style></head><body><div id="s">
 <div id="tete"><h1>🚨 Avant de valider : mon détecteur de vigilance</h1><div class="sous">Pense à la formation que tu as le plus envie de mettre dans ta liste et réponds honnêtement.</div></div>
 <div id="qs"></div>
 <div id="feu"><div id="titrefeu">Résultat</div><div class="lamp v" id="lv"></div><div class="lamp o" id="lo"></div><div class="lamp r" id="lr"></div><div id="msg">Réponds aux 5 questions pour allumer ton feu.</div></div>
 <img class="lisa" id="lisa" alt="">
 </div>
-<script src="commun.js"></script><script>
+<script>if(new URLSearchParams(location.search).get('mode')==='compact'){document.body.classList.add('compact');document.body.removeAttribute('data-voix');}</script><script src="commun.js"></script><script>
 const Q=["Cette formation me plaît-elle vraiment ?","Est-ce que je sais ce que j'y étudierai ?","Est-ce que je sais comment on y entre ?","Est-ce que j'ai vérifié ce qu'il est possible de faire après ?","Ai-je plusieurs chemins possibles vers mon objectif ?"];
 let R=PE.get('pe_m2_detecteur',{});
 const lisa=document.getElementById('lisa'); lisa.src=LISA+'lisa_11_reflexion.gif';
