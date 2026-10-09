@@ -1,0 +1,45 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Vrai choix ou coup de cœur ?</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commun.css"><style>
+html,body{background:transparent}
+#s{width:900px;height:675px;left:0;top:0;transform:none;position:absolute}
+h1{font-size:30px;position:absolute;left:30px;top:18px}
+.sous{position:absolute;left:30px;top:60px;width:840px;font-size:14px}
+#plaq{position:absolute;left:30px;top:108px;width:300px}
+.carte{padding:16px 18px;margin-bottom:12px;border-radius:16px}
+.carte.dark{background:#0e5d70;color:#fff}.carte.pink{background:var(--rose);color:#fff}
+.carte b{display:block;font:800 20px Montserrat,sans-serif;margin-bottom:6px}
+.carte div{font:600 14px/1.45 Montserrat,sans-serif}
+#q{position:absolute;left:350px;top:108px;width:520px}
+#q h2{margin:0 0 4px;font:800 17px/1.25 Montserrat,sans-serif;color:#fff}
+#q .ind{font:500 12px Montserrat,sans-serif;color:#fff;opacity:.9;margin-bottom:8px}
+#grille{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.opt{background:#fff;border-radius:10px;padding:8px 10px;display:flex;gap:8px;align-items:center;cursor:pointer;border:3px solid transparent;font:600 13px/1.2 Montserrat,sans-serif;color:var(--encre)}
+.opt i{flex:none;width:20px;height:20px;border:3px solid var(--canard);border-radius:6px;font-style:normal;text-align:center;line-height:15px;font-size:12px;color:#fff}
+.opt.on{border-color:var(--canard)}.opt.on i{background:var(--canard)}
+.opt.ok{border-color:var(--vert);background:#eafaf3}.opt.ok i{background:var(--vert);border-color:var(--vert)}
+#bas{position:absolute;left:350px;top:560px;width:520px;display:flex;gap:12px;align-items:center}
+#fb{position:absolute;left:30px;top:518px;width:300px;background:rgba(255,253,247,.96);border-radius:14px;padding:12px 14px;font:600 13px/1.35 Montserrat,sans-serif;color:var(--encre);box-shadow:0 8px 20px rgba(0,0,0,.18);display:none}
+#fb b{color:var(--rose)}
+#bas .btn{font-size:15px;padding:11px 20px}
+#score{color:#fff;font:700 14px Montserrat,sans-serif}
+</style></head><body><div id="s">
+<h1>Vrai choix ou coup de cœur ?</h1>
+<div class="sous">Voici une formation fictive, telle qu'on la voit sur sa plaquette. Coche toutes les informations qui te manquent encore avant de l'ajouter à ta liste.</div>
+<div id="plaq">
+ <div class="carte dark"><b>Bachelor X – Management international</b><div>📍 Grande ville<br>💶 9 000 € / an<br>🎓 Bac+3</div></div>
+ <div class="carte pink"><b>École privée</b><div>« Beaucoup de communication marketing »<br>De jolies photos, peu de détails…</div></div>
+</div>
+<div id="fb"></div>
+<div id="q"><h2>Quelles informations te manquent avant de l'ajouter à ta liste ?</h2><div class="ind">Plusieurs réponses possibles · coche tout ce qui te manque.</div><div id="grille"></div></div>
+<div id="bas"><button class="btn" id="verif">Vérifier</button><span id="score"></span></div>
+</div>
+<script src="commun.js"></script><script>
+const O=['la reconnaissance du diplôme','le grade de licence éventuel','les modalités d’admission','les poursuites d’études possibles','l’insertion professionnelle','le contenu réel des cours','les stages / l’alternance','le coût total','l’encadrement'];
+let sel=PE.get('pe_m2_vraichoix',[]), fini=false;
+const g=document.getElementById('grille');
+function paint(){ g.innerHTML=O.map((o,i)=>'<div class="opt'+(sel.indexOf(i)>=0?' on':'')+(fini?' ok':'')+'" data-i="'+i+'"><i>'+(sel.indexOf(i)>=0||fini?'✓':'')+'</i>'+o+'</div>').join(''); }
+g.onclick=e=>{ const o=e.target.closest('.opt'); if(!o||fini) return; const i=+o.dataset.i; sel=sel.indexOf(i)>=0?sel.filter(x=>x!==i):[...sel,i]; PE.set('pe_m2_vraichoix',sel); paint(); };
+document.getElementById('verif').onclick=()=>{ const n=sel.length; fini=true; paint(); const fb=document.getElementById('fb'); fb.style.display='block'; fb.innerHTML=n===9?'<b>Bravo.</b> Le nom d’une formation et son marketing ne suffisent jamais pour décider.':'<b>Tu en avais coché '+n+' sur 9.</b> En réalité, TOUTES ces informations te manquent encore : le nom d’une formation et son marketing ne suffisent jamais pour décider.'; document.getElementById('score').textContent=n+' / 9 cochées'; document.getElementById('verif').textContent='↺ Recommencer'; document.getElementById('verif').onclick=()=>{ sel=[]; PE.set('pe_m2_vraichoix',sel); location.reload(); }; };
+paint();
+</script></body></html>
