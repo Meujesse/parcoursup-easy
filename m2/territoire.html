@@ -62,5 +62,5 @@ function paint(){ document.querySelectorAll('.slot').forEach(s=>{const k=choix[s
 document.getElementById('terr').onclick=e=>{const t=e.target.closest('.t'); if(!t) return; document.querySelectorAll('.t').forEach(x=>x.classList.remove('sel')); t.classList.add('sel'); cur=t.dataset.k;};
 document.getElementById('pick').onclick=e=>{const s=e.target.closest('.slot'); if(!s||!cur) return; choix[s.dataset.k]=cur; PE.set('pe_m2_territoires',choix); paint();};
 document.getElementById('refaire').onclick=()=>{i=0;score={U:0,P:0,C:0,I:0,S:0,R:0};document.getElementById('res').style.display='none';document.getElementById('q').style.display='block';show();};
-if(MODE_CHOIX){ result(); const rf=document.getElementById('refaire'); if(rf) rf.style.display='none'; } else show();
+if(MODE_CHOIX){ result(); const rf=document.getElementById('refaire'); if(rf) rf.style.display='none'; const st=document.querySelector('#res .sous'); if(st) st.textContent='Tu viens de découvrir six territoires. Lequel t’attire ? Lequel t’intrigue ? Lequel connais-tu le moins ?'; bulle.style.cssText='left:430px;bottom:70px;right:auto;top:auto;max-width:520px;display:block'; } else show();
 </script></body></html>
