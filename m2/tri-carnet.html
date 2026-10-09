@@ -5,22 +5,22 @@ html,body{background:transparent}
 #s{width:860px;height:675px;left:0;top:0;transform:none;position:absolute}
 #page{position:absolute;left:0;top:10px;width:860px;height:655px;background:var(--papier);border-radius:16px;box-shadow:0 18px 40px rgba(0,0,0,.3);padding:20px 24px 16px 40px;overflow:hidden;box-sizing:border-box}
 #page:before{content:"";position:absolute;left:28px;top:0;bottom:0;width:2px;background:#f4b3c6}
-h2{margin:0;font:800 22px Montserrat,sans-serif;color:var(--rose)}
-.st{font:500 12px Montserrat,sans-serif;color:#6a8791;margin:2px 0 8px}
+h2{margin:0;font:400 30px/1 'Patrick Hand',cursive;color:var(--rose)}
+.st{font:400 17px 'Patrick Hand',cursive;color:#6a8791;margin:2px 0 8px}
 #ajout{display:flex;gap:8px;margin:4px 0 10px}
 #ajout input{flex:1;border:0;border-bottom:2px solid #cfdde6;background:transparent;font:400 19px 'Patrick Hand',cursive;color:var(--encre);padding:4px 6px;outline:none}
 #cols{display:flex;gap:12px;height:430px}
 .col{flex:1;display:flex;flex-direction:column;border-radius:12px;border:2px dashed #cfdde6;padding:6px 8px;background:rgba(255,255,255,.5)}
 .col.over{background:#fff;border-color:var(--canard)}
-.col h3{margin:0;font:800 14px Montserrat,sans-serif;color:var(--canard)}.col h3 small{display:block;font:500 11px/1.3 Montserrat,sans-serif;color:#6a8791;margin:3px 0 6px}
+.col h3{margin:0;font:400 21px 'Patrick Hand',cursive;color:var(--canard)}.col h3 small{display:block;font:400 15px/1.25 'Patrick Hand',cursive;color:#6a8791;margin:3px 0 6px}
 .zone{flex:1;overflow:auto;background:repeating-linear-gradient(transparent 0 31px,#e8dcdc 31px 32px);min-height:60px}
 .pi{height:32px;line-height:32px;font:400 19px/32px 'Patrick Hand',cursive;color:var(--encre);padding:0 6px;display:flex;justify-content:space-between;align-items:center;cursor:grab}
 .pi span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pi .mv{display:flex;gap:3px;opacity:.7}.pi .mv button{border:0;background:transparent;cursor:pointer;font-size:12px;padding:0 2px}.pi i{cursor:pointer;color:#b9b2a3;font-style:normal;margin-left:4px}
 #actions{position:absolute;right:20px;top:16px;display:flex;gap:8px}
 #actions .btn{font-size:14px;padding:9px 16px}
-#tamp{position:absolute;right:30px;bottom:12px;font:700 12px Montserrat,sans-serif;color:var(--canard);opacity:.6}
-#warn{margin-top:8px;font:600 12px/1.3 Montserrat,sans-serif;color:#8a4b00;background:#fff3d6;border-radius:10px;padding:8px 10px}
+#tamp{position:absolute;right:30px;bottom:12px;font:400 15px 'Patrick Hand',cursive;color:var(--canard);opacity:.6}
+#warn{margin-top:8px;font:400 16px/1.3 'Patrick Hand',cursive;color:#8a4b00;background:#fff3d6;border-radius:10px;padding:7px 10px}
 @media print{body{background:#fff}#s{position:static;width:auto;height:auto}#page{position:static;box-shadow:none;width:auto;height:auto}#actions,#ajout,.mv,.pi i{display:none!important}.zone{overflow:visible}}
 </style></head><body><div id="s"><div id="page">
 <div id="actions"><button class="btn" onclick="window.print()">🖨 Imprimer / PDF</button></div>
