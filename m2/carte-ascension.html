@@ -1,0 +1,72 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Ma carte de l'ascension – Mission 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commun.css"><style>
+#s{background:#6fb3c3 url(img/montagne.jpg) center/cover no-repeat}
+#voile{position:absolute;inset:0;background:linear-gradient(180deg,rgba(111,179,195,.55),rgba(111,179,195,.25) 40%,rgba(14,93,112,.35))}
+#tete{position:absolute;left:36px;top:22px;width:760px}
+#tete h1{font-size:34px;text-shadow:0 2px 8px rgba(0,0,0,.25)}
+#tete .sous{font-size:15px;margin-top:4px;text-shadow:0 1px 4px rgba(0,0,0,.25)}
+svg{position:absolute;left:0;top:0;width:1200px;height:675px}
+.chemin{fill:none;stroke:#fffdf7;stroke-width:5;stroke-dasharray:2 14;stroke-linecap:round;opacity:.9}
+.chemin.fait{stroke:#ea1f5c;stroke-dasharray:none;opacity:1}
+.jalon{cursor:pointer}
+.jalon circle.d{fill:#fff;stroke:#0e5d70;stroke-width:4}
+.jalon text.n{font:800 20px Montserrat,sans-serif;fill:#0e5d70;text-anchor:middle;dominant-baseline:central}
+.jalon .lab{font:700 15px Montserrat,sans-serif;fill:#fff;text-anchor:middle;paint-order:stroke;stroke:rgba(14,93,112,.85);stroke-width:5px;stroke-linejoin:round}
+.jalon.fait circle.d{fill:#ea1f5c;stroke:#fff}
+.jalon.fait text.n{fill:#fff}
+.jalon.actif circle.d{fill:#ea1f5c;stroke:#fff}
+.jalon.actif text.n{fill:#fff}
+.jalon.actif circle.halo{fill:none;stroke:#ea1f5c;stroke-width:4;opacity:.7;animation:pulse 1.6s ease-out infinite;transform-origin:center;transform-box:fill-box}
+.jalon.verrou{cursor:not-allowed}
+.jalon.verrou circle.d{fill:#d7e6ea;stroke:#8fb1bb}
+.jalon.verrou text.n{fill:#8fb1bb}
+.jalon.verrou .lab{opacity:.75}
+.jalon.secoue{animation:shake .4s}
+@keyframes pulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.9);opacity:0}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+#lisa{right:10px;height:380px}
+#bulle{right:30px;top:72px;max-width:270px;font-size:14px;padding:10px 14px}
+#bulle:after{display:none}
+#etape{position:absolute;left:36px;bottom:18px;background:rgba(255,253,247,.92);border-radius:14px;padding:10px 16px;font:600 14px/1.3 Montserrat,sans-serif;color:var(--encre);max-width:470px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+#etape b{color:var(--rose)}
+</style></head><body><div id="s"><div id="voile"></div>
+<div id="tete"><h1>🗺️ Ma carte de l'ascension</h1><div class="sous">Sept étapes vers le sommet. Chaque étape terminée débloque la suivante. Clique sur l'étape du jour pour partir.</div></div>
+<svg viewBox="0 0 1200 675" id="carte"></svg>
+<div id="etape"></div>
+<img class="lisa" id="lisa" alt=""><div class="bulle" id="bulle"></div>
+</div>
+<script src="commun.js"></script><script>
+const Z=[
+ {n:1,e:'🗺️',t:"J'explore",d:"Je découvre les grands territoires des études.",x:95,y:518,slide:'dba6c1c1-b66e-4ce9-b8b6-f0147895fa91'},
+ {n:2,e:'🔍',t:"Je découvre",d:"J'explore les formations par domaine.",x:235,y:452,slide:'186f7f11-9435-423d-b257-28e29d794e94'},
+ {n:3,e:'🛣️',t:"Je trouve d'autres chemins",d:"Je découvre les chemins moins évidents.",x:375,y:498,slide:'3ad7e3c6-7bf3-4b90-abf2-6a0abb0edd3b'},
+ {n:4,e:'📊',t:"Je compare",d:"J'apprends à savoir pourquoi je choisis cette formation.",x:515,y:408,slide:'02b18949-793e-48c8-9fa0-164f9f426bf8'},
+ {n:5,e:'🚨',t:"Je vérifie",d:"Je détecte les points de vigilance.",x:655,y:442,slide:'5f22519d-019d-443e-988e-99e748c86a50'},
+ {n:6,e:'🎯',t:"Je construis",d:"Je classe mes pistes : J'ose / Je cible / Je sécurise.",x:795,y:342,slide:'142448a8-6a99-42ce-a785-6b4362b85a37'},
+ {n:7,e:'🏆',t:"Je valide",d:"Je débloque le badge Stratège.",x:935,y:222,slide:'8630746b-b02d-4a00-83d2-c6e019be9c82'}
+];
+const svg=document.getElementById('carte'); const NS='http://www.w3.org/2000/svg';
+function el(t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
+function render(){
+ const done=PE.zones().done; const cur=Z.find(z=>done.indexOf(z.n)<0); svg.innerHTML='';
+ for(let i=0;i<Z.length-1;i++){const a=Z[i],b=Z[i+1]; const mx=(a.x+b.x)/2; const p=el('path',{d:`M${a.x} ${a.y} C ${mx} ${a.y}, ${mx} ${b.y}, ${b.x} ${b.y}`,class:'chemin'+(done.indexOf(a.n)>=0?' fait':'')}); svg.appendChild(p);}
+ Z.forEach(z=>{ const st=done.indexOf(z.n)>=0?'fait':(cur&&cur.n===z.n?'actif':'verrou');
+  const g=el('g',{class:'jalon '+st,'data-n':z.n});
+  if(st==='actif') g.appendChild(el('circle',{class:'halo',cx:z.x,cy:z.y,r:26}));
+  g.appendChild(el('circle',{class:'d',cx:z.x,cy:z.y,r:26}));
+  g.appendChild(el('text',{class:'n',x:z.x,y:z.y},st==='fait'?'✓':(st==='verrou'?'🔒':String(z.n))));
+  const lab=el('text',{class:'lab',x:z.x,y:z.y+48},z.e+' '+z.t); g.appendChild(lab);
+  g.onclick=()=>{ if(st==='verrou'){ g.classList.remove('secoue'); void g.getBBox(); g.classList.add('secoue'); bulle("Patience ! Termine d'abord l'étape "+(z.n-1)+" : « "+Z[z.n-2].t+" »."); return; } PE.goSlide(z.slide); };
+  svg.appendChild(g); });
+ const et=document.getElementById('etape');
+ if(cur){ et.innerHTML='<b>Étape '+cur.n+' · '+cur.e+' '+cur.t+'</b><br>'+cur.d+(done.length?'':'')+' <span style="opacity:.7">· '+done.length+' / 7 terminées</span>'; }
+ else { et.innerHTML='<b>🏆 Sommet atteint !</b><br>Les sept étapes sont terminées. Tu peux revenir sur n’importe laquelle.'; }
+ const lisa=document.getElementById('lisa');
+ if(!done.length){ lisa.src=LISA+'lisa_02_presentation.gif'; bulle("Voici ta carte. On monte étape par étape : commence par « J'explore » !"); }
+ else if(cur){ lisa.src=LISA+'lisa_19_pouce-leve.gif'; bulle("Bien joué ! L'étape suivante est débloquée : « "+cur.t+" »."); }
+ else { lisa.src=LISA+'lisa_26_emerveillement.gif'; bulle("Tu as atteint le sommet. Un plan B n'est pas une punition, et tu le sais maintenant !"); }
+}
+function bulle(t){document.getElementById('bulle').textContent=t;}
+render(); addEventListener('storage',render);
+</script></body></html>

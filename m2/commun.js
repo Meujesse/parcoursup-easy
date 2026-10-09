@@ -8,3 +8,17 @@ var pos=document.body.getAttribute('data-voix-pos')||'right:16px;top:50px';b.sty
 var a=new Audio('https://meujesse.github.io/parcoursup-easy/audio/m2/lisa-m2-'+k+'.mp3');a.preload='none';
 b.onclick=function(){if(a.paused){a.play();b.style.background='var(--canard)';}else{a.pause();a.currentTime=0;b.style.background='var(--rose)';}};
 a.onended=function(){b.style.background='var(--rose)';};s.appendChild(b);})();
+/* Carte de l'ascension : progression par zone + retour à la carte */
+(function(){
+PE.GENIALLY='6ac43071a8dbcbfb106aad3f'; PE.CARTE_SLIDE='a85af7c2-864b-4bea-84ec-ace0d93c2af6';
+PE.zones=function(){return PE.get('pe_m2_zones',{done:[]});};
+PE.zoneDone=function(n){var z=PE.zones(); if(z.done.indexOf(n)<0){z.done.push(n); PE.set('pe_m2_zones',z);} return z;};
+PE.goSlide=function(id){var base=null; try{var u=new URL(document.referrer); if(/genially\.com$/.test(u.hostname)&&/view/.test(u.pathname+u.hostname)){u.searchParams.set('idSlide',id); base=u.href;}}catch(e){} if(!base) base='https://view.genially.com/'+PE.GENIALLY+'?idSlide='+id; try{window.parent.location.href=base;}catch(e){window.open(base,'_top');}};
+PE.goCarte=function(){PE.goSlide(PE.CARTE_SLIDE);};
+var fin=document.body&&document.body.getAttribute('data-zone-fin'); if(!fin) return;
+PE.zoneDone(+fin);
+var s=document.getElementById('s'); if(!s) return;
+var b=document.createElement('button'); b.type='button'; b.className='btn'; b.id='retourcarte'; b.innerHTML='🗺️ Retour à la carte';
+var pos=document.body.getAttribute('data-zone-pos')||'left:16px;bottom:16px'; b.style.cssText='position:absolute;'+pos+';z-index:60;font-size:15px;padding:10px 18px';
+b.onclick=PE.goCarte; s.appendChild(b);
+})();
