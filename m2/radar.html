@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="commun.css"><style>
 html,body{background:transparent}
 #s{width:860px;height:675px;left:0;top:0;transform:none;position:absolute}
-#radar{position:absolute;left:150px;top:30px;width:560px;height:560px}
+#radar{position:absolute;left:160px;top:112px;width:540px;height:540px}
 svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}
 .ring{fill:none;stroke:rgba(255,253,247,.45);stroke-width:1.5}
 .axe{stroke:rgba(255,253,247,.25);stroke-width:1}
@@ -16,12 +16,12 @@ svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}
 .pt.vu circle.c{fill:#25a782}
 .pt.actif circle.c{r:16}
 @keyframes pulse{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
-#loupe{position:absolute;width:150px;height:150px;left:470px;top:430px;cursor:grab;touch-action:none;z-index:6;filter:drop-shadow(0 10px 16px rgba(0,0,0,.35));transition:transform .1s}
+#loupe{position:absolute;width:150px;height:150px;left:470px;top:490px;cursor:grab;touch-action:none;z-index:6;filter:drop-shadow(0 10px 16px rgba(0,0,0,.35));transition:transform .1s}
 #loupe.drag{cursor:grabbing;transform:scale(1.04)}
-#fiche{position:absolute;left:0;top:598px;width:860px;min-height:64px;background:rgba(255,253,247,.96);border-radius:14px;padding:10px 16px;box-sizing:border-box;font:600 14px/1.35 Montserrat,sans-serif;color:var(--encre);box-shadow:0 8px 20px rgba(0,0,0,.18);display:flex;gap:14px;align-items:center}
+#fiche{position:absolute;left:0;top:14px;width:860px;min-height:78px;background:rgba(255,253,247,.96);border-radius:14px;padding:10px 16px;box-sizing:border-box;font:600 14px/1.35 Montserrat,sans-serif;color:var(--encre);box-shadow:0 8px 20px rgba(0,0,0,.18);display:flex;gap:14px;align-items:center}
 #fiche b{color:var(--rose);font-size:15px}
 #fiche .num{flex:none;width:40px;height:40px;border-radius:50%;background:var(--rose);color:#fff;font:800 18px Montserrat,sans-serif;display:flex;align-items:center;justify-content:center}
-#compte{position:absolute;left:0;top:14px;font:700 13px Montserrat,sans-serif;color:#fff;background:rgba(14,93,112,.8);border-radius:999px;padding:6px 12px}
+#compte{position:absolute;left:0;top:102px;font:700 13px Montserrat,sans-serif;color:#fff;background:rgba(14,93,112,.8);border-radius:999px;padding:6px 12px}
 </style></head><body><div id="s">
 <div id="compte">0 / 10 points vérifiés</div>
 <div id="radar"><svg viewBox="0 0 560 560" id="svg">
@@ -45,7 +45,7 @@ function compte(){ document.getElementById('compte').textContent=vu.length+' / 1
 function montre(i){ document.querySelectorAll('.pt').forEach(e=>e.classList.toggle('actif',+e.dataset.i===i)); const pt=document.querySelector('.pt[data-i="'+i+'"]'); if(vu.indexOf(i)<0){ vu.push(i); PE.set('pe_m2_radar_vu',vu); pt.classList.add('vu'); } document.getElementById('fiche').innerHTML='<div class="num">'+(i+1)+'</div><div><b>'+Q[i][0]+'</b><br>'+Q[i][1]+'</div>'; compte(); }
 const L=document.getElementById('loupe'); let drag=false,off=[0,0];
 L.onpointerdown=e=>{ drag=true; L.classList.add('drag'); L.setPointerCapture(e.pointerId); const r=L.getBoundingClientRect(); off=[e.clientX-r.left,e.clientY-r.top]; };
-L.onpointermove=e=>{ if(!drag) return; const s=document.getElementById('s').getBoundingClientRect(); const k=s.width/860; const x=(e.clientX-s.left)/k-off[0]/k, y=(e.clientY-s.top)/k-off[1]/k; L.style.left=x+'px'; L.style.top=y+'px'; const cx=x+62, cy=y+62; let best=-1,bd=1e9; POS.forEach((p,i)=>{ const px=150+p[0], py=30+p[1]; const d=Math.hypot(px-cx,py-cy); if(d<bd){bd=d;best=i;} }); if(bd<46) montre(best); };
+L.onpointermove=e=>{ if(!drag) return; const s=document.getElementById('s').getBoundingClientRect(); const k=s.width/860; const x=(e.clientX-s.left)/k-off[0]/k, y=(e.clientY-s.top)/k-off[1]/k; L.style.left=x+'px'; L.style.top=y+'px'; const cx=x+62, cy=y+62; let best=-1,bd=1e9; POS.forEach((p,i)=>{ const px=160+p[0]*540/560, py=112+p[1]*540/560; const d=Math.hypot(px-cx,py-cy); if(d<bd){bd=d;best=i;} }); if(bd<46) montre(best); };
 L.onpointerup=()=>{ drag=false; L.classList.remove('drag'); };
 compte();
 </script></body></html>
