@@ -1,0 +1,24 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Lisa – Bienvenue dans la Première ascension</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commun.css"><style>
+#s{overflow:hidden}
+video{position:absolute;left:0;top:0;width:1200px;height:675px;object-fit:cover;background:#6fb3c3}
+#play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:120px;height:120px;border-radius:50%;border:5px solid #fff;background:var(--rose);color:#fff;font-size:52px;cursor:pointer;box-shadow:0 12px 30px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;padding:0 0 0 8px;transition:transform .15s}
+#play:hover{transform:translate(-50%,-50%) scale(1.06)}
+#titre{position:absolute;left:36px;top:24px;font:800 30px Montserrat,sans-serif;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.35)}
+#sous{position:absolute;left:36px;bottom:26px;max-width:620px;background:rgba(255,253,247,.92);border-radius:14px;padding:10px 16px;font:600 15px/1.35 Montserrat,sans-serif;color:var(--encre)}
+.cache{display:none!important}
+</style></head><body><div id="s">
+<video id="v" playsinline preload="metadata" poster="../video/m2/lisa-m2-e1-intro-poster.jpg"><source src="../video/m2/lisa-m2-e1-intro.mp4" type="video/mp4"></video>
+<div id="titre">Bienvenue dans la Première ascension</div>
+<button id="play" type="button" aria-label="Lire la vidéo">▶</button>
+<div id="sous">« Il existe des milliers de formations après le bac. Et bonne nouvelle : tu n'as pas besoin de toutes les connaître ! » Clique sur ▶ pour écouter Lisa.</div>
+</div>
+<script src="commun.js"></script><script>
+const v=document.getElementById('v'),p=document.getElementById('play'),t=document.getElementById('titre'),s=document.getElementById('sous');
+p.onclick=()=>{v.play();};
+v.onplay=()=>{p.classList.add('cache');t.classList.add('cache');s.classList.add('cache');};
+v.onpause=()=>{p.classList.remove('cache');};
+v.onended=()=>{p.classList.remove('cache');s.textContent='Prêt(e) ? Passe à la suite avec la flèche ➜';s.classList.remove('cache');};
+v.onclick=()=>{v.paused?v.play():v.pause();};
+</script></body></html>
