@@ -48,7 +48,7 @@ const Q=[
  {t:"Je préfère des études…",r:[["très concrètes",'P'],["équilibrées entre théorie et pratique",'I'],["plutôt théoriques",'U']]},
  {t:"Aujourd'hui, quelle durée d'études te semble la plus envisageable ?",r:[["2 ans",'P'],["3 ans et je verrai ensuite",'U'],["5 ans ou plus",'I']]}];
 const BONUS={0:{2:'I',3:'C'},1:{1:'R'},2:{3:'R'},3:{2:'R'}};
-let i=0,score={U:0,P:0,C:0,I:0,S:0,R:0},choix=PE.get('pe_m2_territoires',{}),cur=null;
+let i=0,score={U:0,P:0,C:0,I:0,S:0,R:0},choix=PE.get('pe_m2_territoires',{}),cur=null; const MODE_CHOIX=new URLSearchParams(location.search).get('etape')==='choix';
 const lisa=document.getElementById('lisa'),bulle=document.getElementById('bulle');
 function show(){ document.getElementById('prog').innerHTML=Q.map((_,k)=>'<i class="'+(k<=i?'on':'')+'"></i>').join('');
  document.getElementById('titre').textContent='Question '+(i+1)+' · '+Q[i].t;
@@ -56,11 +56,11 @@ function show(){ document.getElementById('prog').innerHTML=Q.map((_,k)=>'<i clas
  lisa.src=LISA+'lisa_29_question-complice.gif'; bulle.style.display='none'; }
 document.getElementById('reps').onclick=e=>{const b=e.target.closest('.rep'); if(!b) return; const k=+b.dataset.k; score[Q[i].r[k][1]]+=2; const bo=(BONUS[i]||{})[k]; if(bo) score[bo]+=1; b.classList.add('on'); setTimeout(()=>{ i++; if(i<Q.length) show(); else result(); },350); };
 function result(){ document.getElementById('q').style.display='none'; const r=document.getElementById('res'); r.style.display='block'; const order=Object.keys(T).sort((a,b)=>score[b]-score[a]);
- document.getElementById('terr').innerHTML=order.map((k,n)=>'<div class="t" data-k="'+k+'" style="background:'+T[k][2]+'">'+(n<2?'<span class="tag">'+(n==0?'⭐ Ton n°1':'⭐ Ton n°2')+'</span>':'')+T[k][0]+'<small>'+T[k][1]+'</small></div>').join('');
- lisa.src=LISA+'lisa_20_designe-element.gif'; bulle.innerHTML='Les deux territoires marqués d’une étoile correspondent le mieux à ta façon d’apprendre. Mais garde l’esprit ouvert : un chemin peut passer par plusieurs territoires.'; bulle.style.display='block'; paint(); }
+ document.getElementById('terr').innerHTML=order.map((k,n)=>'<div class="t" data-k="'+k+'" style="background:'+T[k][2]+'">'+(n<2&&!MODE_CHOIX?'<span class="tag">'+(n==0?'⭐ Ton n°1':'⭐ Ton n°2')+'</span>':'')+T[k][0]+'<small>'+T[k][1]+'</small></div>').join('');
+ lisa.src=LISA+'lisa_20_designe-element.gif'; bulle.innerHTML=MODE_CHOIX?'Parmi les territoires que tu viens de découvrir, choisis : 🥇 un territoire que tu veux absolument explorer, 🥈 un territoire qui t’intrigue, 🔍 un territoire que tu connaissais peu ou pas.':'Les deux territoires marqués d’une étoile correspondent le mieux à ta façon d’apprendre. Mais garde l’esprit ouvert : un chemin peut passer par plusieurs territoires.'; bulle.style.display='block'; paint(); }
 function paint(){ document.querySelectorAll('.slot').forEach(s=>{const k=choix[s.dataset.k]; s.classList.toggle('on',!!k); s.querySelector('span').textContent=k?T[k][0]:'…';}); document.getElementById('ok').style.display=Object.keys(choix).length?'inline-block':'none'; }
 document.getElementById('terr').onclick=e=>{const t=e.target.closest('.t'); if(!t) return; document.querySelectorAll('.t').forEach(x=>x.classList.remove('sel')); t.classList.add('sel'); cur=t.dataset.k;};
 document.getElementById('pick').onclick=e=>{const s=e.target.closest('.slot'); if(!s||!cur) return; choix[s.dataset.k]=cur; PE.set('pe_m2_territoires',choix); paint();};
 document.getElementById('refaire').onclick=()=>{i=0;score={U:0,P:0,C:0,I:0,S:0,R:0};document.getElementById('res').style.display='none';document.getElementById('q').style.display='block';show();};
-show();
+if(MODE_CHOIX){ result(); const rf=document.getElementById('refaire'); if(rf) rf.style.display='none'; } else show();
 </script></body></html>
