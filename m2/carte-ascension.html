@@ -31,7 +31,7 @@ svg{position:absolute;left:0;top:0;width:1200px;height:675px}
 #etape{position:absolute;left:36px;bottom:18px;background:rgba(255,253,247,.92);border-radius:14px;padding:10px 16px;font:600 14px/1.3 Montserrat,sans-serif;color:var(--encre);max-width:470px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
 #etape b{color:var(--rose)}
 </style></head><body><div id="s"><div id="voile"></div>
-<div id="tete"><h1>🗺️ Ma carte de l'ascension</h1><div class="sous">Sept étapes vers le sommet. Chaque étape terminée débloque la suivante. Clique sur l'étape du jour pour partir.</div></div>
+<div id="tete"><h1>🗺️ Ma carte de l'ascension</h1><div class="sous">Sept étapes vers le sommet. Chaque étape terminée débloque la suivante.</div></div>
 <svg viewBox="0 0 1200 675" id="carte"></svg>
 <div id="etape"></div>
 <img class="lisa" id="lisa" alt=""><div class="bulle" id="bulle"></div>
@@ -48,8 +48,10 @@ const Z=[
 ];
 const svg=document.getElementById('carte'); const NS='http://www.w3.org/2000/svg';
 function el(t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
+const ETAPE=+(new URLSearchParams(location.search).get('etape')||0);
+if(ETAPE){ for(let i=1;i<ETAPE;i++) PE.zoneDone(i); }
 function render(){
- const done=PE.zones().done; const cur=Z.find(z=>done.indexOf(z.n)<0); svg.innerHTML='';
+ const done=ETAPE?Z.filter(z=>z.n<ETAPE).map(z=>z.n):PE.zones().done; const cur=Z.find(z=>done.indexOf(z.n)<0); svg.innerHTML='';
  for(let i=0;i<Z.length-1;i++){const a=Z[i],b=Z[i+1]; const mx=(a.x+b.x)/2; const p=el('path',{d:`M${a.x} ${a.y} C ${mx} ${a.y}, ${mx} ${b.y}, ${b.x} ${b.y}`,class:'chemin'+(done.indexOf(a.n)>=0?' fait':'')}); svg.appendChild(p);}
  Z.forEach(z=>{ const st=done.indexOf(z.n)>=0?'fait':(cur&&cur.n===z.n?'actif':'verrou');
   const g=el('g',{class:'jalon '+st,'data-n':z.n});
@@ -63,8 +65,8 @@ function render(){
  if(cur){ et.innerHTML='<b>Étape '+cur.n+' · '+cur.e+' '+cur.t+'</b><br>'+cur.d+(done.length?'':'')+' <span style="opacity:.7">· '+done.length+' / 7 terminées</span>'; }
  else { et.innerHTML='<b>🏆 Sommet atteint !</b><br>Les sept étapes sont terminées. Tu peux revenir sur n’importe laquelle.'; }
  const lisa=document.getElementById('lisa');
- if(!done.length){ lisa.src=LISA+'lisa_02_presentation.gif'; bulle("Voici ta carte. On monte étape par étape : commence par « J'explore » !"); }
- else if(cur){ lisa.src=LISA+'lisa_19_pouce-leve.gif'; bulle("Bien joué ! L'étape suivante est débloquée : « "+cur.t+" »."); }
+ if(!done.length){ lisa.src=LISA+'lisa_02_presentation.gif'; bulle("Voici ta carte. On monte étape par étape : on commence par « J'explore » !"); }
+ else if(cur){ lisa.src=LISA+'lisa_19_pouce-leve.gif'; bulle("Bien joué, étape "+(cur.n-1)+" terminée ! On passe à « "+cur.t+" ». Continue avec la flèche ➜"); }
  else { lisa.src=LISA+'lisa_26_emerveillement.gif'; bulle("Tu as atteint le sommet. Un plan B n'est pas une punition, et tu le sais maintenant !"); }
 }
 function bulle(t){document.getElementById('bulle').textContent=t;}
