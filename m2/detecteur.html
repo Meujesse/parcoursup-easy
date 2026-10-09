@@ -14,6 +14,8 @@
 #titrefeu{font:800 18px Montserrat,sans-serif;color:var(--canard)}
 #lisa{right:30px;height:235px}
 body.compact #lisa,#bulle,body.compact #voix,body.compact .lisa,body.compact .bulle{display:none!important}
+#feu .lamp{display:inline-block;margin:6px 10px}
+@media print{body{background:#fff}#s{transform:none;position:static}#voix,.btn,#lisa{display:none!important}}
 </style></head><body><div id="s">
 <div id="tete"><h1>🚨 Avant de valider : mon détecteur de vigilance</h1><div class="sous">Pense à la formation que tu as le plus envie de mettre dans ta liste et réponds honnêtement.</div></div>
 <div id="qs"></div>
@@ -22,10 +24,11 @@ body.compact #lisa,#bulle,body.compact #voix,body.compact .lisa,body.compact .bu
 </div>
 <script>if(new URLSearchParams(location.search).get('mode')==='compact'){document.body.classList.add('compact');document.body.removeAttribute('data-voix');}</script><script src="commun.js"></script><script>
 const Q=["Cette formation me plaît-elle vraiment ?","Est-ce que je sais ce que j'y étudierai ?","Est-ce que je sais comment on y entre ?","Est-ce que j'ai vérifié ce qu'il est possible de faire après ?","Ai-je plusieurs chemins possibles vers mon objectif ?"];
-let R=PE.get('pe_m2_detecteur',{});
+let R=PE.get('pe_m2_detecteur',{}); const MODE_RES=new URLSearchParams(location.search).get('etape')==='resultat';
 const lisa=document.getElementById('lisa'); lisa.src=LISA+'lisa_11_reflexion.gif';
 document.getElementById('qs').innerHTML=Q.map((q,i)=>'<div class="q"><span><b>'+(i+1)+'</b>'+q+'</span><div class="r"><button class="oui" data-i="'+i+'" data-v="1">Oui</button><button class="non" data-i="'+i+'" data-v="0">Pas encore</button></div></div>').join('');
 function paint(){ document.querySelectorAll('.q button').forEach(b=>b.classList.toggle('on',R[b.dataset.i]===b.dataset.v)); const n=Object.keys(R).length, oui=Object.values(R).filter(v=>v==='1').length; ['lv','lo','lr'].forEach(id=>document.getElementById(id).classList.remove('on')); const m=document.getElementById('msg'); if(n<5){ m.textContent='Réponds aux 5 questions pour allumer ton feu. ('+n+'/5)'; return; } if(oui===5){ document.getElementById('lv').classList.add('on'); document.getElementById('titrefeu').textContent='🟢 FEU VERT'; m.textContent='Tu as une bonne base. Continue à vérifier les détails avant de valider tes vœux.'; lisa.src=LISA+'lisa_19_pouce-leve.gif'; } else if(oui>=3){ document.getElementById('lo').classList.add('on'); document.getElementById('titrefeu').textContent='🟠 FEU ORANGE'; m.textContent='Certaines pistes méritent encore d\'être vérifiées. Ne te précipite pas.'; lisa.src=LISA+'lisa_24_reflexion-buste.gif'; } else { document.getElementById('lr').classList.add('on'); document.getElementById('titrefeu').textContent='🔴 FEU ROUGE'; m.textContent='Tu as encore trop d\'informations manquantes. Retourne explorer avant de faire tes choix.'; lisa.src=LISA+'lisa_30_perplexite.gif'; } }
 document.getElementById('qs').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; R[b.dataset.i]=b.dataset.v; PE.set('pe_m2_detecteur',R); paint(); };
 paint();
+if(MODE_RES){ document.getElementById('qs').style.display='none'; const f=document.getElementById('feu'); f.style.left='40px'; f.style.top='110px'; f.style.width='560px'; f.style.padding='26px'; document.querySelector('#tete h1').textContent='🚦 Mon détecteur de vigilance : le résultat'; document.querySelector('#tete .sous').textContent='Pas de note. Juste un feu, et un conseil de Lisa.'; const b=document.createElement('button'); b.className='btn'; b.textContent='🖨 Télécharger / imprimer mon résultat'; b.style.cssText='position:absolute;left:40px;top:470px'; b.onclick=()=>window.print(); document.getElementById('s').appendChild(b); const n=Object.keys(R).length; if(n<5){ document.getElementById('msg').textContent='Tu n’as pas encore répondu aux 5 questions ('+n+'/5). Reviens en arrière pour compléter.'; } }
 </script></body></html>
