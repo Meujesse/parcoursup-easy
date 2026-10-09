@@ -1,0 +1,51 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Le radar des formations</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commun.css"><style>
+html,body{background:transparent}
+#s{width:860px;height:675px;left:0;top:0;transform:none;position:absolute}
+#radar{position:absolute;left:150px;top:30px;width:560px;height:560px}
+svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}
+.ring{fill:none;stroke:rgba(255,253,247,.45);stroke-width:1.5}
+.axe{stroke:rgba(255,253,247,.25);stroke-width:1}
+#sweep{transform-origin:280px 280px;animation:tourne 9s linear infinite}
+@keyframes tourne{to{transform:rotate(360deg)}}
+.pt{cursor:pointer}
+.pt circle.c{fill:#ea1f5c;stroke:#fff;stroke-width:3;transition:r .15s}
+.pt circle.h{fill:rgba(234,31,92,.35);animation:pulse 2.4s ease-out infinite;transform-box:fill-box;transform-origin:center}
+.pt text{font:800 12px Montserrat,sans-serif;fill:#fff;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.pt.vu circle.c{fill:#25a782}
+.pt.actif circle.c{r:16}
+@keyframes pulse{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+#loupe{position:absolute;width:150px;height:150px;left:470px;top:430px;cursor:grab;touch-action:none;z-index:6;filter:drop-shadow(0 10px 16px rgba(0,0,0,.35));transition:transform .1s}
+#loupe.drag{cursor:grabbing;transform:scale(1.04)}
+#fiche{position:absolute;left:0;top:598px;width:860px;min-height:64px;background:rgba(255,253,247,.96);border-radius:14px;padding:10px 16px;box-sizing:border-box;font:600 14px/1.35 Montserrat,sans-serif;color:var(--encre);box-shadow:0 8px 20px rgba(0,0,0,.18);display:flex;gap:14px;align-items:center}
+#fiche b{color:var(--rose);font-size:15px}
+#fiche .num{flex:none;width:40px;height:40px;border-radius:50%;background:var(--rose);color:#fff;font:800 18px Montserrat,sans-serif;display:flex;align-items:center;justify-content:center}
+#compte{position:absolute;left:0;top:14px;font:700 13px Montserrat,sans-serif;color:#fff;background:rgba(14,93,112,.8);border-radius:999px;padding:6px 12px}
+</style></head><body><div id="s">
+<div id="compte">0 / 10 points vérifiés</div>
+<div id="radar"><svg viewBox="0 0 560 560" id="svg">
+ <defs><radialGradient id="g" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#1b7f97"/><stop offset="1" stop-color="#0e5d70"/></radialGradient>
+ <linearGradient id="sw" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="rgba(255,253,247,0)"/><stop offset="1" stop-color="rgba(255,253,247,.55)"/></linearGradient></defs>
+ <circle cx="280" cy="280" r="276" fill="url(#g)" stroke="#0a4a5a" stroke-width="8"/>
+ <circle class="ring" cx="280" cy="280" r="220"/><circle class="ring" cx="280" cy="280" r="160"/><circle class="ring" cx="280" cy="280" r="100"/><circle class="ring" cx="280" cy="280" r="45"/>
+ <line class="axe" x1="280" y1="4" x2="280" y2="556"/><line class="axe" x1="4" y1="280" x2="556" y2="280"/><line class="axe" x1="85" y1="85" x2="475" y2="475"/><line class="axe" x1="475" y1="85" x2="85" y2="475"/>
+ <path id="sweep" d="M280 280 L280 4 A276 276 0 0 1 475 85 Z" fill="url(#sw)"/>
+ <g id="pts"></g>
+</svg></div>
+<svg id="loupe" viewBox="0 0 150 150"><circle cx="62" cy="62" r="48" fill="rgba(255,253,247,.28)" stroke="#fffdf7" stroke-width="9"/><circle cx="62" cy="62" r="40" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/><path d="M38 52 a30 30 0 0 1 24-22" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><rect x="100" y="92" width="22" height="52" rx="11" transform="rotate(-45 111 118)" fill="#ea1f5c"/></svg>
+<div id="fiche"><div class="num">🔍</div><div><b>Déplace la loupe sur les points rouges</b> pour révéler les dix questions à te poser avant de candidater hors Parcoursup.</div></div>
+</div>
+<script src="commun.js"></script><script>
+const Q=[['Qui délivre la formation ?','Établissement public ? privé ? autre statut ?'],['Depuis combien de temps existe-t-elle ?','Une formation récente demande plus de vérifications.'],['Quel diplôme vais-je réellement obtenir ?','Le nom commercial ne dit pas le diplôme délivré.'],['Quelle reconnaissance ?','Par l’État, par les entreprises, par les autres écoles ?'],['Le diplôme bénéficie-t-il d’un visa ou d’un grade de licence / master ?','Lorsque cela est annoncé, vérifie que c’est vrai.'],['Quelles poursuites d’études sont réellement possibles ?','Après cette formation, quelles portes restent ouvertes ?'],['Quels sont les résultats et l’insertion ?','Taux de réussite, emplois obtenus, délais.'],['Quel est le coût total de la formation ?','Frais de scolarité, matériel, logement, sur toute la durée.'],['Quelle est la pédagogie ?','Cours, projets, stages, alternance, travail personnel ?'],['Quel encadrement ?','Qui enseigne, qui suit les étudiants, avec quels moyens ?']];
+const POS=[[280,120],[400,160],[455,280],[395,400],[280,445],[160,400],[105,280],[160,160],[250,235],[330,320]];
+let vu=PE.get('pe_m2_radar_vu',[]); const NS='http://www.w3.org/2000/svg'; const g=document.getElementById('pts');
+POS.forEach((p,i)=>{ const el=document.createElementNS(NS,'g'); el.setAttribute('class','pt'+(vu.indexOf(i)>=0?' vu':'')); el.dataset.i=i; el.innerHTML='<circle class="h" cx="'+p[0]+'" cy="'+p[1]+'" r="12"/><circle class="c" cx="'+p[0]+'" cy="'+p[1]+'" r="13"/><text x="'+p[0]+'" y="'+p[1]+'">'+(i+1)+'</text>'; el.onclick=()=>montre(i); g.appendChild(el); });
+function compte(){ document.getElementById('compte').textContent=vu.length+' / 10 points vérifiés'+(vu.length===10?' · bravo !':''); }
+function montre(i){ document.querySelectorAll('.pt').forEach(e=>e.classList.toggle('actif',+e.dataset.i===i)); const pt=document.querySelector('.pt[data-i="'+i+'"]'); if(vu.indexOf(i)<0){ vu.push(i); PE.set('pe_m2_radar_vu',vu); pt.classList.add('vu'); } document.getElementById('fiche').innerHTML='<div class="num">'+(i+1)+'</div><div><b>'+Q[i][0]+'</b><br>'+Q[i][1]+'</div>'; compte(); }
+const L=document.getElementById('loupe'); let drag=false,off=[0,0];
+L.onpointerdown=e=>{ drag=true; L.classList.add('drag'); L.setPointerCapture(e.pointerId); const r=L.getBoundingClientRect(); off=[e.clientX-r.left,e.clientY-r.top]; };
+L.onpointermove=e=>{ if(!drag) return; const s=document.getElementById('s').getBoundingClientRect(); const k=s.width/860; const x=(e.clientX-s.left)/k-off[0]/k, y=(e.clientY-s.top)/k-off[1]/k; L.style.left=x+'px'; L.style.top=y+'px'; const cx=x+62, cy=y+62; let best=-1,bd=1e9; POS.forEach((p,i)=>{ const px=150+p[0], py=30+p[1]; const d=Math.hypot(px-cx,py-cy); if(d<bd){bd=d;best=i;} }); if(bd<46) montre(best); };
+L.onpointerup=()=>{ drag=false; L.classList.remove('drag'); };
+compte();
+</script></body></html>
