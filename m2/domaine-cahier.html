@@ -12,6 +12,8 @@ html,body{background:transparent}
 .txt{position:relative;font:400 24px/40px 'Patrick Hand',cursive;color:var(--encre)}
 .txt h2{margin:0;font:400 28px/40px 'Patrick Hand',cursive;color:var(--rose)}
 .pc{position:relative;height:518px}
+.pc.suite .emo{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%) rotate(-8deg);font-size:150px;opacity:.9}
+.pc.suite .t{position:absolute;left:30px;right:30px;top:70%;text-align:center;font:400 26px/36px 'Patrick Hand',cursive;color:var(--canard)}
 .txt h3{margin:0;font:400 26px/40px 'Patrick Hand',cursive;color:var(--canard)}
 .txt p{margin:0;padding-left:26px;text-indent:-26px}
 .txt p.q{padding-left:36px;text-indent:-36px}
@@ -54,10 +56,13 @@ html,body{background:transparent}
  function add(h,l){ if(used+l>LINES){ flush(); } cur.push(h); used+=l; }
  add('<h2>'+d.emoji+' '+d.nom+'</h2>',nl(d.nom,30)); add('<h3>Les chemins possibles</h3>',1);
  d.chemins.forEach(function(c){ add('<p>• '+c+'</p>',nl(c)); });
- flush();
- // post-it « À retenir » : seul sur la page suivante, centré
- pages.push(['<div class="pc"><div class="postit"><b>À retenir</b>'+d.retenir.charAt(0).toUpperCase()+d.retenir.slice(1)+'</div></div>']);
- if(pages.length%2) pages.push([]);
+ var postit='<div class="postit"><b>À retenir</b>'+d.retenir.charAt(0).toUpperCase()+d.retenir.slice(1)+'</div>';
+ if(pages.length%2===1 && used<=LINES-7){ // page de droite avec assez de place : post-it dans l'espace restant
+   cur.push('<div class="pc" style="height:'+((LINES-used)*40)+'px">'+postit+'</div>'); flush();
+ } else { flush(); if(pages.length%2===1){ pages.push([]); } // retomber sur une page de gauche
+   pages.push(['<div class="pc">'+postit+'</div>']);
+   pages.push(['<div class="pc suite"><div class="emo">'+d.emoji+'</div><div class="t">Tourne la page pour découvrir les 8 questions à te poser avant de choisir.</div></div>']);
+ }
  // les 8 questions : double page suivante, 4 à gauche, 4 à droite
  var q=d.questions.map(function(x,i){ return '<p class="q"><b>'+(i+1)+'.</b> '+x+'</p>'; });
  pages.push(['<h3>Les 8 questions à te poser</h3>'].concat(q.slice(0,4))); pages.push(['<h3>&nbsp;</h3>'].concat(q.slice(4)));
