@@ -8,18 +8,19 @@ html,body{background:transparent}
 .page.g{left:0;border-radius:14px 4px 4px 14px}
 .page.d{left:560px;border-radius:4px 14px 14px 4px}
 .page.g:before{content:"";position:absolute;left:30px;top:0;bottom:0;width:2px;background:#f4b3c6}
-.lignes{position:absolute;left:44px;right:34px;top:30px;bottom:92px;background:repeating-linear-gradient(transparent 0 39px,#e3d6d6 39px 40px);background-position:0 var(--lo,0px)}
-.txt{position:relative;font:400 24px/40px 'Patrick Hand',cursive;color:var(--encre)}
-.txt h2{margin:0;font:400 28px/40px 'Patrick Hand',cursive;color:var(--rose)}
-.pc{position:relative;height:518px}
+:root{--s:40px;--f:24px}
+.lignes{position:absolute;left:44px;right:34px;top:30px;bottom:92px;background:repeating-linear-gradient(transparent 0 calc(var(--s) - 2px),#c9b6b6 calc(var(--s) - 2px) var(--s));background-position:0 var(--lo,0px)}
+.txt{position:relative;font:400 var(--f)/var(--s) 'Patrick Hand',cursive;color:var(--encre)}
+.txt h2{margin:0;font:400 calc(var(--f)*1.15)/var(--s) 'Patrick Hand',cursive;color:var(--rose)}
+.pc{position:relative}
 .pc.suite .emo{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%) rotate(-8deg);font-size:150px;opacity:.9}
 .pc.suite .t{position:absolute;left:30px;right:30px;top:70%;text-align:center;font:400 26px/36px 'Patrick Hand',cursive;color:var(--canard)}
-.txt h3{margin:0;font:400 26px/40px 'Patrick Hand',cursive;color:var(--canard)}
+.txt h3{margin:0;font:400 calc(var(--f)*1.08)/var(--s) 'Patrick Hand',cursive;color:var(--canard)}
 .txt p{margin:0;padding-left:26px;text-indent:-26px}
 .txt p.q{padding-left:36px;text-indent:-36px}
 .txt p b{color:var(--rose);font-weight:400}
-.postit{position:absolute;left:50%;top:50%;width:460px;transform:translate(-50%,-50%) rotate(-1.5deg);background:#fff3b0;box-shadow:0 12px 28px rgba(0,0,0,.2);padding:26px 28px 30px;box-sizing:border-box;font:400 25px/34px 'Patrick Hand',cursive;color:#5a4a00}
-.postit b{display:block;font-size:30px;color:#b4461b;margin-bottom:8px}
+.postit{position:absolute;left:50%;top:50%;width:460px;transform:translate(-50%,-50%) rotate(-1.5deg);background:#fff3b0;box-shadow:0 12px 28px rgba(0,0,0,.2);padding:22px 26px 26px;box-sizing:border-box;font:400 calc(var(--f)*1.0)/1.4 'Patrick Hand',cursive;color:#5a4a00}
+.postit b{display:block;font-size:calc(var(--f)*1.2);color:#b4461b;margin-bottom:6px}
 .postit:before{content:"";position:absolute;left:50%;top:-12px;width:90px;height:26px;margin-left:-45px;background:rgba(255,255,255,.55);transform:rotate(-2deg);box-shadow:0 2px 6px rgba(0,0,0,.08)}
 .emoji{position:absolute;right:40px;top:300px;font-size:72px;opacity:.9;transform:rotate(6deg)}
 #spirale{position:absolute;left:546px;top:36px;width:28px;height:600px;z-index:5}
@@ -49,21 +50,20 @@ html,body{background:transparent}
 <script src="commun.js"></script><script src="domaines-data.js"></script><script>
 (function(){
  var id=+(new URLSearchParams(location.search).get('d')||1); var d=(window.DOMAINES||[]).find(function(x){return x.id===id;})||window.DOMAINES[0];
- var LINES=12, CPL=36;
- function nl(t,cpl){ return Math.max(1,Math.ceil(t.length/(cpl||CPL))); }
- var pages=[], cur=[], used=0;
- function flush(){ pages.push(cur); cur=[]; used=0; }
- function add(h,l){ if(used+l>LINES){ flush(); } cur.push(h); used+=l; }
- add('<h2>'+d.emoji+' '+d.nom+'</h2>',nl(d.nom,30)); add('<h3>Les chemins possibles</h3>',1);
- d.chemins.forEach(function(c){ add('<p>• '+c+'</p>',nl(c)); });
- var postit='<div class="postit"><b>À retenir</b>'+d.retenir.charAt(0).toUpperCase()+d.retenir.slice(1)+'</div>';
- if(pages.length%2===1 && used<=LINES-7){ // page de droite avec assez de place : post-it dans l'espace restant
-   cur.push('<div class="pc" style="height:'+((LINES-used)*40)+'px">'+postit+'</div>'); flush();
- } else { flush();
-   if(pages.length%2===1){ pages.push(['<div class="pc">'+postit+'</div>']); } // page de droite libre
-   else { pages.push(['<div class="pc">'+postit+'</div>']); pages.push(['<div class="pc suite"><div class="emo">'+d.emoji+'</div><div class="t">Tourne la page pour découvrir les 8 questions à te poser avant de choisir.</div></div>']); }
- }
- // les 8 questions : double page suivante, 4 à gauche, 4 à droite
+ var H=518; // hauteur utile d'une page
+ var retenir=d.retenir.charAt(0).toUpperCase()+d.retenir.slice(1);
+ var postitH=function(S){ return Math.ceil((60+retenir.length/34*S*1.0+40)/S); }; // hauteur du post-it en lignes
+ function nl(t,cpl){ return Math.max(1,Math.ceil(t.length/cpl)); }
+ var S=40, cpl=36, cap, rows;
+ var sizes=[[40,36],[36,40],[32,46],[28,52],[24,60],[22,66]];
+ for(var k=0;k<sizes.length;k++){ S=sizes[k][0]; cpl=sizes[k][1]; cap=Math.floor(H/S); rows=nl(d.nom,Math.round(cpl*0.85))+1; d.chemins.forEach(function(c){ rows+=nl(c,cpl); }); if(rows+postitH(S)<=2*cap) break; }
+ document.documentElement.style.setProperty('--s',S+'px'); document.documentElement.style.setProperty('--f',Math.round(S*0.6)+'px');
+ var pages=[[],[]], used=0, pg=0;
+ function add(h,l){ if(pg===0&&used+l>cap){ pg=1; used=0; } pages[pg].push(h); used+=l; }
+ add('<h2>'+d.emoji+' '+d.nom+'</h2>',nl(d.nom,Math.round(cpl*0.85))); add('<h3>Les chemins possibles</h3>',1);
+ d.chemins.forEach(function(c){ add('<p>• '+c+'</p>',nl(c,cpl)); });
+ if(pg===0){ used=0; } // la page de droite est libre : post-it centré dessus
+ var reste=(cap-used)*S; pages[1].push('<div class="pc" style="height:'+reste+'px"><div class="postit"><b>À retenir</b>'+retenir+'</div></div>');
  var q=d.questions.map(function(x,i){ return '<p class="q"><b>'+(i+1)+'.</b> '+x+'</p>'; });
  pages.push(['<h3>Les 8 questions à te poser</h3>'].concat(q.slice(0,4))); pages.push(['<h3>&nbsp;</h3>'].concat(q.slice(4)));
  var spread=+(PE.get('pe_m2_dom_'+id,0))||0, max=pages.length/2-1; if(spread>max) spread=0;
@@ -73,6 +73,6 @@ html,body{background:transparent}
  function go(dir){ if(busy) return; var n=spread+dir; if(n<0||n>max) return; busy=true; flip.className=dir>0?'on':'back on'; setTimeout(function(){ spread=n; paint(); },350); setTimeout(function(){ flip.className=''; busy=false; },720); }
  document.getElementById('next').onclick=function(){go(1);}; document.getElementById('prev').onclick=function(){go(-1);};
  paint();
- document.fonts.ready.then(function(){ try{ var c=document.createElement('canvas').getContext('2d'); c.font='24px "Patrick Hand"'; var m=c.measureText('Hg'); var asc=m.fontBoundingBoxAscent||19, desc=m.fontBoundingBoxDescent||6; var base=(40-(asc+desc))/2+asc; document.documentElement.style.setProperty('--lo',(Math.round(base+3)-40)+'px'); }catch(e){} });
+ document.fonts.ready.then(function(){ try{ var c=document.createElement('canvas').getContext('2d'); var S2=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--s')), F2=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--f')); c.font=F2+'px "Patrick Hand"'; var m=c.measureText('Hg'); var asc=m.fontBoundingBoxAscent||F2*0.8, desc=m.fontBoundingBoxDescent||F2*0.25; var base=(S2-(asc+desc))/2+asc; document.documentElement.style.setProperty('--lo',(Math.round(base+3)-S2)+'px'); }catch(e){} });
 })();
 </script></body></html>
