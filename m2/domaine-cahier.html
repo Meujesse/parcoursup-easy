@@ -59,9 +59,9 @@ html,body{background:transparent}
  var postit='<div class="postit"><b>À retenir</b>'+d.retenir.charAt(0).toUpperCase()+d.retenir.slice(1)+'</div>';
  if(pages.length%2===1 && used<=LINES-7){ // page de droite avec assez de place : post-it dans l'espace restant
    cur.push('<div class="pc" style="height:'+((LINES-used)*40)+'px">'+postit+'</div>'); flush();
- } else { flush(); if(pages.length%2===1){ pages.push([]); } // retomber sur une page de gauche
-   pages.push(['<div class="pc">'+postit+'</div>']);
-   pages.push(['<div class="pc suite"><div class="emo">'+d.emoji+'</div><div class="t">Tourne la page pour découvrir les 8 questions à te poser avant de choisir.</div></div>']);
+ } else { flush();
+   if(pages.length%2===1){ pages.push(['<div class="pc">'+postit+'</div>']); } // page de droite libre
+   else { pages.push(['<div class="pc">'+postit+'</div>']); pages.push(['<div class="pc suite"><div class="emo">'+d.emoji+'</div><div class="t">Tourne la page pour découvrir les 8 questions à te poser avant de choisir.</div></div>']); }
  }
  // les 8 questions : double page suivante, 4 à gauche, 4 à droite
  var q=d.questions.map(function(x,i){ return '<p class="q"><b>'+(i+1)+'.</b> '+x+'</p>'; });
