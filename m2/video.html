@@ -16,6 +16,8 @@ video{width:100%;height:100%;object-fit:cover;display:block}
 #etiq{position:absolute;left:470px;top:466px;width:690px;background:rgba(255,253,247,.94);border-radius:14px;padding:12px 16px;font:500 15px/1.4 Montserrat,sans-serif;color:var(--encre);box-shadow:0 8px 20px rgba(0,0,0,.15)}
 #etiq b{color:var(--canard)}
 .cache{display:none!important}
+body.video #col,body.video #etiq{display:none}
+body.video #cadre{left:0;top:0;width:1200px;height:675px;border-radius:0;border:0;box-shadow:none;box-sizing:border-box}
 </style></head><body><div id="s">
 <div id="col"><h1 id="titre"></h1><div class="sous" id="sous"></div><div id="cles"></div></div>
 <div id="cadre"><video id="v" playsinline preload="metadata"></video><button id="play" type="button" aria-label="Lire la vidéo">▶</button></div>
@@ -26,7 +28,8 @@ const P={
  e1:{t:'Bienvenue dans la Première ascension',s:'Découvre les chemins possibles après le lycée, trouve ceux qui te correspondent et construis une stratégie qui te permet d’oser sans tout miser sur une seule possibilité.',c:['Des milliers de formations existent : tu n’as pas besoin de toutes les connaître.','Tu dois savoir repérer celles qui pourraient vraiment te correspondre.','Un même objectif peut souvent être atteint par plusieurs chemins.'],v:'lisa-m2-e1-intro',q:'« Dans cette mission, je vais t’aider à découvrir les différents chemins possibles, y compris certains auxquels tu n’aurais peut-être jamais pensé. »'},
  e8:{t:'Le tableau « Je compare »',s:'Tu as découvert plusieurs chemins. Maintenant, il faut apprendre à les comparer, sans te demander de choisir tout de suite.',c:['Le nom d’une formation ne suffit pas.','Avant de la mettre dans ta liste, tu dois savoir ce que tu vas réellement y trouver.','Les pages suivantes te donnent les huit questions à te poser.'],v:'lisa-m2-e8-compare',q:'« Tu as découvert plusieurs chemins. Maintenant, il faut apprendre à les comparer. »'}
 };
-const k=new URLSearchParams(location.search).get('e')||'e1'; const d=P[k]||P.e1;
+const QS=new URLSearchParams(location.search); if(QS.get('mode')==='video') document.body.classList.add('video');
+const k=QS.get('e')||'e1'; const d=P[k]||P.e1;
 document.title='Lisa – '+d.t; document.getElementById('titre').textContent=d.t; document.getElementById('sous').textContent=d.s;
 document.getElementById('cles').innerHTML=d.c.map(x=>'<div class="cle"><b>✓</b><span>'+x+'</span></div>').join('');
 const v=document.getElementById('v'),p=document.getElementById('play'),e=document.getElementById('etiq');
