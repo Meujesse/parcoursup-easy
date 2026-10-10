@@ -2,7 +2,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="commun.css"><style>
 html,body{background:transparent}
-#s{width:900px;height:675px;left:0;top:0;transform:none;position:absolute}
+#s{width:900px;height:675px;left:0;top:0;transform:none;position:absolute;touch-action:none}
 #carte{position:absolute;left:0;top:0;width:900px;height:506px;overflow:hidden;border-radius:0 0 18px 18px}
 #carte img,#carte canvas{position:absolute;left:0;top:0;width:900px;height:506px;display:block}
 #glow{pointer-events:none;opacity:0;transition:opacity .25s}
@@ -34,16 +34,16 @@ let choix=PE.get('pe_m2_territoires',{}), pos=PE.get('pe_m2_territoires_pos',{})
 const img=document.getElementById('img'), glow=document.getElementById('glow'), gctx=glow.getContext('2d');
 let px=null; // pixel data of the map at 900x506
 function prep(){ const c=document.createElement('canvas'); c.width=900; c.height=506; const x=c.getContext('2d'); x.drawImage(img,0,0,900,506); try{ px=x.getImageData(0,0,900,506).data; }catch(e){ px=null; } }
-function zoneAt(x,y){ if(!px) return null; x=Math.max(0,Math.min(899,Math.round(x))); y=Math.max(0,Math.min(505,Math.round(y))); let best=null,bd=1e9; // sample a small square
- for(let dy=-6;dy<=6;dy+=3) for(let dx=-6;dx<=6;dx+=3){ const i=((y+dy)*900+(x+dx))*4; if(i<0||i>=px.length) continue; const r=px[i],g=px[i+1],b=px[i+2]; for(const k in Z){ const c=Z[k].c; const d=Math.abs(r-c[0])+Math.abs(g-c[1])+Math.abs(b-c[2]); if(d<bd){bd=d;best=k;} } }
- return bd<70?best:null; }
+function zoneAt(x,y,wide){ if(!px) return null; x=Math.max(0,Math.min(899,Math.round(x))); y=Math.max(0,Math.min(505,Math.round(y))); const votes={}; const R=wide?36:8, step=wide?6:4;
+ for(let dy=-R;dy<=R;dy+=step) for(let dx=-R;dx<=R;dx+=step){ const xx=x+dx,yy=y+dy; if(xx<0||yy<0||xx>=900||yy>=506) continue; const i=(yy*900+xx)*4; const r=px[i],g=px[i+1],b=px[i+2]; let best=null,bd=1e9; for(const k in Z){ const c=Z[k].c; const d=Math.abs(r-c[0])+Math.abs(g-c[1])+Math.abs(b-c[2]); if(d<bd){bd=d;best=k;} } if(bd<80) votes[best]=(votes[best]||0)+1; }
+ let bk=null,bn=0; for(const k in votes) if(votes[k]>bn){bn=votes[k];bk=k;} return bk; }
 function highlight(keys){ gctx.clearRect(0,0,900,506); if(!px||!keys.length) {glow.classList.remove('on');return;} const out=gctx.createImageData(900,506); const o=out.data; for(let i=0;i<px.length;i+=4){ const r=px[i],g=px[i+1],b=px[i+2]; for(const k of keys){ const c=Z[k].c; if(Math.abs(r-c[0])+Math.abs(g-c[1])+Math.abs(b-c[2])<70){ o[i]=255;o[i+1]=255;o[i+2]=255;o[i+3]=95; break; } } } gctx.putImageData(out,0,0); glow.classList.add('on'); }
 function paint(){ const keys=Object.values(choix).filter(Boolean); highlight(keys); for(const k in HOME){ const p=document.getElementById('p-'+k); const at=pos[k]||HOME[k]; p.style.left=at[0]+'px'; p.style.top=at[1]+'px'; p.classList.toggle('pose',!!choix[k]); let s=p.querySelector('small'); if(choix[k]){ if(!s){s=document.createElement('small');p.appendChild(s);} s.textContent=Z[choix[k]].n; } else if(s) s.remove(); document.querySelector('.slot[data-k='+k+'] .res').textContent=choix[k]?Z[choix[k]].n:'…'; }
  const n=keys.length; document.getElementById('msg').style.display=n?'block':'none'; document.getElementById('msg').textContent=n===3?'Bravo, tes trois territoires sont posés. Tu peux encore les déplacer.':(n?'Encore '+(3-n)+' repère'+(3-n>1?'s':'')+' à poser.':'Glisse chaque repère sur un territoire de la carte.'); }
 img.complete?prep():img.onload=prep;
 let drag=null,off=[0,0];
-document.querySelectorAll('.pion').forEach(p=>{ p.onpointerdown=e=>{ drag=p; p.classList.add('drag'); p.setPointerCapture(e.pointerId); const r=p.getBoundingClientRect(); const k=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--k'))||1; off=[(e.clientX-r.left),(e.clientY-r.top)]; };
+document.querySelectorAll('.pion').forEach(p=>{ p.onpointerdown=e=>{ e.preventDefault(); drag=p; p.classList.add('drag'); p.setPointerCapture(e.pointerId); const r=p.getBoundingClientRect(); const k=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--k'))||1; off=[(e.clientX-r.left),(e.clientY-r.top)]; };
  p.onpointermove=e=>{ if(drag!==p) return; const s=document.getElementById('s').getBoundingClientRect(); const x=(e.clientX-s.left)-off[0], y=(e.clientY-s.top)-off[1]; p.style.left=x+'px'; p.style.top=y+'px'; const z=zoneAt(x+32,y+32); const keys=Object.values(choix).filter(Boolean); highlight(z?[...keys,z]:keys); };
- p.onpointerup=e=>{ if(drag!==p) return; p.classList.remove('drag'); drag=null; const x=parseFloat(p.style.left), y=parseFloat(p.style.top); const z=zoneAt(x+32,y+32); const k=p.dataset.k; if(z){ choix[k]=z; pos[k]=[x,y]; } else { delete choix[k]; delete pos[k]; } PE.set('pe_m2_territoires',choix); PE.set('pe_m2_territoires_pos',pos); paint(); }; });
+ p.onpointerup=e=>{ if(drag!==p) return; p.classList.remove('drag'); drag=null; const x=parseFloat(p.style.left), y=parseFloat(p.style.top); const z=zoneAt(x+32,y+32)||zoneAt(x+32,y+32,true); const k=p.dataset.k; if(z){ choix[k]=z; pos[k]=[x,y]; } else { delete choix[k]; delete pos[k]; if(y<480){ const m=document.getElementById('msg'); m.style.display='block'; m.textContent='Pose le repère sur un territoire coloré de la carte.'; setTimeout(paint,1800); return; } } PE.set('pe_m2_territoires',choix); PE.set('pe_m2_territoires_pos',pos); paint(); }; });
 paint();
 </script></body></html>
