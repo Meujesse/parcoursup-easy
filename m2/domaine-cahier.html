@@ -8,15 +8,15 @@ html,body{background:transparent}
 .page.g{left:0;border-radius:14px 4px 4px 14px}
 .page.d{left:560px;border-radius:4px 14px 14px 4px}
 .page.g:before{content:"";position:absolute;left:30px;top:0;bottom:0;width:2px;background:#f4b3c6}
-.lignes{position:absolute;left:44px;right:34px;top:30px;bottom:92px;background:repeating-linear-gradient(transparent 0 31px,#e8dcdc 31px 32px)}
-.txt{position:relative;font:400 20px/32px 'Patrick Hand',cursive;color:var(--encre)}
-.txt h2{margin:0;font:400 26px/32px 'Patrick Hand',cursive;color:var(--rose);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.txt h3{margin:0;font:400 22px/32px 'Patrick Hand',cursive;color:var(--canard)}
-.txt p{margin:0;padding-left:22px;text-indent:-22px}
-.txt p.q{padding-left:30px;text-indent:-30px}
+.lignes{position:absolute;left:44px;right:34px;top:30px;bottom:92px;background:repeating-linear-gradient(transparent 0 39px,#e3d6d6 39px 40px);background-position:0 var(--lo,0px)}
+.txt{position:relative;font:400 24px/40px 'Patrick Hand',cursive;color:var(--encre)}
+.txt h2{margin:0;font:400 30px/40px 'Patrick Hand',cursive;color:var(--rose);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.txt h3{margin:0;font:400 26px/40px 'Patrick Hand',cursive;color:var(--canard)}
+.txt p{margin:0;padding-left:26px;text-indent:-26px}
+.txt p.q{padding-left:36px;text-indent:-36px}
 .txt p b{color:var(--rose);font-weight:400}
-.postit{position:absolute;left:60px;top:378px;width:440px;min-height:170px;background:#fff3b0;box-shadow:0 10px 24px rgba(0,0,0,.18);transform:rotate(-1.5deg);padding:16px 20px;box-sizing:border-box;font:400 19px/26px 'Patrick Hand',cursive;color:#5a4a00}
-.postit b{display:block;font-size:22px;color:#b4461b;margin-bottom:4px}
+.postit{position:absolute;left:50%;top:50%;width:460px;transform:translate(-50%,-50%) rotate(-1.5deg);background:#fff3b0;box-shadow:0 12px 28px rgba(0,0,0,.2);padding:26px 28px 30px;box-sizing:border-box;font:400 25px/34px 'Patrick Hand',cursive;color:#5a4a00}
+.postit b{display:block;font-size:30px;color:#b4461b;margin-bottom:8px}
 .postit:before{content:"";position:absolute;left:50%;top:-12px;width:90px;height:26px;margin-left:-45px;background:rgba(255,255,255,.55);transform:rotate(-2deg);box-shadow:0 2px 6px rgba(0,0,0,.08)}
 .emoji{position:absolute;right:40px;top:300px;font-size:72px;opacity:.9;transform:rotate(6deg)}
 #spirale{position:absolute;left:546px;top:36px;width:28px;height:600px;z-index:5}
@@ -46,17 +46,16 @@ html,body{background:transparent}
 <script src="commun.js"></script><script src="domaines-data.js"></script><script>
 (function(){
  var id=+(new URLSearchParams(location.search).get('d')||1); var d=(window.DOMAINES||[]).find(function(x){return x.id===id;})||window.DOMAINES[0];
- var LINES=16, CPL=44;
+ var LINES=12, CPL=36;
  function nl(t,cpl){ return Math.max(1,Math.ceil(t.length/(cpl||CPL))); }
  var pages=[], cur=[], used=0;
  function flush(){ pages.push(cur); cur=[]; used=0; }
  function add(h,l){ if(used+l>LINES){ flush(); } cur.push(h); used+=l; }
  add('<h2>'+d.emoji+' '+d.nom+'</h2>',1); add('<h3>Les chemins possibles</h3>',1);
  d.chemins.forEach(function(c){ add('<p>• '+c+'</p>',nl(c)); });
- // post-it « À retenir » : sur la page de droite de la première double page si possible
- var PH=8; if(pages.length%2===0){ flush(); } // on est sur une page gauche : passer à droite
- if(used+PH>LINES){ flush(); if(pages.length%2===0){ /* retombé à gauche : laisser droite au post-it */ } }
- cur.push('<div style="height:'+(PH*32)+'px;position:relative"><div class="postit" style="left:0;top:14px;width:100%"><b>À retenir</b>'+d.retenir.charAt(0).toUpperCase()+d.retenir.slice(1)+'</div></div>'); used+=PH; flush();
+ flush();
+ // post-it « À retenir » : seul sur la page suivante, centré
+ pages.push(['<div class="postit"><b>À retenir</b>'+d.retenir.charAt(0).toUpperCase()+d.retenir.slice(1)+'</div>']);
  if(pages.length%2) pages.push([]);
  // les 8 questions : double page suivante, 4 à gauche, 4 à droite
  var q=d.questions.map(function(x,i){ return '<p class="q"><b>'+(i+1)+'.</b> '+x+'</p>'; });
@@ -68,5 +67,6 @@ html,body{background:transparent}
  function go(dir){ if(busy) return; var n=spread+dir; if(n<0||n>max) return; busy=true; flip.className=dir>0?'on':'back on'; setTimeout(function(){ spread=n; paint(); },350); setTimeout(function(){ flip.className=''; busy=false; },720); }
  document.getElementById('next').onclick=function(){go(1);}; document.getElementById('prev').onclick=function(){go(-1);};
  paint();
+ document.fonts.ready.then(function(){ try{ var c=document.createElement('canvas').getContext('2d'); c.font='24px "Patrick Hand"'; var m=c.measureText('Hg'); var asc=m.fontBoundingBoxAscent||19, desc=m.fontBoundingBoxDescent||6; var base=(40-(asc+desc))/2+asc; document.documentElement.style.setProperty('--lo',(Math.round(base+3)-40)+'px'); }catch(e){} });
 })();
 </script></body></html>
