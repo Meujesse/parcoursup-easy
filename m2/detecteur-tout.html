@@ -1,0 +1,50 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Mon détecteur de vigilance</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commun.css"><style>
+html,body{background:transparent}
+#s{width:720px;height:560px;left:0;top:0;transform:none;position:absolute;overflow:hidden}
+.ecran{position:absolute;inset:0;transition:opacity .35s,transform .35s}
+.ecran.out{opacity:0;transform:translateX(-40px);pointer-events:none}
+.ecran.in{opacity:0;transform:translateX(40px)}
+#compte{font:800 15px Montserrat,sans-serif;color:#fff;opacity:.9;letter-spacing:.04em}
+#pts{display:flex;gap:8px;margin-top:8px}
+#pts i{width:46px;height:8px;border-radius:999px;background:rgba(255,255,255,.35)}
+#pts i.v{background:var(--vert)}#pts i.r{background:var(--rose)}#pts i.cur{background:#fff}
+#q{margin-top:26px;font:800 34px/1.25 Montserrat,sans-serif;color:#fff;min-height:170px}
+#btns{position:absolute;left:0;bottom:60px;display:flex;gap:18px;width:100%}
+#btns button{flex:1;height:78px;border:4px solid #fff;border-radius:999px;font:800 22px Montserrat,sans-serif;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.2);transition:transform .15s,background .15s}
+#btns button:hover{transform:translateY(-3px)}
+#oui{background:var(--vert);color:#fff}#non{background:#fff;color:var(--rose);border-color:var(--rose)}
+#btns button.choisi{transform:scale(1.06);box-shadow:0 0 0 8px rgba(255,255,255,.45),0 10px 24px rgba(0,0,0,.2)}
+#btns button.pas{opacity:.35}
+#aide{position:absolute;left:0;bottom:18px;font:600 14px Montserrat,sans-serif;color:#fff;opacity:.85}
+/* résultat */
+#res{background:#fff;border-radius:22px;padding:24px 28px;box-shadow:0 14px 34px rgba(0,0,0,.2);color:var(--encre)}
+#res h2{margin:0;font:800 26px Montserrat,sans-serif;color:var(--canard)}
+#lamps{display:flex;gap:14px;margin:16px 0}
+.lamp{width:58px;height:58px;border-radius:50%;background:#e6eef2;transition:.3s}
+.lamp.on.v{background:var(--vert);box-shadow:0 0 26px var(--vert)}.lamp.on.o{background:var(--orange);box-shadow:0 0 26px var(--orange)}.lamp.on.r{background:var(--rose);box-shadow:0 0 26px var(--rose)}
+#verdict{font:800 22px Montserrat,sans-serif;margin-bottom:6px}
+#conseil{font:600 17px/1.45 Montserrat,sans-serif}
+#recap{margin-top:14px;display:flex;flex-direction:column;gap:5px;font:600 14px Montserrat,sans-serif;color:#51707b}
+#recap span b{display:inline-block;width:22px;text-align:center;margin-right:6px}
+#acts{margin-top:18px;display:flex;gap:12px}
+#acts .btn{font-size:15px;padding:11px 18px}
+@media print{body{background:#fff}#s{position:static;width:auto;height:auto}#acts{display:none}}
+</style></head><body><div id="s">
+<div class="ecran" id="e1"><div id="compte"></div><div id="pts"></div><div id="q"></div><div id="btns"><button id="oui" type="button">✅ Oui</button><button id="non" type="button">🕒 Pas encore</button></div><div id="aide">Clique sur ta réponse : la question suivante arrive toute seule.</div></div>
+<div class="ecran in" id="e2"><div id="res"><h2>🚦 Le verdict du détecteur</h2><div id="lamps"><div class="lamp v" id="lv"></div><div class="lamp o" id="lo"></div><div class="lamp r" id="lr"></div></div><div id="verdict"></div><div id="conseil"></div><div id="recap"></div><div id="acts"><button class="btn" onclick="window.print()">🖨 Imprimer / PDF</button><button class="btn sec" id="redo">↺ Refaire le test</button></div></div></div>
+</div>
+<script src="commun.js"></script><script>
+const Q=["Cette formation me plaît-elle vraiment ?","Est-ce que je sais ce que j'y étudierai ?","Est-ce que je sais comment on y entre ?","Est-ce que j'ai vérifié ce qu'il est possible de faire après ?","Ai-je plusieurs chemins possibles vers mon objectif ?"];
+let R=PE.get('pe_m2_detecteur',{}); let i=0; while(i<5&&R[i]!==undefined) i++;
+const e1=document.getElementById('e1'), e2=document.getElementById('e2'); let busy=false;
+function pts(){ document.getElementById('pts').innerHTML=Q.map((_,k)=>'<i class="'+(R[k]==='1'?'v':R[k]==='0'?'r':'')+(k===i?' cur':'')+'"></i>').join(''); }
+function question(){ document.getElementById('compte').textContent='QUESTION '+(i+1)+' / 5'; document.getElementById('q').textContent=Q[i]; pts(); document.querySelectorAll('#btns button').forEach(b=>{b.classList.remove('choisi','pas');}); }
+function resultat(){ const oui=Object.values(R).filter(v=>v==='1').length; ['lv','lo','lr'].forEach(id=>document.getElementById(id).classList.remove('on')); let t,c; if(oui===5){ document.getElementById('lv').classList.add('on'); t='🟢 Feu vert'; c='Tu as une bonne base. Continue à vérifier chaque détail avant de valider, mais tu es sur la bonne voie.'; } else if(oui>=3){ document.getElementById('lo').classList.add('on'); t='🟠 Feu orange'; c='Il te manque encore quelques vérifications. Reprends les points « pas encore » avant de valider ton vœu.'; } else { document.getElementById('lr').classList.add('on'); t='🔴 Feu rouge'; c='Stop : tu ne sais pas encore assez de choses sur cette formation. Pas de panique, c’est exactement le travail de cette mission.'; } document.getElementById('verdict').textContent=t; document.getElementById('conseil').textContent=c; document.getElementById('recap').innerHTML=Q.map((q,k)=>'<span><b>'+(R[k]==='1'?'✅':'🕒')+'</b>'+q+'</span>').join(''); }
+function montre(){ if(i>=5){ resultat(); e1.classList.add('out'); e2.classList.remove('in'); } else { question(); e2.classList.add('in'); e1.classList.remove('out'); } }
+function go(v,btn){ if(busy) return; busy=true; R[i]=v; PE.set('pe_m2_detecteur',R); btn.classList.add('choisi'); document.querySelectorAll('#btns button').forEach(b=>{ if(b!==btn) b.classList.add('pas'); }); pts(); setTimeout(()=>{ i++; e1.classList.add('out'); setTimeout(()=>{ montre(); if(i<5){ e1.classList.remove('out'); } busy=false; },360); },650); }
+document.getElementById('oui').onclick=function(){go('1',this);}; document.getElementById('non').onclick=function(){go('0',this);};
+document.getElementById('redo').onclick=()=>{ R={}; PE.set('pe_m2_detecteur',R); i=0; montre(); };
+montre();
+</script></body></html>
