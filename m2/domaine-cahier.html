@@ -55,18 +55,16 @@ html,body{background:transparent}
  var id=+(new URLSearchParams(location.search).get('d')||1); var d=(window.DOMAINES||[]).find(function(x){return x.id===id;})||window.DOMAINES[0];
  var H=518; // hauteur utile d'une page
  var retenir=d.retenir.charAt(0).toUpperCase()+d.retenir.slice(1);
- function nl(t,cpl){ return Math.max(1,Math.ceil(t.length/cpl)); }
- // 1) tous les chemins sur la page de gauche : on cherche la plus grande écriture qui tient, en 1 colonne puis en 2 colonnes
- var sizes=[[40,36],[36,40],[32,46],[28,52],[26,56],[24,60]];
- var S=40, cpl=36, cols=1, found=false;
- for(var c=1;c<=2&&!found;c++){ for(var k=0;k<sizes.length;k++){ S=sizes[k][0]; cpl=sizes[k][1]; var cap=Math.floor(H/S); var head=nl(d.nom,Math.round(cpl*0.85))+1; var items=0; d.chemins.forEach(function(x){ items+=nl(x,c===2?Math.round(cpl*0.46):cpl); }); var rows=head+(c===2?Math.ceil(items/2):items); if(rows<=cap){ cols=c; found=true; break; } } }
- if(!found){ cols=2; S=24; cpl=60; }
- document.documentElement.style.setProperty('--s',S+'px'); document.documentElement.style.setProperty('--f',Math.round(S*0.6)+'px');
  var left=['<h2>'+d.emoji+' '+d.nom+'</h2>','<h3>Les chemins possibles</h3>'].concat(d.chemins.map(function(x){ return '<p>• '+x+'</p>'; }));
+ var pgEl=document.getElementById('pg');
+ function setSize(S){ document.documentElement.style.setProperty('--s',S+'px'); document.documentElement.style.setProperty('--f',Math.round(S*0.6)+'px'); }
+ // on mesure réellement : la plus grande écriture pour laquelle toute la liste tient sur la page de gauche (1 colonne, sinon 2)
+ var ladder=[40,36,32,30,28,26,24,22,20], S=40, COLS=1, ok=false;
+ for(var c=1;c<=2&&!ok;c++){ for(var k=0;k<ladder.length;k++){ setSize(ladder[k]); pgEl.className='txt'+(c===2?' cols':''); pgEl.innerHTML=left.join(''); if(pgEl.scrollHeight<=H+2&&pgEl.scrollWidth<=pgEl.clientWidth+2){ S=ladder[k]; COLS=c; ok=true; break; } } }
+ if(!ok){ S=20; COLS=2; } setSize(S); pgEl.className='txt';
  var pages=[left,['<div class="pc" style="height:'+H+'px"><div class="postit"><b>À retenir</b>'+retenir+'</div></div>']];
  var q=d.questions.map(function(x,i){ return '<p class="q"><b>'+(i+1)+'.</b> '+x+'</p>'; });
  pages.push(['<div class="centre"><h3>Les 8 questions à te poser</h3>'+q.slice(0,4).join('')+'</div>']); pages.push(['<div class="centre">'+q.slice(4).join('')+'</div>']);
- var COLS=cols;
  var spread=+(PE.get('pe_m2_dom_'+id,0))||0, max=pages.length/2-1; if(spread>max) spread=0;
  var pg=document.getElementById('pg'), pd=document.getElementById('pd'), flip=document.getElementById('flip');
  function paint(){ pg.innerHTML=pages[spread*2].join(''); pd.innerHTML=pages[spread*2+1].join(''); pg.classList.toggle('cols',spread===0&&COLS===2); pd.classList.remove('cols'); [pg,pd].forEach(function(el){ var c=el.querySelector('.centre'); if(c){ var h=c.offsetHeight; var off=Math.max(0,Math.floor(((H-h)/2)/S)*S); c.style.paddingTop=off+'px'; } }); document.getElementById('num').textContent=(spread+1)+' / '+(max+1); document.getElementById('prev').disabled=spread===0; document.getElementById('next').disabled=spread===max; PE.set('pe_m2_dom_'+id,spread); }
