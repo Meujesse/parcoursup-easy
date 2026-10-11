@@ -13,6 +13,9 @@ html,body{background:transparent}
 .txt{position:relative;font:400 var(--f)/var(--s) 'Patrick Hand',cursive;color:var(--encre)}
 .txt h2{margin:0;font:400 calc(var(--f)*1.15)/var(--s) 'Patrick Hand',cursive;color:var(--rose)}
 .pc{position:relative}
+.txt.cols{column-count:2;column-gap:28px}
+.txt.cols h2,.txt.cols h3{column-span:all}
+.txt.cols p{break-inside:avoid}
 .pc.suite .emo{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%) rotate(-8deg);font-size:150px;opacity:.9}
 .pc.suite .t{position:absolute;left:30px;right:30px;top:70%;text-align:center;font:400 26px/36px 'Patrick Hand',cursive;color:var(--canard)}
 .txt h3{margin:0;font:400 calc(var(--f)*1.08)/var(--s) 'Patrick Hand',cursive;color:var(--canard)}
@@ -52,23 +55,21 @@ html,body{background:transparent}
  var id=+(new URLSearchParams(location.search).get('d')||1); var d=(window.DOMAINES||[]).find(function(x){return x.id===id;})||window.DOMAINES[0];
  var H=518; // hauteur utile d'une page
  var retenir=d.retenir.charAt(0).toUpperCase()+d.retenir.slice(1);
- var postitH=function(S){ return Math.ceil((60+retenir.length/34*S*1.0+40)/S); }; // hauteur du post-it en lignes
  function nl(t,cpl){ return Math.max(1,Math.ceil(t.length/cpl)); }
- var S=40, cpl=36, cap, rows;
- var sizes=[[40,36],[36,40],[32,46],[28,52],[24,60],[22,66]];
- for(var k=0;k<sizes.length;k++){ S=sizes[k][0]; cpl=sizes[k][1]; cap=Math.floor(H/S); rows=nl(d.nom,Math.round(cpl*0.85))+1; d.chemins.forEach(function(c){ rows+=nl(c,cpl); }); if(rows+postitH(S)<=2*cap) break; }
+ // 1) tous les chemins sur la page de gauche : on cherche la plus grande écriture qui tient, en 1 colonne puis en 2 colonnes
+ var sizes=[[40,36],[36,40],[32,46],[28,52],[26,56],[24,60]];
+ var S=40, cpl=36, cols=1, found=false;
+ for(var c=1;c<=2&&!found;c++){ for(var k=0;k<sizes.length;k++){ S=sizes[k][0]; cpl=sizes[k][1]; var cap=Math.floor(H/S); var head=nl(d.nom,Math.round(cpl*0.85))+1; var items=0; d.chemins.forEach(function(x){ items+=nl(x,c===2?Math.round(cpl*0.46):cpl); }); var rows=head+(c===2?Math.ceil(items/2):items); if(rows<=cap){ cols=c; found=true; break; } } }
+ if(!found){ cols=2; S=24; cpl=60; }
  document.documentElement.style.setProperty('--s',S+'px'); document.documentElement.style.setProperty('--f',Math.round(S*0.6)+'px');
- var pages=[[],[]], used=0, pg=0;
- function add(h,l){ if(pg===0&&used+l>cap){ pg=1; used=0; } pages[pg].push(h); used+=l; }
- add('<h2>'+d.emoji+' '+d.nom+'</h2>',nl(d.nom,Math.round(cpl*0.85))); add('<h3>Les chemins possibles</h3>',1);
- d.chemins.forEach(function(c){ add('<p>• '+c+'</p>',nl(c,cpl)); });
- if(pg===0){ used=0; } // la page de droite est libre : post-it centré dessus
- var reste=(cap-used)*S; pages[1].push('<div class="pc" style="height:'+reste+'px"><div class="postit"><b>À retenir</b>'+retenir+'</div></div>');
+ var left=['<h2>'+d.emoji+' '+d.nom+'</h2>','<h3>Les chemins possibles</h3>'].concat(d.chemins.map(function(x){ return '<p>• '+x+'</p>'; }));
+ var pages=[left,['<div class="pc" style="height:'+H+'px"><div class="postit"><b>À retenir</b>'+retenir+'</div></div>']];
  var q=d.questions.map(function(x,i){ return '<p class="q"><b>'+(i+1)+'.</b> '+x+'</p>'; });
- pages.push(['<h3>Les 8 questions à te poser</h3>'].concat(q.slice(0,4))); pages.push(['<h3>&nbsp;</h3>'].concat(q.slice(4)));
+ pages.push(['<div class="centre"><h3>Les 8 questions à te poser</h3>'+q.slice(0,4).join('')+'</div>']); pages.push(['<div class="centre">'+q.slice(4).join('')+'</div>']);
+ var COLS=cols;
  var spread=+(PE.get('pe_m2_dom_'+id,0))||0, max=pages.length/2-1; if(spread>max) spread=0;
  var pg=document.getElementById('pg'), pd=document.getElementById('pd'), flip=document.getElementById('flip');
- function paint(){ pg.innerHTML=pages[spread*2].join(''); pd.innerHTML=pages[spread*2+1].join(''); document.getElementById('num').textContent=(spread+1)+' / '+(max+1); document.getElementById('prev').disabled=spread===0; document.getElementById('next').disabled=spread===max; PE.set('pe_m2_dom_'+id,spread); }
+ function paint(){ pg.innerHTML=pages[spread*2].join(''); pd.innerHTML=pages[spread*2+1].join(''); pg.classList.toggle('cols',spread===0&&COLS===2); pd.classList.remove('cols'); [pg,pd].forEach(function(el){ var c=el.querySelector('.centre'); if(c){ var h=c.offsetHeight; var off=Math.max(0,Math.floor(((H-h)/2)/S)*S); c.style.paddingTop=off+'px'; } }); document.getElementById('num').textContent=(spread+1)+' / '+(max+1); document.getElementById('prev').disabled=spread===0; document.getElementById('next').disabled=spread===max; PE.set('pe_m2_dom_'+id,spread); }
  var busy=false;
  function go(dir){ if(busy) return; var n=spread+dir; if(n<0||n>max) return; busy=true; flip.className=dir>0?'on':'back on'; setTimeout(function(){ spread=n; paint(); },350); setTimeout(function(){ flip.className=''; busy=false; },720); }
  document.getElementById('next').onclick=function(){go(1);}; document.getElementById('prev').onclick=function(){go(-1);};
