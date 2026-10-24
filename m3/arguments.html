@@ -1,0 +1,53 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Choisir les meilleurs arguments</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commun.css"><style>
+html,body{background:transparent}
+#pool{position:absolute;left:40px;top:128px;width:1120px;height:150px;display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start}
+.arg{width:364px;box-sizing:border-box;background:#fffdf7;border-radius:12px;padding:8px 12px;font:400 19px/1.25 'Patrick Hand',cursive;color:var(--encre);cursor:grab;user-select:none;touch-action:none;border:2px solid #fffdf7;display:flex;gap:8px;align-items:flex-start}
+.arg b{font:800 14px/22px Montserrat,sans-serif;color:#fff;background:var(--canard);border-radius:6px;min-width:22px;text-align:center;flex:0 0 22px}
+.arg.choisi{border-color:var(--rose)}
+.arg.bien{border-color:var(--vert);background:#d6f5e8}
+.arg.moyen{border-color:var(--orange);background:#ffe9cf}
+#cols{position:absolute;left:40px;top:290px;width:1120px;height:300px;display:flex;gap:14px}
+.col{flex:1;overflow:auto;border-radius:16px;background:rgba(255,255,255,.22);border:3px dashed rgba(255,255,255,.7);padding:10px;display:flex;flex-direction:column;gap:8px}
+.col.vise{background:rgba(255,255,255,.45)}
+.col h3{margin:0 0 2px;font:800 16px Montserrat,sans-serif;color:#fff;text-align:center}
+.col .arg{width:auto}
+#bas{position:absolute;left:40px;top:600px;width:760px;display:flex;gap:12px;align-items:center}
+#bas .btn{box-shadow:none;font-size:15px;padding:10px 18px;flex:0 0 auto}
+#bas .btn.sec{border:2px solid #fff}
+#retour{display:none;font:400 18px/1.25 'Patrick Hand',cursive;color:var(--encre);background:#fffdf7;border-radius:10px;padding:6px 12px}
+#retour.on{display:block}
+.fantome{position:fixed;pointer-events:none;z-index:9;opacity:.92}
+</style></head><body><div id="s">
+<div id="pool"></div>
+<div id="cols">
+ <div class="col" data-c="0"><h3>✅ Argument précis</h3></div>
+ <div class="col" data-c="1"><h3>✏️ Argument à développer</h3></div>
+ <div class="col" data-c="2"><h3>❌ Argument peu convaincant</h3></div>
+</div>
+<div id="bas"><button class="btn" id="verif">Vérifier</button><button class="btn sec" id="raz">Recommencer</button><div id="retour"></div></div>
+</div>
+<script src="commun.js"></script><script>
+(function(){
+ // Contenu : document de Laurence, mission 3, écran 17 (BUT informatique)
+ var A=[['A','J’aime l’informatique.',1],['B','J’ai créé un petit programme pour automatiser une tâche dans un projet personnel.',0],['C','Votre formation est très bien.',2],['D','Je souhaite comprendre comment concevoir et développer des applications en équipe.',0],['E','Je suis le meilleur candidat.',2],['F','J’ai apprécié un projet de programmation au lycée et je souhaite approfondir ces compétences.',0]];
+ var FB='Un argument devient plus convaincant quand il repose sur un fait, une expérience ou un intérêt expliqué.';
+ var place={}, choisi=null; var pool=document.getElementById('pool'), cols=[].slice.call(document.querySelectorAll('.col')), retour=document.getElementById('retour');
+ function carte(a,etat){ var d=document.createElement('div'); d.className='arg'+(etat?' '+etat:'')+(choisi===a[0]?' choisi':''); d.innerHTML='<b>'+a[0]+'</b><span>« '+a[1]+' »</span>'; d.dataset.k=a[0]; brancher(d,a[0]); return d; }
+ function dessine(verifie){ pool.innerHTML=''; cols.forEach(function(c){ [].slice.call(c.querySelectorAll('.arg')).forEach(function(x){x.remove();}); });
+  A.forEach(function(a){ var c=place[a[0]]; if(c===undefined) pool.appendChild(carte(a)); else cols[c].appendChild(carte(a,verifie?(a[2]===c?'bien':'moyen'):'')); }); }
+ function poser(k,c){ place[k]=c; choisi=null; retour.className=''; dessine(); }
+ cols.forEach(function(c){ c.addEventListener('click',function(e){ if(choisi&&!e.target.closest('.arg')) poser(choisi,+c.dataset.c); }); });
+ function brancher(d,k){ d.addEventListener('pointerdown',function(ev){ ev.preventDefault(); var sx=ev.clientX, sy=ev.clientY, f=null, cible=null;
+  function mv(e){ if(!f&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){ f=d.cloneNode(true); f.classList.add('fantome'); var r=d.getBoundingClientRect(); f.style.width=d.offsetWidth+'px'; var kk=r.width/d.offsetWidth; f.style.transform='scale('+kk+') rotate(-2deg)'; f.style.transformOrigin='0 0'; document.body.appendChild(f); }
+   if(f){ f.style.left=(e.clientX-14)+'px'; f.style.top=(e.clientY-14)+'px'; var el=document.elementFromPoint(e.clientX,e.clientY); var x=el&&el.closest('.col'); if(cible&&cible!==x) cible.classList.remove('vise'); cible=x; if(x) x.classList.add('vise'); } }
+  function up(){ document.removeEventListener('pointermove',mv); document.removeEventListener('pointerup',up);
+   if(f){ f.remove(); if(cible){ cible.classList.remove('vise'); poser(k,+cible.dataset.c); } }
+   else { if(place[k]!==undefined){ delete place[k]; choisi=null; retour.className=''; dessine(); } else { choisi=(choisi===k?null:k); dessine(); } } }
+  document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up); }); }
+ document.getElementById('verif').onclick=function(){ dessine(true); var n=Object.keys(place).length; retour.textContent=n<6?'Classe les 6 arguments avant de vérifier.':FB; retour.className='on'; if(n===6&&A.every(function(a){return place[a[0]]===a[2];})) PE.set('pe_m3_args_ok',1); };
+ document.getElementById('raz').onclick=function(){ place={}; choisi=null; retour.className=''; dessine(); };
+ dessine();
+})();
+</script></body></html>
