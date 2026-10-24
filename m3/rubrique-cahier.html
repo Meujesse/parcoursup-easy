@@ -1,0 +1,88 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Rubrique Activités – Carnet</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commun.css"><style>
+html,body{background:transparent}
+#s{color:var(--encre)}
+#cahier{position:absolute;left:40px;top:18px;width:1120px;height:640px;perspective:2200px}
+.page{position:absolute;top:0;width:560px;height:640px;background:var(--papier);box-sizing:border-box;padding:30px 34px 24px 44px;overflow:hidden;border:1px solid #e6dfd0}
+.page.g{left:0;border-radius:14px 4px 4px 14px}
+.page.d{left:560px;border-radius:4px 14px 14px 4px}
+.page.g:before{content:"";position:absolute;left:30px;top:0;bottom:0;width:2px;background:#f4b3c6}
+:root{--s:36px;--f:22px}
+.lignes{position:absolute;left:44px;right:34px;top:30px;bottom:92px;background:repeating-linear-gradient(transparent 0 calc(var(--s) - 2px),#c9b6b6 calc(var(--s) - 2px) var(--s));background-position:0 var(--lo,0px)}
+.txt{position:relative;font:400 var(--f)/var(--s) 'Patrick Hand',cursive;color:var(--encre)}
+.txt h2{margin:0;font:400 calc(var(--f)*1.2)/var(--s) 'Patrick Hand',cursive;color:var(--rose)}
+.txt h3{margin:0;font:400 calc(var(--f)*1.08)/var(--s) 'Patrick Hand',cursive;color:var(--canard)}
+.txt p{margin:0}
+.txt p.l{padding-left:22px;text-indent:-22px}
+.txt p.e{color:#2d6f80;margin-top:var(--s)}
+.txt p.e:before{content:"« "}.txt p.e:after{content:" »"}
+.txt p.e.suite:before,.txt p.e.coupe:after{content:""}
+.txt p.e.premier{margin-top:0}
+.pc{position:relative}
+.postit{position:absolute;left:50%;top:50%;width:440px;transform:translate(-50%,-50%) rotate(-1.5deg);background:#fff3b0;padding:24px 28px 28px;box-sizing:border-box;font:400 26px/1.4 'Patrick Hand',cursive;color:#5a4a00;text-align:center}
+.postit b{display:block;font-weight:400;font-size:30px;color:#b4461b;margin-bottom:8px}
+.postit img{display:block;width:96px;height:96px;border-radius:50%;object-fit:cover;object-position:top;margin:0 auto 10px;background:#cfe7ee}
+.postit:before{content:"";position:absolute;left:50%;top:-12px;width:90px;height:26px;margin-left:-45px;background:rgba(255,255,255,.6);transform:rotate(-2deg)}
+#spirale{position:absolute;left:546px;top:36px;width:28px;height:600px;z-index:5}
+#spirale i{display:block;width:28px;height:10px;border:3px solid #c8c2b4;border-radius:6px;background:#fff;margin:0 0 23px;box-sizing:border-box}
+#nav{position:absolute;left:0;right:0;bottom:34px;display:flex;justify-content:center;gap:12px;z-index:6}
+#nav .btn{font-size:15px;padding:10px 18px;box-shadow:none}
+#nav .btn.sec{border:2px solid var(--canard)}
+#nav .btn[disabled]{opacity:.35;cursor:default}
+#num{position:absolute;right:52px;bottom:12px;font:400 16px 'Patrick Hand',cursive;color:#8a9aa3}
+#tamp{position:absolute;left:62px;bottom:12px;font:400 16px 'Patrick Hand',cursive;color:#8a9aa3}
+#flip{position:absolute;left:560px;top:0;width:560px;height:640px;transform-origin:left center;transform-style:preserve-3d;pointer-events:none;opacity:0}
+#flip .face{position:absolute;inset:0;background:var(--papier);border-radius:4px 14px 14px 4px;backface-visibility:hidden;border:1px solid #e6dfd0}
+#flip .face.back{transform:rotateY(180deg);border-radius:14px 4px 4px 14px}
+#flip.on{opacity:1;animation:tourne .7s cubic-bezier(.5,.05,.4,1) forwards}
+@keyframes tourne{from{transform:rotateY(0)}to{transform:rotateY(-180deg)}}
+#flip.back.on{animation:retourne .7s cubic-bezier(.5,.05,.4,1) forwards}
+@keyframes retourne{from{transform:rotateY(-180deg)}to{transform:rotateY(0)}}
+#mesure{position:absolute;left:-3000px;top:0;width:482px}
+</style></head><body><div id="s">
+<div id="cahier">
+ <div class="page g"><div class="lignes"></div><div class="txt" id="pg"></div><div id="tamp">Parcoursup'easy · Carnet de route</div></div>
+ <div class="page d"><div class="lignes"></div><div class="txt" id="pd"></div><div id="num"></div></div>
+ <div id="flip"><div class="face"></div><div class="face back"></div></div>
+ <div id="spirale"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+</div>
+<div class="txt" id="mesure"></div>
+<div id="nav"><button class="btn sec" id="prev">◀ Page précédente</button><button class="btn" id="next">Tourner la page ▶</button></div>
+</div>
+<script src="commun.js"></script><script src="rubrique-data.js"></script><script>
+document.fonts.ready.then(function(){
+ var id=+(new URLSearchParams(location.search).get('c')||0); var d=window.RUBRIQUE.find(function(x){return x.id===id;})||window.RUBRIQUE[0];
+ var H=504, S=36; // hauteur utile d'une page (14 lignes)
+ var M=document.getElementById('mesure');
+ function el(b,cls){ var t=b[0]; if(t==='h2'||t==='h3') return '<'+t+'>'+b[1]+'</'+t+'>'; var c={n:'',p:'l',e:'e'}[t]; return '<p class="'+(c+' '+(cls||'')).trim()+'">'+b[1]+'</p>'; }
+ function fits(html){ M.innerHTML=html; return M.scrollHeight<=H+1; }
+ var pages=[], cur=['<h2>'+d.emoji+' '+d.nom+'</h2>'];
+ function flush(){ pages.push(cur); cur=[]; }
+ d.blocs.forEach(function(b){
+  var first=cur.length===0?' premier':'';
+  var h=el(b,first.trim()); if(fits(cur.concat([h]).join(''))){ cur.push(h); return; }
+  if(b[0]==='h3'||b[0]==='h2'){ flush(); cur.push(el(b)); return; }
+  // le paragraphe ne tient pas : on le coupe entre deux phrases
+  var phr=b[1].match(/[^.!?…]+[.!?…]+[»"]?\s*|[^.!?…]+$/g)||[b[1]], part=[], suite=false;
+  phr.forEach(function(ph){
+   var essai=part.concat([ph]).join('').trim(); var cls=(cur.length===0?'premier ':'')+(suite?'suite ':'')+'coupe';
+   if(fits(cur.concat([el([b[0],essai],cls)]).join(''))){ part.push(ph); return; }
+   if(part.length){ cur.push(el([b[0],part.join('').trim()],(cur.length===0?'premier ':'')+(suite?'suite ':'')+'coupe')); suite=true; }
+   flush(); part=[ph];
+  });
+  if(part.length) cur.push(el([b[0],part.join('').trim()],(cur.length===0?'premier ':'')+(suite?'suite':'')));
+ });
+ if(cur.length) flush();
+ if(d.lisa){ pages.push(['<div class="pc" style="height:'+H+'px"><div class="postit"><img src="img/lisa-avatar.png" alt=""><b>Le conseil de Lisa</b>'+d.lisa+'</div></div>']); }
+ if(pages.length%2) pages.push([]);
+ var max=pages.length/2-1, spread=+(PE.get('pe_m3_rub_'+id,0))||0; if(spread>max) spread=0; var qp=new URLSearchParams(location.search).get('p'); if(qp!==null) spread=Math.min(max,+qp);
+ var pg=document.getElementById('pg'), pd=document.getElementById('pd'), flip=document.getElementById('flip');
+ function paint(){ pg.innerHTML=pages[spread*2].join(''); pd.innerHTML=pages[spread*2+1].join(''); document.getElementById('num').textContent=(spread+1)+' / '+(max+1); document.getElementById('prev').disabled=spread===0; document.getElementById('next').disabled=spread===max; document.getElementById('nav').style.display=max===0?'none':''; PE.set('pe_m3_rub_'+id,spread); }
+ var busy=false;
+ function go(dir){ if(busy) return; var n=spread+dir; if(n<0||n>max) return; busy=true; flip.className=dir>0?'on':'back on'; setTimeout(function(){ spread=n; paint(); },350); setTimeout(function(){ flip.className=''; busy=false; },720); }
+ document.getElementById('next').onclick=function(){go(1);}; document.getElementById('prev').onclick=function(){go(-1);};
+ function calibre(){ try{ var c=document.createElement('canvas').getContext('2d'); var F2=22; c.font=F2+'px "Patrick Hand"'; var m=c.measureText('Hg'); var asc=m.fontBoundingBoxAscent||F2*0.8, desc=m.fontBoundingBoxDescent||F2*0.25; var base=(S-(asc+desc))/2+asc; document.documentElement.style.setProperty('--lo',(Math.round(base+3)-S)+'px'); }catch(e){} }
+ calibre(); paint();
+});
+</script></body></html>
