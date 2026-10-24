@@ -55,11 +55,13 @@ document.fonts.ready.then(function(){
  var id=+(new URLSearchParams(location.search).get('c')||0); var d=window.RUBRIQUE.find(function(x){return x.id===id;})||window.RUBRIQUE[0];
  var H=504, S=36; // hauteur utile d'une page (14 lignes)
  var M=document.getElementById('mesure');
- function el(b,cls){ var t=b[0]; if(t==='h2'||t==='h3') return '<'+t+'>'+b[1]+'</'+t+'>'; var c={n:'',p:'l',e:'e'}[t]; return '<p class="'+(c+' '+(cls||'')).trim()+'">'+b[1]+'</p>'; }
+ function nb(x){ return String(x).replace(/« /g,'«\u00a0').replace(/ ([»:?!;])/g,'\u00a0$1'); }
+ function el(b,cls){ var t=b[0]; b=[t,nb(b[1])]; if(t==='h2'||t==='h3') return '<'+t+'>'+b[1]+'</'+t+'>'; var c={n:'',p:'l',e:'e'}[t]; return '<p class="'+(c+' '+(cls||'')).trim()+'">'+b[1]+'</p>'; }
  function fits(html){ M.innerHTML=html; return M.scrollHeight<=H+1; }
  var pages=[], cur=['<h2>'+d.emoji+' '+d.nom+'</h2>'];
  function flush(){ pages.push(cur); cur=[]; }
  d.blocs.forEach(function(b){
+  if(b[0]==='br'){ if(cur.length) flush(); return; }
   var first=cur.length===0?' premier':'';
   var h=el(b,first.trim()); if(fits(cur.concat([h]).join(''))){ cur.push(h); return; }
   if(b[0]==='h3'||b[0]==='h2'){ flush(); cur.push(el(b)); return; }

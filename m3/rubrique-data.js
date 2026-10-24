@@ -90,4 +90,24 @@ window.RUBRIQUE=[
  ['e','Depuis l’enfance, le sport et les voyages ont profondément contribué à mon ouverture sur le monde. J’ai pratiqué le tennis et le ski (alpin et fond), qui m’ont appris la persévérance, la gestion du stress et le dépassement de soi. Cependant, la danse, que j’ai exercée pendant sept ans, a été l’expérience la plus marquante. Elle m’a apportée discipline, rigueur et sens du collectif. Les répétitions et représentations m’ont permis de gagner en confiance, de canaliser mes émotions et de travailler en équipe.'],
  ['e','Par ailleurs, j’ai eu la chance de découvrir plusieurs pays aux cultures variées : l’Italie, le Royaume-Uni, la Grèce, le Monténégro et la Tunisie. Ces voyages m’ont permis d’élargir ma vision du monde et découvrir des environnements différents. L’immersion culturelle, notamment en Tunisie, m’a sensibilisée à d’autres modes de vie et a renforcé mon ouverture d’esprit. Cela serait une vraie opportunité pour moi de faire un semestre d’études à l’étranger afin de participer à mon envie d’explorer le monde et améliorer ma culture linguistique.']
 ]}
+
+,{id:5,emoji:'🏀',nom:'Exemple : avant / après',blocs:[
+ ['h3','Exemple à améliorer'],
+ ['e','Je fais du basket depuis plusieurs années.'],
+ ['n','Que pourrais-tu ajouter pour mieux décrire cette expérience ?'],
+ ['br'],
+ ['h3','Exemple amélioré'],
+ ['e','Je pratique le basket depuis 4 ans. Les entraînements et les matchs m’ont appris à coopérer, à persévérer et à tenir mes engagements.'],
+ ['n','On passe ainsi d’une activité à une compétence.']
+]},
+{id:6,emoji:'⚠️',nom:'Les erreurs à éviter',blocs:[
+ ['n','Énumérer des activités sans explication n’apporte rien : Football / Piano / Lecture / Babysitting. Cette liste ne dit rien sur toi et n’apporte aucune valeur ajoutée. Les formations ne cherchent pas des hobbies. Elles cherchent des compétences et des qualités transférables.'],
+ ['h3','✅ Ce qu’il faut faire'],
+ ['n','Toujours expliquer : ce que l’activité t’a apporté, quelles compétences tu as développées, ce que ça dit de toi.'],
+ ['h3','Erreur fréquente : minimiser une expérience jugée « banale »'],
+ ['n','L’erreur consiste à penser que seules les expériences « exceptionnelles » méritent d’être mentionnées. Beaucoup d’élèves écrivent très peu car ils pensent : ne pas avoir fait assez, ne pas être engagés dans des projets prestigieux. Mais ce n’est pas l’exceptionnel qui compte. C’est la capacité à analyser son expérience. Un job d’été, du babysitting ou une aide familiale peuvent révéler : sens des responsabilités, autonomie, fiabilité, gestion du temps.'],
+ ['h3','✅ Comment valoriser une expérience simple ?'],
+ ['n','Exemple :'],
+ ['e','Mes missions de babysitting régulières m’ont permis de développer mon sens des responsabilités et ma capacité à gérer des situations imprévues avec calme.']
+]}
 ];
