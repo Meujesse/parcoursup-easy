@@ -1,0 +1,38 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Mon sac à dos – Mission 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--canard:#0e5d70;--rose:#ea1f5c;--vert:#25a782}
+html,body{margin:0;background:transparent;font-family:Montserrat,sans-serif;overflow:hidden}
+#s{position:absolute;left:0;top:0;width:1100px;height:530px;transform-origin:0 0}
+#sac{position:absolute;left:20px;top:20px;width:220px;text-align:center}
+#sac .anse{width:50px;height:34px;margin:0 auto -6px;border:12px solid #d81b56;border-bottom:0;border-radius:30px 30px 0 0}
+#sac .corps{position:relative;height:250px;background:var(--rose);border-radius:40px}
+#sac .rabat{position:absolute;left:24px;right:24px;top:0;height:90px;background:#cf1650;border-radius:30px 30px 18px 18px}
+#sac .poche{position:absolute;left:38px;right:38px;bottom:24px;height:110px;background:#127a8c;border-radius:16px;border-top:26px solid #0f5c6c}
+#sac .poche:after{content:"";position:absolute;left:50%;top:22px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:#e8f6f8}
+#sac b{display:block;margin-top:14px;font:800 18px Montserrat,sans-serif;color:var(--canard);letter-spacing:.04em}
+#grille{position:absolute;left:330px;top:20px;width:755px;display:grid;grid-template-columns:repeat(3,230px);gap:30px 30px}
+.c{position:relative;height:140px;background:#fff;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font:700 16px/1.2 Montserrat,sans-serif;color:var(--canard);text-align:center;padding:0 10px;box-sizing:border-box}
+.c .e{font-size:36px;line-height:1}
+.c img{width:58px;height:58px}
+.c:after{content:"✔";position:absolute;right:12px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--vert);color:#fff;font:800 14px/26px Montserrat,sans-serif}
+.c.n{border:3px solid var(--rose)}
+.c.n:before{content:"NOUVEAU";position:absolute;left:10px;top:10px;background:var(--rose);color:#fff;font:800 11px Montserrat,sans-serif;border-radius:6px;padding:3px 7px;letter-spacing:.04em}
+#suite{position:absolute;left:330px;top:500px;font:700 15px Montserrat,sans-serif;color:var(--canard)}
+</style></head><body><div id="s">
+<div id="sac"><div class="anse"></div><div class="corps"><div class="rabat"></div><div class="poche"></div></div><b>SAC À DOS</b></div>
+<div id="grille">
+ <div class="c"><span class="e">🧭</span>Carnet de route</div>
+ <div class="c"><span class="e">🎖️</span>Badge Explorateur</div>
+ <div class="c"><span class="e">🕵️</span>Chasseur de mythes</div>
+ <div class="c"><span class="e">🔑</span>Décrypteur Parcoursup</div>
+ <div class="c"><img src="../badges/detecteur-full.png" alt="">Détecteur</div>
+ <div class="c"><img src="../badges/stratege-full.png" alt="">Stratège</div>
+ <div class="c n"><img src="../badges/dossier-expert-full.png" alt="">Dossier Expert</div>
+ <div class="c n"><img src="../badges/redacteur-full.png" alt="">Rédacteur</div>
+ <div class="c n"><img src="../badges/mission-accomplie-full.png" alt="">Mission accomplie</div>
+</div>
+<div id="suite">… et il reste de la place pour la suite de l’aventure !</div>
+</div>
+<script>function fit(){var k=Math.min(innerWidth/1100,innerHeight/530);document.getElementById('s').style.transform='scale('+k+')';}addEventListener('resize',fit);fit();</script>
+</body></html>
