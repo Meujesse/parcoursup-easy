@@ -1,0 +1,33 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Mes expériences à valoriser – Carnet de route</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commun.css"><style>
+html,body{background:transparent}
+#s{width:860px;height:675px;left:0;top:0;transform:none;position:absolute}
+#page{position:absolute;left:0;top:10px;width:860px;height:655px;background:var(--papier);border-radius:16px;padding:20px 24px 16px 40px;overflow:hidden;box-sizing:border-box}
+#page:before{content:"";position:absolute;left:28px;top:0;bottom:0;width:2px;background:#f4b3c6}
+h2{margin:0;font:400 32px/1 'Patrick Hand',cursive;color:var(--rose)}
+.st{font:400 18px 'Patrick Hand',cursive;color:#6a8791;margin:4px 0 10px}
+table{width:100%;border-collapse:separate;border-spacing:10px 0;margin-left:-10px;width:calc(100% + 20px)}
+th{font:400 21px/1.15 'Patrick Hand',cursive;color:var(--canard);text-align:left;padding:0 4px 6px;vertical-align:bottom}
+td{padding:0 0 12px;vertical-align:top}
+td{position:relative}td .num{position:absolute;left:-14px;top:2px;font:400 18px 'Patrick Hand',cursive;color:var(--rose)}
+textarea{width:100%;height:128px;box-sizing:border-box;resize:none;border:0;outline:none;background:repeating-linear-gradient(transparent 0 31px,#d9caca 31px 32px);font:400 20px/32px 'Patrick Hand',cursive;color:var(--encre);padding:0 4px;border-radius:4px}
+textarea:focus{background-color:rgba(111,179,195,.08)}
+textarea::placeholder{color:#b0bec3}
+#actions{position:absolute;right:20px;top:16px;display:flex;gap:8px}
+#actions .btn{font-size:14px;padding:9px 16px;box-shadow:none}
+#warn{position:absolute;left:40px;right:24px;bottom:34px;font:400 17px/1.3 'Patrick Hand',cursive;color:#8a4b00;background:#fff3d6;border-radius:10px;padding:7px 12px}
+#tamp{position:absolute;right:30px;bottom:10px;font:400 15px 'Patrick Hand',cursive;color:var(--canard);opacity:.6}
+@media print{@page{size:A4 landscape;margin:12mm}body{background:#fff}#s{position:static;width:auto;height:auto}#page{position:static;width:auto;height:auto;padding:0 0 0 18px}#page:before{left:4px}#actions,#warn{display:none!important}textarea{height:150px}}
+</style></head><body><div id="s"><div id="page">
+<div id="actions"><button class="btn" onclick="window.print()">📥 Télécharger ma fiche de travail</button></div>
+<h2>📝 Mes expériences à valoriser</h2><div class="st">Carnet de route Terminale · Mission 3 · Je valorise mon parcours.</div>
+<table><thead><tr><th>Mon expérience</th><th>Ce que j’ai fait concrètement</th><th>Ce que j’ai appris ou développé</th></tr></thead><tbody id="tb"></tbody></table>
+<div id="warn">⚠️ Tes réponses ne sont pas sauvegardées automatiquement. Télécharge ta fiche et complète-la dans ton document personnel.</div>
+<div id="tamp">Parcoursup'easy · Mission 3</div>
+</div></div>
+<script src="commun.js"></script><script>
+var tb=document.getElementById('tb'), h='';
+for(var r=0;r<3;r++){ h+='<tr>'; for(var c=0;c<3;c++) h+='<td>'+(c===0?'<span class="num">'+(r+1)+'.</span>':'')+'<textarea data-k="'+r+'-'+c+'"></textarea></td>'; h+='</tr>'; }
+tb.innerHTML=h;
+</script></body></html>
