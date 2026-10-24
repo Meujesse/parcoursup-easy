@@ -1,0 +1,51 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Checklist – Parcoursup'easy</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commun.css"><style>
+html,body{background:transparent}
+#s{width:860px;height:675px;left:0;top:0;transform:none;position:absolute}
+#page{position:absolute;left:0;top:10px;width:860px;height:655px;background:var(--papier);border-radius:16px;padding:22px 28px 16px 52px;overflow:hidden;box-sizing:border-box}
+#page:before{content:"";position:absolute;left:34px;top:0;bottom:0;width:2px;background:#f4b3c6}
+h2{margin:0;font:400 34px/1 'Patrick Hand',cursive;color:var(--rose)}
+.st{font:400 18px 'Patrick Hand',cursive;color:#6a8791;margin:4px 0 8px}
+#liste label{display:flex;gap:14px;align-items:center;font:400 var(--fl,22px)/1.2 'Patrick Hand',cursive;color:var(--encre);border-bottom:2px solid #eadfdf;padding:var(--pl,6px) 4px;cursor:pointer}
+#liste input{appearance:none;width:26px;height:26px;border:3px solid var(--canard);border-radius:7px;flex:0 0 26px;margin:0;display:grid;place-content:center;cursor:pointer;background:#fff}
+#liste input:checked{background:var(--vert);border-color:var(--vert)}
+#liste input:checked:after{content:"✓";color:#fff;font:800 17px Montserrat,sans-serif}
+#liste label.ok{color:#5b7c86}
+#compte{margin-top:12px;font:800 17px Montserrat,sans-serif;color:var(--canard)}
+#msg{font:400 19px/1.3 'Patrick Hand',cursive;color:#8a4b00;background:#fff3d6;border-radius:10px;padding:6px 12px;margin-top:6px}
+#msg:empty{display:none}
+#actions{position:absolute;left:52px;bottom:34px;display:flex;gap:8px}
+#actions .btn{font-size:14px;padding:9px 16px;box-shadow:none}
+#actions .btn.sec{border:2px solid var(--canard)}
+#tamp{position:absolute;right:30px;bottom:10px;font:400 15px 'Patrick Hand',cursive;color:var(--canard);opacity:.6}
+@media print{body{background:#fff}#s{position:static;width:auto;height:auto}#page{position:static;width:auto;height:auto}#actions,#msg{display:none!important}}
+</style></head><body><div id="s"><div id="page">
+<div id="actions"></div>
+<h2 id="titre"></h2><div class="st" id="st"></div>
+<div id="liste"></div>
+<div id="compte"></div><div id="msg"></div>
+<div id="tamp">Parcoursup'easy · Mission 3</div>
+</div></div>
+<script src="commun.js"></script><script>
+(function(){
+ // Contenu : document de Laurence, mission 3, écrans 20 (grille de la lettre) et 23 (checklist du dossier)
+ var L={
+  lettre:{titre:'✅ Ma lettre est-elle prête ?',st:'Grille d’auto-évaluation de ma lettre · Coche les éléments que tu as réellement contrôlés.',fl:'25px',pl:'10px',
+   items:['J’ai vérifié le nom et les caractéristiques de la formation.','J’explique ce qui m’intéresse réellement.','J’utilise au moins un exemple personnel pertinent.','Je fais le lien entre mon parcours et la formation.','Mes arguments sont précis et sincères.','J’ai relu l’orthographe et la syntaxe.','J’ai respecté les consignes et la limite de caractères indiquées.'],
+   reste:'Continue à vérifier les points restants avant de considérer ta lettre comme prête.',bouton:'📥 Télécharger la grille complète'},
+  dossier:{titre:'✅ Ma checklist de vérification',st:'Coche chaque élément après vérification sur Parcoursup.',fl:'23px',pl:'6px',
+   items:['J’ai vérifié mes informations personnelles et scolaires.','J’ai relu les rubriques de mon dossier.','J’ai vérifié la cohérence de mes informations.','J’ai renseigné les rubriques pertinentes pour mon parcours.','J’ai relu mes lettres et vérifié leur personnalisation.','J’ai contrôlé les consignes propres à chaque formation.','J’ai vérifié les éventuels documents demandés.','J’ai vérifié les échéances officielles.','J’ai identifié les éléments qui restent à corriger.'],
+   reste:'Certains contrôles restent à effectuer. Reprends ton dossier avant de poursuivre.',bouton:'📥 Télécharger ma checklist',
+   guide:['📘 Guide : les 20 erreurs','https://drive.google.com/file/d/13bo7kLY4pAKR6ibrVNjLztOFGJHdD_tY/view']}};
+ var id=new URLSearchParams(location.search).get('l')||'lettre', d=L[id]||L.lettre, cle='pe_m3_chk_'+id;
+ document.documentElement.style.setProperty('--fl',d.fl); document.documentElement.style.setProperty('--pl',d.pl);
+ document.getElementById('titre').textContent=d.titre; document.getElementById('st').textContent=d.st;
+ var act=document.getElementById('actions'); if(d.guide) act.innerHTML+='<a class="btn sec" href="'+d.guide[1]+'" target="_blank" rel="noopener" style="text-decoration:none;background:#fff;color:var(--canard)">'+d.guide[0]+'</a>'; act.innerHTML+='<button class="btn" onclick="window.print()">'+d.bouton+'</button>';
+ var coche=PE.get(cle,[]), liste=document.getElementById('liste');
+ liste.innerHTML=d.items.map(function(t,k){ return '<label><input type="checkbox" data-k="'+k+'"'+(coche.indexOf(k)>=0?' checked':'')+'>'+t+'</label>'; }).join('');
+ function maj(){ var n=0; [].forEach.call(liste.querySelectorAll('input'),function(c){ c.parentNode.classList.toggle('ok',c.checked); if(c.checked) n++; }); document.getElementById('compte').textContent=n+' point(s) vérifié(s) sur '+d.items.length+'.'; document.getElementById('msg').textContent=n<d.items.length?d.reste:''; }
+ liste.addEventListener('change',function(){ coche=[].filter.call(liste.querySelectorAll('input'),function(c){return c.checked;}).map(function(c){return +c.dataset.k;}); PE.set(cle,coche); maj(); });
+ maj();
+})();
+</script></body></html>
