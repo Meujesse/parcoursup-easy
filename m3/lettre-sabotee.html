@@ -1,0 +1,61 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>La lettre sabotée</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commun.css"><style>
+html,body{background:transparent}
+#lettre{position:absolute;left:40px;top:128px;width:600px;height:530px;background:var(--papier);border-radius:10px;padding:22px 30px 18px 52px;box-sizing:border-box;transform:rotate(-.6deg)}
+#lettre:before{content:"";position:absolute;left:36px;top:0;bottom:0;width:2px;background:#f4b3c6}
+#lettre h3{margin:0 0 6px;font:800 15px Montserrat,sans-serif;color:var(--canard);letter-spacing:.02em}
+#lettre p{margin:0 0 8px;font:400 23px/34px 'Patrick Hand',cursive;color:var(--encre)}
+#lettre p.z{cursor:pointer;border-radius:6px;padding:0 6px;margin-left:-6px;transition:background .15s;position:relative}
+#lettre p.z:hover{background:#fff1b8}
+#lettre p.z.vu{background:#ffd9e4;color:#9b1440}
+#lettre p.z .n{display:none;position:absolute;left:-34px;top:4px;width:24px;height:24px;border-radius:50%;background:var(--rose);color:#fff;font:800 13px/24px Montserrat,sans-serif;text-align:center}
+#lettre p.z.vu .n{display:block}
+#droite{position:absolute;left:670px;top:128px;width:490px}
+#cadenas{display:flex;gap:8px;margin-bottom:12px}
+#cadenas span{flex:1;height:54px;border-radius:12px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:24px;transition:background .3s}
+#cadenas span.ok{background:#fff}
+#compte{font:800 17px Montserrat,sans-serif;color:#fff;margin-bottom:10px}
+#exp{background:#fff;border-radius:16px;padding:18px 22px;min-height:230px;box-sizing:border-box}
+#exp .t{font:800 18px/1.3 Montserrat,sans-serif;color:var(--rose);margin-bottom:8px}
+#exp .p{font:400 19px/1.35 'Patrick Hand',cursive;color:#9b1440;background:#ffe7ee;border-radius:8px;padding:6px 10px;margin-bottom:12px}
+#exp .l{display:flex;gap:12px;align-items:flex-start;font:500 16px/1.45 Montserrat,sans-serif;color:var(--encre)}
+#exp .l img{width:56px;height:56px;border-radius:50%;object-fit:cover;object-position:top;background:#cfe7ee;flex:0 0 56px}
+#exp .vide{font:400 21px/1.4 'Patrick Hand',cursive;color:#7d969e;text-align:center;padding-top:70px}
+#bravo{display:none;margin-top:12px;background:#d6f5e8;border-radius:16px;padding:14px 20px;font:500 16px/1.45 Montserrat,sans-serif;color:#0f5c47;border-left:6px solid var(--vert)}
+#bravo b{display:block;font:800 17px Montserrat,sans-serif;margin-bottom:4px}
+</style></head><body><div id="s">
+<div id="lettre">
+ <h3>Candidature en licence de psychologie</h3>
+ <p>Madame, Monsieur,</p>
+ <div id="corps"></div>
+ <p>Cordialement.</p>
+</div>
+<div id="droite">
+ <div id="cadenas"></div>
+ <div id="compte"></div>
+ <div id="exp"><div class="vide">Clique sur un passage suspect de la lettre 🔎</div></div>
+ <div id="bravo"></div>
+</div>
+</div>
+<script src="commun.js"></script><script>
+(function(){
+ // Contenu : document de Laurence, mission 3, écran 14
+ var Z=[
+  ['Je vous écris pour intégrer votre formation, qui m’intéresse beaucoup.','Une entrée trop générale','Votre formation m’intéresse beaucoup.','Cette phrase ne précise pas ce qui t’intéresse. Cite un élément réel de la formation et explique pourquoi.'],
+  ['Depuis toujours, je suis passionné par la psychologie et je sais que c’est ma vocation.','Une affirmation sans preuve','Depuis toujours, je suis passionné par la psychologie.','Cette affirmation peut être sincère. Pour la rendre convaincante, explique ce qui a éveillé ton intérêt.'],
+  ['Je suis sérieux, motivé, dynamique, curieux et très travailleur.','Une liste d’adjectifs','Sérieux, motivé, dynamique, curieux et très travailleur.','Une liste de qualités ne suffit pas. Illustre celles que tu souhaites mettre en avant avec un exemple.'],
+  ['Votre formation est la meilleure et me permettra de réussir ma carrière.','Une affirmation excessive','Votre formation est la meilleure.','Évite les jugements généraux. Explique ce qui t’intéresse dans le programme ou les modalités d’enseignement.'],
+  ['Je pense que je serai un excellent étudiant et que je réussirai tous mes examens.','Une promesse irréaliste','Je réussirai tous mes examens.','Tu ne peux pas garantir tes résultats. Présente plutôt tes efforts, tes acquis ou ta façon de travailler.'],
+  ['Je vous remercie de m’accepter dans votre établissement.','Une demande inadaptée','Je vous remercie de m’accepter.','Une lettre présente ta candidature et ta motivation. Tu peux conclure poliment sans demander directement ton admission.']];
+ var BRAVO='Enquête réussie ! Tu sais maintenant repérer plusieurs formulations qui rendent une lettre moins convaincante. Voyons comment les améliorer.';
+ var vus=[], ordre=[];
+ var corps=document.getElementById('corps'), exp=document.getElementById('exp'), cad=document.getElementById('cadenas'), compte=document.getElementById('compte');
+ Z.forEach(function(z,i){ var p=document.createElement('p'); p.className='z'; p.innerHTML='<span class="n"></span>'+z[0]; p.onclick=function(){ voir(i,p); }; corps.appendChild(p); });
+ function maj(){ cad.innerHTML=Z.map(function(_,i){ return '<span class="'+(i<vus.length?'ok':'')+'">'+(i<vus.length?'✅':'🔒')+'</span>'; }).join(''); compte.textContent='Erreurs trouvées : '+vus.length+' / 6'; }
+ function voir(i,p){ if(vus.indexOf(i)<0){ vus.push(i); p.classList.add('vu'); p.querySelector('.n').textContent=vus.length; }
+  var z=Z[i]; exp.className=''; exp.innerHTML='<div class="t">Erreur '+(i+1)+' · '+z[1]+'</div><div class="p">« '+z[2]+' »</div><div class="l"><img src="img/lisa-avatar.png" alt=""><div>'+z[3]+'</div></div>';
+  maj(); if(vus.length===6){ var b=document.getElementById('bravo'); b.innerHTML='<b>🎉 '+BRAVO.split(' ! ')[0]+' !</b>'+BRAVO.split(' ! ').slice(1).join(' ! '); b.style.display='block'; PE.set('pe_m3_lettre_ok',1); } }
+ maj();
+})();
+</script></body></html>
