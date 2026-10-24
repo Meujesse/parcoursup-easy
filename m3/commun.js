@@ -10,7 +10,7 @@ b.onclick=function(){if(a.paused){a.play();b.style.background='var(--canard)';}e
 a.onended=function(){b.style.background='var(--rose)';};s.appendChild(b);})();
 /* Carte de l'ascension : progression par zone + retour à la carte */
 (function(){
-PE.GENIALLY='6add08e496a85650698b6efb'; PE.CARTE_SLIDE='';
+PE.GENIALLY='6add08e496a85650698b6efb'; PE.CARTE_SLIDE='a85af7c2-864b-4bea-84ec-ace0d93c2af6';
 PE.zones=function(){return PE.get('pe_m3_zones',{done:[]});};
 PE.zoneDone=function(n){var z=PE.zones(); if(z.done.indexOf(n)<0){z.done.push(n); PE.set('pe_m3_zones',z);} return z;};
 PE.goSlide=function(id){var base=null; try{var u=new URL(document.referrer); if(/genially\.com$/.test(u.hostname)&&/view/.test(u.pathname+u.hostname)){u.searchParams.set('idSlide',id); base=u.href;}}catch(e){} if(!base) base='https://view.genially.com/'+PE.GENIALLY+'?idSlide='+id; try{window.parent.location.href=base;}catch(e){window.open(base,'_top');}};
