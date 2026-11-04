@@ -76,6 +76,8 @@ document.fonts.ready.then(function(){
   if(part.length) cur.push(el([b[0],part.join('').trim()],(cur.length===0?'premier ':'')+(suite?'suite':'')));
  });
  if(cur.length) flush();
+ // pas d'intertitre seul en bas de page : on le reporte en haut de la page suivante si elle a la place
+ for(var pi=0;pi<pages.length-1;pi++){ var pg0=pages[pi]; if(pg0.length>1 && /^<h3>/.test(pg0[pg0.length-1])){ var essai=[pg0[pg0.length-1]].concat(pages[pi+1].map(function(h){ return h.replace(' premier','').replace('class="e premier"','class="e"'); })); if(fits(essai.join(''))){ pages[pi+1]=essai; pg0.pop(); } } }
  if(d.lisa){ pages.push(['<div class="pc" style="height:'+H+'px"><div class="postit"><img src="img/lisa-avatar.png" alt=""><b>Le conseil de Lisa</b>'+d.lisa+'</div></div>']); }
  if(pages.length%2) pages.push([]);
  var max=pages.length/2-1, spread=+(PE.get('pe_m3_rub_'+id,0))||0; if(spread>max) spread=0; var qp=new URLSearchParams(location.search).get('p'); if(qp!==null) spread=Math.min(max,+qp);
