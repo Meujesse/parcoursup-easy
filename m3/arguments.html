@@ -8,6 +8,7 @@ html,body{background:transparent}
 .arg.choisi{border-color:var(--rose)}
 .arg.bien{border-color:var(--vert);background:#d6f5e8}
 .arg.moyen{border-color:var(--orange);background:#ffe9cf}
+.arg .note{display:block;font-style:normal;font-size:16px;color:#0f5c47;margin-top:2px}
 #cols{position:absolute;left:40px;top:316px;width:1120px;height:276px;display:flex;gap:14px}
 .col{flex:1;overflow:auto;border-radius:16px;background:rgba(255,255,255,.22);border:3px dashed rgba(255,255,255,.7);padding:10px;display:flex;flex-direction:column;gap:8px}
 .col.vise{background:rgba(255,255,255,.45)}
@@ -34,7 +35,7 @@ html,body{background:transparent}
  var A=[['A','J’aime l’informatique.',1],['B','J’ai créé un petit programme pour automatiser une tâche dans un projet personnel.',0],['C','Votre formation est très bien.',2],['D','Je souhaite comprendre comment concevoir et développer des applications en équipe.',0],['E','Je suis le meilleur candidat.',2],['F','J’ai apprécié un projet de programmation au lycée et je souhaite approfondir ces compétences.',0]];
  var FB='Un argument devient plus convaincant quand il repose sur un fait, une expérience ou un intérêt expliqué.';
  var place={}, choisi=null; var pool=document.getElementById('pool'), cols=[].slice.call(document.querySelectorAll('.col')), retour=document.getElementById('retour');
- function carte(a,etat){ var d=document.createElement('div'); d.className='arg'+(etat?' '+etat:'')+(choisi===a[0]?' choisi':''); d.innerHTML='<b>'+a[0]+'</b><span>« '+a[1]+' »</span>'; d.dataset.k=a[0]; brancher(d,a[0]); return d; }
+ function carte(a,etat){ var d=document.createElement('div'); d.className='arg'+(etat?' '+etat:'')+(choisi===a[0]?' choisi':''); var note=(etat==='bien'&&a[0]==='A')?'<em class="note">À développer : convaincant si l’élève explique ce qui l’intéresse.</em>':''; d.innerHTML='<b>'+a[0]+'</b><span>« '+a[1]+' »'+note+'</span>'; d.dataset.k=a[0]; brancher(d,a[0]); return d; }
  function dessine(verifie){ pool.innerHTML=''; cols.forEach(function(c){ [].slice.call(c.querySelectorAll('.arg')).forEach(function(x){x.remove();}); });
   A.forEach(function(a){ var c=place[a[0]]; if(c===undefined) pool.appendChild(carte(a)); else cols[c].appendChild(carte(a,verifie?(a[2]===c?'bien':'moyen'):'')); }); }
  function poser(k,c){ place[k]=c; choisi=null; retour.className=''; dessine(); }
