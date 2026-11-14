@@ -50,7 +50,7 @@ html,body{background:transparent}
 <div class="txt" id="mesure"></div>
 <div id="nav"><button class="btn sec" id="prev">◀ Page précédente</button><button class="btn" id="next">Tourner la page ▶</button></div>
 </div>
-<script src="commun.js"></script><script src="rubrique-data.js"></script><script>
+<script src="commun.js"></script><script src="rubrique-data.js?v=5"></script><script>
 document.fonts.ready.then(function(){
  var id=+(new URLSearchParams(location.search).get('c')||0); var d=window.RUBRIQUE.find(function(x){return x.id===id;})||window.RUBRIQUE[0];
  var H=504, S=36; // hauteur utile d'une page (14 lignes)
