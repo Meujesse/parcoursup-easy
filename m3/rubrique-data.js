@@ -95,7 +95,7 @@ window.RUBRIQUE=[
  ['h3','Exemple à améliorer'],
  ['e','Je fais du basket depuis plusieurs années.'],
  ['n','Que pourrais-tu ajouter pour mieux décrire cette expérience ?'],
- ['br'],
+ ['tourne','Écris ta version de cette phrase dans ton brouillon, puis tourne la page pour découvrir un exemple amélioré.'],
  ['h3','Exemple amélioré'],
  ['e','Je pratique le basket depuis 4 ans. Les entraînements et les matchs m’ont appris à coopérer, à persévérer et à tenir mes engagements.'],
  ['n','On passe ainsi d’une activité à une compétence.']

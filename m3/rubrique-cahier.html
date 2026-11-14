@@ -62,6 +62,7 @@ document.fonts.ready.then(function(){
  function flush(){ pages.push(cur); cur=[]; }
  d.blocs.forEach(function(b){
   if(b[0]==='br'){ if(cur.length) flush(); return; }
+  if(b[0]==='tourne'){ if(cur.length) flush(); var pi=['<div class="pc" style="height:'+H+'px"><div class="postit"><img src="img/lisa-avatar.png" alt=""><b>À toi d’abord !</b>'+nb(b[1])+'</div></div>']; if(pages.length%2===1) pages.push(pi); else { pages.push(pi); pages.push([]); } return; }
   var first=cur.length===0?' premier':'';
   var h=el(b,first.trim()); if(fits(cur.concat([h]).join(''))){ cur.push(h); return; }
   if(b[0]==='h3'||b[0]==='h2'){ flush(); cur.push(el(b)); return; }
