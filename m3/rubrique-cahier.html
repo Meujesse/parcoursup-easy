@@ -8,13 +8,14 @@ html,body{background:transparent}
 .page.g{left:0;border-radius:14px 4px 4px 14px}
 .page.d{left:560px;border-radius:4px 14px 14px 4px}
 .page.g:before{content:"";position:absolute;left:30px;top:0;bottom:0;width:2px;background:#f4b3c6}
-:root{--s:36px;--f:22px}
+:root{--s:42px;--f:25px}
 .lignes{position:absolute;left:44px;right:34px;top:30px;bottom:92px;background:repeating-linear-gradient(transparent 0 calc(var(--s) - 2px),#c9b6b6 calc(var(--s) - 2px) var(--s));background-position:0 var(--lo,0px)}
 .txt{position:relative;font:400 var(--f)/var(--s) 'Patrick Hand',cursive;color:var(--encre)}
 .txt h2{margin:0;font:400 calc(var(--f)*1.2)/var(--s) 'Patrick Hand',cursive;color:var(--rose)}
 .txt h3{margin:0;font:400 calc(var(--f)*1.08)/var(--s) 'Patrick Hand',cursive;color:var(--canard)}
 .txt p{margin:0}
-.txt p.l{padding-left:22px;text-indent:-22px}
+.txt p.l{padding-left:24px;text-indent:-24px}
+.txt p.n + p.n,.txt p.e + p.n,.txt p.n + p.l,.txt p.l + p.n{margin-top:var(--s)}
 .txt p.e{color:#2d6f80;margin-top:var(--s)}
 .txt p.e:before{content:"« "}.txt p.e:after{content:" »"}
 .txt p.e.suite:before,.txt p.e.coupe:after{content:""}
@@ -50,13 +51,13 @@ html,body{background:transparent}
 <div class="txt" id="mesure"></div>
 <div id="nav"><button class="btn sec" id="prev">◀ Page précédente</button><button class="btn" id="next">Tourner la page ▶</button></div>
 </div>
-<script src="commun.js"></script><script src="rubrique-data.js?v=5"></script><script>
+<script src="commun.js"></script><script src="rubrique-data.js?v=7"></script><script>
 document.fonts.ready.then(function(){
  var id=+(new URLSearchParams(location.search).get('c')||0); var d=window.RUBRIQUE.find(function(x){return x.id===id;})||window.RUBRIQUE[0];
- var H=504, S=36; // hauteur utile d'une page (14 lignes)
+ var H=504, S=42; // hauteur utile d'une page (14 lignes)
  var M=document.getElementById('mesure');
  function nb(x){ return String(x).replace(/« /g,'«\u00a0').replace(/ ([»:?!;])/g,'\u00a0$1'); }
- function el(b,cls){ var t=b[0]; b=[t,nb(b[1])]; if(t==='h2'||t==='h3') return '<'+t+'>'+b[1]+'</'+t+'>'; var c={n:'',p:'l',e:'e'}[t]; return '<p class="'+(c+' '+(cls||'')).trim()+'">'+b[1]+'</p>'; }
+ function el(b,cls){ var t=b[0]; b=[t,nb(b[1])]; if(t==='h2'||t==='h3') return '<'+t+'>'+b[1]+'</'+t+'>'; var c={n:'n',p:'l',e:'e'}[t]; return '<p class="'+(c+' '+(cls||'')).trim()+'">'+b[1]+'</p>'; }
  function fits(html){ M.innerHTML=html; return M.scrollHeight<=H+1; }
  var pages=[], cur=['<h2>'+d.emoji+' '+d.nom+'</h2>'];
  function flush(){ pages.push(cur); cur=[]; }
@@ -87,7 +88,7 @@ document.fonts.ready.then(function(){
  var busy=false;
  function go(dir){ if(busy) return; var n=spread+dir; if(n<0||n>max) return; busy=true; flip.className=dir>0?'on':'back on'; setTimeout(function(){ spread=n; paint(); },350); setTimeout(function(){ flip.className=''; busy=false; },720); }
  document.getElementById('next').onclick=function(){go(1);}; document.getElementById('prev').onclick=function(){go(-1);};
- function calibre(){ try{ var c=document.createElement('canvas').getContext('2d'); var F2=22; c.font=F2+'px "Patrick Hand"'; var m=c.measureText('Hg'); var asc=m.fontBoundingBoxAscent||F2*0.8, desc=m.fontBoundingBoxDescent||F2*0.25; var base=(S-(asc+desc))/2+asc; document.documentElement.style.setProperty('--lo',(Math.round(base+3)-S)+'px'); }catch(e){} }
+ function calibre(){ try{ var c=document.createElement('canvas').getContext('2d'); var F2=25; c.font=F2+'px "Patrick Hand"'; var m=c.measureText('Hg'); var asc=m.fontBoundingBoxAscent||F2*0.8, desc=m.fontBoundingBoxDescent||F2*0.25; var base=(S-(asc+desc))/2+asc; document.documentElement.style.setProperty('--lo',(Math.round(base+3)-S)+'px'); }catch(e){} }
  calibre(); paint();
 });
 </script></body></html>
