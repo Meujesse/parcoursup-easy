@@ -592,15 +592,22 @@ function inspire(){
              {transform:'scale(1,1)'}],
             {duration:2600, easing:'ease-in-out', composite:'add'});
 }
+const SANS_CLIGNEMENT = ['joie','bravo'];
 function clignote(duree){
-  const p = dolly.querySelectorAll('.pose.vu .paup');
-  if(!p.length || doux) return;
+  const v = dolly.querySelector('.pose.vu');
+  if(!v || doux || SANS_CLIGNEMENT.includes(v.dataset.pose)) return;
+  const p = v.querySelectorAll('.paup');
+  if(!p.length) return;
+  const d = duree || (195 + Math.random()*45);
+  v.querySelectorAll('.oeil').forEach(el => el.animate([
+    {opacity:1, offset:0}, {opacity:0, offset:.12}, {opacity:0, offset:.7}, {opacity:1, offset:1}
+  ], {duration: d}));
   p.forEach(el => el.animate([
     {opacity:0, offset:0,   easing:'cubic-bezier(.45,0,.85,1)'},
     {opacity:1, offset:.19, easing:'linear'},
     {opacity:1, offset:.55, easing:'cubic-bezier(.1,0,.35,1)'},
     {opacity:0, offset:1}
-  ], {duration: duree || (195 + Math.random()*45)}));
+  ], {duration: d}));
 }
 
 /* =====================================================================
