@@ -9,9 +9,9 @@ html,body{background:transparent}
 .exp .nom{flex:0 0 230px;font:700 16px/1.25 Montserrat,sans-serif;color:var(--canard)}
 .exp .nom span{font-size:24px;margin-right:6px;vertical-align:-3px}
 .exp .zone{flex:1;height:58px;border:2px dashed #b9d3da;border-radius:12px;display:flex;flex-wrap:wrap;align-content:center;gap:6px;padding:4px 8px;overflow:hidden}
-.exp .zone:empty:before{content:"Dépose ici les compétences";font:400 19px 'Patrick Hand',cursive;color:#9fb6bd;margin:auto}
-#palette{position:absolute;left:800px;top:150px;width:360px}
-#palette h3{margin:0 0 10px;font:800 17px Montserrat,sans-serif;color:#fff}
+.exp .zone:empty:before{content:"⬇ Dépose ici les compétences";font:italic 500 14px Montserrat,sans-serif;color:#8fb0b8;margin:auto}
+#palette{position:absolute;left:796px;top:150px;width:352px;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.35);border-radius:20px;padding:16px 16px 14px}
+#palette h3{margin:0 0 6px;font:800 18px Montserrat,sans-serif;color:#fff}
 .chip{display:inline-flex;align-items:center;border-radius:999px;padding:8px 14px;margin:0 6px 8px 0;font:700 15px Montserrat,sans-serif;background:#fff;color:var(--canard);cursor:grab;user-select:none;border:2px solid #fff;touch-action:none}
 .chip.choisi{background:var(--rose);color:#fff;border-color:var(--rose)}
 .zone .chip{margin:0;padding:5px 10px;font-size:13px;cursor:pointer;background:#e7f3f6;border-color:#e7f3f6}
@@ -19,13 +19,14 @@ html,body{background:transparent}
 .zone .chip.moyen{background:#ffe9cf;border-color:var(--orange);color:#8a4a07}
 .zone .chip:after{content:"×";margin-left:6px;opacity:.5}
 .fantome{position:fixed;pointer-events:none;z-index:9;opacity:.9;transform:rotate(-3deg)}
-#retour{margin-top:6px;min-height:96px;background:#fffdf7;border-radius:14px;padding:12px 16px;font:400 19px/1.3 'Patrick Hand',cursive;color:var(--encre);display:none}
+#retour{margin-top:10px;background:#fffdf7;border-radius:14px;padding:12px 16px;font:500 14px/1.45 Montserrat,sans-serif;color:var(--encre);display:none}
 #retour.bien{display:block;border-left:6px solid var(--vert)}
 #retour.moyen{display:block;border-left:6px solid var(--orange)}
 #actions{margin-top:10px;display:flex;gap:10px}
 #actions .btn{box-shadow:none;font-size:15px;padding:10px 18px}
 #actions .btn.sec{border:2px solid #fff}
-#aide{font:400 18px/1.3 'Patrick Hand',cursive;color:#fff;margin:4px 0 8px}
+#aide{font:500 13px/1.4 Montserrat,sans-serif;color:#eaf6f8;margin:0 0 12px}
+.chip:before{content:attr(data-ico);margin-right:6px;font-size:1.05em}
 </style></head><body><div id="s">
 <div id="plateau"></div>
 <div id="palette"><h3>Les compétences</h3><div id="aide">Glisse une compétence sur une expérience (ou clique sur la compétence, puis sur l’expérience).</div><div id="chips"></div>
@@ -41,6 +42,7 @@ html,body{background:transparent}
   ['🎸','Pratiquer la guitare régulièrement',['Régularité et persévérance','Créativité']],
   ['🏠','Aider un proche dans certaines tâches',['Sens des responsabilités','Organisation','Autonomie']]];
  var COMP=['Coopération','Organisation','Créativité','Régularité et persévérance','Sens des responsabilités','Communication','Autonomie'];
+ var ICO={'Coopération':'🤝','Organisation':'🗂️','Créativité':'💡','Régularité et persévérance':'🔁','Sens des responsabilités':'🛡️','Communication':'💬','Autonomie':'🧭'};
  var OK='Bien joué ! Tu vois qu’une expérience peut révéler plusieurs compétences. Pour ton dossier, choisis uniquement celles que tu peux illustrer.';
  var KO='Cette association est possible dans certains cas. Demande-toi ce que la personne a réellement fait et appris.';
  var etat=PE.get('pe_m3_comp',null)||EXP.map(function(){return [];});
@@ -48,13 +50,13 @@ html,body{background:transparent}
  function save(){ PE.set('pe_m3_comp',etat); }
  function dessine(verifie){
   plateau.innerHTML=''; EXP.forEach(function(e,i){ var d=document.createElement('div'); d.className='exp'; d.dataset.i=i; d.innerHTML='<div class="nom"><span>'+e[0]+'</span>'+e[1]+'</div><div class="zone"></div>'; var z=d.querySelector('.zone');
-   etat[i].forEach(function(c){ var b=document.createElement('span'); b.className='chip'+(verifie?(e[2].indexOf(c)>=0?' bien':' moyen'):''); b.textContent=c; b.title='Retirer'; b.onclick=function(ev){ ev.stopPropagation(); etat[i]=etat[i].filter(function(x){return x!==c;}); save(); dessine(); retour.className=''; }; z.appendChild(b); });
+   etat[i].forEach(function(c){ var b=document.createElement('span'); b.className='chip'+(verifie?(e[2].indexOf(c)>=0?' bien':' moyen'):''); b.textContent=c; b.dataset.ico=ICO[c]||''; b.title='Retirer'; b.onclick=function(ev){ ev.stopPropagation(); etat[i]=etat[i].filter(function(x){return x!==c;}); save(); dessine(); retour.className=''; }; z.appendChild(b); });
    if(verifie){ var n=etat[i].filter(function(c){return e[2].indexOf(c)>=0;}).length; if(n>=Math.min(2,e[2].length)) d.classList.add('ok'); }
    d.onclick=function(){ if(choisi){ ajoute(i,choisi); } }; plateau.appendChild(d); });
  }
  function ajoute(i,c){ if(etat[i].indexOf(c)<0&&etat[i].length<4){ etat[i].push(c); save(); } choisi=null; marque(); retour.className=''; dessine(); }
  function marque(){ [].forEach.call(chips.children,function(b){ b.classList.toggle('choisi',b.textContent===choisi); }); }
- COMP.forEach(function(c){ var b=document.createElement('span'); b.className='chip'; b.textContent=c; chips.appendChild(b);
+ COMP.forEach(function(c){ var b=document.createElement('span'); b.className='chip'; b.textContent=c; b.dataset.ico=ICO[c]||''; chips.appendChild(b);
   b.addEventListener('pointerdown',function(ev){ ev.preventDefault(); var sx=ev.clientX, sy=ev.clientY, f=null, cible=null;
    function mv(e){ if(!f&&Math.hypot(e.clientX-sx,e.clientY-sy)>6){ f=b.cloneNode(true); f.classList.add('fantome'); var k=b.getBoundingClientRect().width/b.offsetWidth; f.style.transform='scale('+k+') rotate(-3deg)'; f.style.transformOrigin='0 0'; document.body.appendChild(f); }
     if(f){ f.style.left=(e.clientX-10)+'px'; f.style.top=(e.clientY-14)+'px'; var el=document.elementFromPoint(e.clientX,e.clientY); var x=el&&el.closest('.exp'); if(cible&&cible!==x) cible.classList.remove('vise'); cible=x; if(x) x.classList.add('vise'); } }
