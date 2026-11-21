@@ -91,14 +91,15 @@
   function end(){ dragging=false; canvas.classList.remove('drag'); }
   canvas.addEventListener('pointerup',end); canvas.addEventListener('pointercancel',end);
 
-  function resize(){ var w=innerWidth,h=innerHeight; renderer.setSize(w,h,false);
+  var __wh='';
+  function resize(){ var w=innerWidth,h=innerHeight; if(!w||!h||__wh===w+'x'+h) return; __wh=w+'x'+h; renderer.setSize(w,h,false);
     camera.aspect=w/h;
     // on garde toujours la medaille entiere dans le cadre, meme en format non carre
     var need=2.35;                       // hauteur occupee par la medaille + le ruban
     var fovV=2*Math.atan((need/2)/4.75)*180/Math.PI;
     if(camera.aspect<1){ fovV=2*Math.atan((need/2)/(4.75*camera.aspect))*180/Math.PI; }
     camera.fov=Math.min(60,fovV); camera.updateProjectionMatrix(); }
-  addEventListener('resize',resize); resize();
+  addEventListener('resize',resize); setInterval(resize,400); resize();
 
   var t0=performance.now(), introT=0;            // tour complet a l'apparition, pour montrer la 3D
   (function loop(now){

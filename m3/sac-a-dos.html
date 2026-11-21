@@ -34,5 +34,5 @@ html,body{margin:0;background:transparent;font-family:Montserrat,sans-serif;over
 </div>
 <div id="suite">… et il reste de la place pour la suite de l’aventure !</div>
 </div>
-<script>function fit(){var k=Math.min(innerWidth/1100,innerHeight/530);document.getElementById('s').style.transform='scale('+k+')';}addEventListener('resize',fit);fit();</script>
+<script>var __k=-1;function fit(){if(!innerWidth||!innerHeight)return;var k=Math.min(innerWidth/1100,innerHeight/530);if(k===__k)return;__k=k;document.getElementById('s').style.transform='scale('+k+')';}addEventListener('resize',fit);addEventListener('pageshow',fit);setInterval(fit,400);fit();</script>
 </body></html>

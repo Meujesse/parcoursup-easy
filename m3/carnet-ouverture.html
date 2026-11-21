@@ -55,7 +55,7 @@ h1 span{color:#ffd0dd}
  </div>
  <div id="aide">Clique sur le carnet pour l'ouvrir 👆</div>
 </div>
-<script src="commun.js"></script><script>
+<script src="commun.js?v=2"></script><script>
 (function(){ var s=document.getElementById('s'), next=new URLSearchParams(location.search).get('next')||''; var going=false;
  document.getElementById('carnet').addEventListener('click',function(){ if(going) return; going=true; s.classList.add('ouvert'); if(next) setTimeout(function(){ PE.goSlide(next); },1300); else setTimeout(function(){ s.classList.remove('ouvert'); going=false; },2500); });
 })();

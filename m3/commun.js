@@ -1,4 +1,4 @@
-(function(){function fit(){var k=Math.min(innerWidth/1200,innerHeight/675);document.documentElement.style.setProperty('--k',k)}addEventListener('resize',fit);fit();
+(function(){var last=-1;function fit(){if(!innerWidth||!innerHeight)return;var k=Math.min(innerWidth/1200,innerHeight/675);if(k!==last){last=k;document.documentElement.style.setProperty('--k',k)}}addEventListener('resize',fit);addEventListener('pageshow',fit);document.addEventListener('visibilitychange',fit);setInterval(fit,400);fit();
 window.PE={get:function(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 window.LISA='https://meujesse.github.io/parcoursup-easy/lisa-anim/';})();
 (function(){var k=document.body&&document.body.getAttribute('data-voix');if(!k)return;var s=document.getElementById('s');if(!s)return;
