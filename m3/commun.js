@@ -22,3 +22,9 @@ var b=document.createElement('button'); b.type='button'; b.className='btn'; b.id
 var pos=document.body.getAttribute('data-zone-pos')||'left:16px;bottom:16px'; b.style.cssText='position:absolute;'+pos+';z-index:60;font-size:15px;padding:10px 18px';
 b.onclick=PE.goCarte; s.appendChild(b);
 })();
+
+/* Brouillon de lettre (écran 19) : téléchargement en fichier texte */
+window.PE&&(PE.brouillon=function(titres){titres=titres||['Mon intérêt','Mes acquis','Mon lien avec la formation','Ma conclusion'];var t=PE.get('pe_m3_brouillon',['','','','']);
+var out='Mon brouillon de lettre de motivation\r\nParcoursup\u2019easy · Mission 3\r\n\r\n';titres.forEach(function(ti,k){out+='Micro-défi '+(k+1)+' · '+ti+'\r\n'+((t[k]||'').trim()||'(à compléter)')+'\r\n\r\n';});
+out+='Ces champs sont un guide. Rédige ta lettre complète dans un document personnel, conserve-la, puis copie-la sur la plateforme Parcoursup.\r\n';
+var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+out],{type:'text/plain;charset=utf-8'}));a.download='mon-brouillon-lettre.txt';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);});

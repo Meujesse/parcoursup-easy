@@ -28,13 +28,13 @@ h2{margin:0;font:400 34px/1 'Patrick Hand',cursive;color:var(--rose)}
 <div id="compte"></div><div id="msg"></div>
 <div id="tamp">Parcoursup'easy · Mission 3</div>
 </div></div>
-<script src="commun.js?v=2"></script><script>
+<script src="commun.js?v=3"></script><script>
 (function(){
  // Contenu : document de Laurence, mission 3, écrans 11 (tutoriel express), 20 (grille de la lettre) et 23 (checklist du dossier)
  var L={
   lettre:{titre:'✅ Ma lettre est-elle prête ?',st:'Grille d’auto-évaluation de ma lettre · Coche les éléments que tu as réellement contrôlés.',fl:'25px',pl:'10px',
    items:['J’ai vérifié le nom et les caractéristiques de la formation.','J’explique ce qui m’intéresse réellement.','J’utilise au moins un exemple personnel pertinent.','Je fais le lien entre mon parcours et la formation.','Mes arguments sont précis et sincères.','J’ai relu l’orthographe et la syntaxe.','J’ai respecté les consignes et la limite de caractères indiquées.'],
-   reste:'Continue à vérifier les points restants avant de considérer ta lettre comme prête.',bouton:'📥 Télécharger la grille complète'},
+   reste:'Continue à vérifier les points restants avant de considérer ta lettre comme prête.',bouton:'📥 Télécharger la grille complète',brouillon:true},
   rubrique:{titre:'',st:'Coche chaque point une fois vérifié dans ton dossier.',fl:'25px',pl:'9px',box:[150,195,900,385],num:true,
    items:['Je repère les catégories de la rubrique.','Je sélectionne les expériences pertinentes.','Je décris des faits concrets.','Je valorise mes apprentissages.','Je relis pour vérifier la clarté et l’exactitude.'],
    reste:'',bouton:''},
@@ -46,7 +46,7 @@ h2{margin:0;font:400 34px/1 'Patrick Hand',cursive;color:var(--rose)}
  document.documentElement.style.setProperty('--fl',d.fl); document.documentElement.style.setProperty('--pl',d.pl);
  if(d.box){ var pg=document.getElementById('page'), sc=document.getElementById('s'); sc.style.width='1200px'; pg.style.left=d.box[0]+'px'; pg.style.top=d.box[1]+'px'; pg.style.width=d.box[2]+'px'; pg.style.height=d.box[3]+'px'; pg.style.paddingTop='14px'; }
  if(!d.titre) document.getElementById('titre').style.display='none'; document.getElementById('titre').textContent=d.titre; document.getElementById('st').textContent=d.st;
- var act=document.getElementById('actions'); if(d.guide) act.innerHTML+='<a class="btn sec" href="'+d.guide[1]+'" target="_blank" rel="noopener" style="text-decoration:none;background:#fff;color:var(--canard)">'+d.guide[0]+'</a>'; if(d.bouton) act.innerHTML+='<button class="btn" onclick="window.print()">'+d.bouton+'</button>';
+ var act=document.getElementById('actions'); if(d.guide) act.innerHTML+='<a class="btn sec" href="'+d.guide[1]+'" target="_blank" rel="noopener" style="text-decoration:none;background:#fff;color:var(--canard)">'+d.guide[0]+'</a>'; if(d.brouillon) act.innerHTML+='<button class="btn sec" onclick="PE.brouillon()" style="background:#fff;color:var(--canard)">📝 Télécharger mon brouillon</button>'; if(d.bouton) act.innerHTML+='<button class="btn" onclick="window.print()">'+d.bouton+'</button>';
  var coche=PE.get(cle,[]), liste=document.getElementById('liste');
  liste.innerHTML=d.items.map(function(t,k){ return '<label><input type="checkbox" data-k="'+k+'"'+(coche.indexOf(k)>=0?' checked':'')+'>'+(d.num?'<b class="num">'+(k+1)+'.</b>':'')+t+'</label>'; }).join('');
  function maj(){ var n=0; [].forEach.call(liste.querySelectorAll('input'),function(c){ c.parentNode.classList.toggle('ok',c.checked); if(c.checked) n++; }); document.getElementById('compte').textContent=n+' point(s) vérifié(s) sur '+d.items.length+'.'; document.getElementById('msg').textContent=n<d.items.length?(d.reste||''):''; }

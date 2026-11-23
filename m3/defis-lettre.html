@@ -21,25 +21,28 @@ textarea{flex:1;resize:none;border:0;outline:none;background:repeating-linear-gr
 #nav{position:absolute;left:140px;top:606px;display:flex;gap:10px}
 #nav .btn{box-shadow:none;font-size:15px;padding:10px 18px}
 #nav .btn.sec{border:2px solid #fff}
+#nav #dl{background:#fff;color:var(--canard);margin-left:18px}
 </style></head><body><div id="s">
 <div id="etapes"></div>
 <div id="defi"><div id="gauche"></div><div id="droite"><label>Mon brouillon</label><textarea id="brouillon" placeholder="Écris ici tes idées…"></textarea><div id="note">⚠️ Ces champs sont un guide. Rédige ta lettre complète dans un document personnel, conserve-la, puis copie-la sur la plateforme Parcoursup.</div></div></div>
-<div id="nav"><button class="btn sec" id="prev">◀ Défi précédent</button><button class="btn" id="next">Défi suivant ▶</button></div>
+<div id="nav"><button class="btn sec" id="prev">◀ Défi précédent</button><button class="btn" id="next">Défi suivant ▶</button><button class="btn sec" id="dl">📥 Télécharger mon brouillon</button></div>
 </div>
-<script src="commun.js?v=2"></script><script>
+<script src="commun.js?v=3"></script><script>
 (function(){
  // Contenu : document de Laurence, mission 3, écran 19
  var D=[['Mon intérêt','Sélectionne 2 éléments qui expliquent ton intérêt pour cette formation.','Tu peux t’appuyer sur les matières, le programme, un projet ou une expérience.','2 arguments notés dans la fiche personnelle.'],
   ['Mes acquis','Choisis une expérience ou un acquis qui éclaire ton intérêt.','Pense à un cours, un projet, un stage, une activité ou une démarche personnelle.','Un exemple précis, sans exagération.'],
   ['Mon lien avec la formation','Explique ce que tu souhaites approfondir dans cette formation.','Fais le lien entre ton intérêt, ton parcours et les enseignements proposés.','Une phrase personnalisée.'],
   ['Ma conclusion','Termine ta lettre avec une formule simple et adaptée.','Reste poli et naturel. Évite les promesses de réussite ou les demandes insistantes.','Une conclusion sobre.']];
- var i=0, vu={0:1}, txt=['','','',''];
+ var i=0, vu={0:1}, txt=PE.get('pe_m3_brouillon',['','','','']);
  var et=document.getElementById('etapes'), g=document.getElementById('gauche'), ta=document.getElementById('brouillon');
  function paint(){ et.innerHTML=D.map(function(d,k){ return '<span class="'+(k===i?'on ':'')+(vu[k]&&k!==i?'fait':'')+'" data-k="'+k+'">Micro-défi '+(k+1)+'</span>'; }).join('');
   [].forEach.call(et.children,function(sp){ sp.onclick=function(){ aller(+sp.dataset.k); }; });
   var d=D[i]; g.innerHTML='<h2>Micro-défi '+(i+1)+' · '+d[0]+'</h2><div class="bloc consigne"><b>CONSIGNE</b>« '+d[1]+' »</div><div class="bloc aide"><b>💡 AIDE</b>« '+d[2]+' »</div><div class="bloc attendu"><b>🎯 RÉSULTAT ATTENDU</b>'+d[3]+'</div>';
   ta.value=txt[i]; document.getElementById('prev').disabled=i===0; document.getElementById('next').disabled=i===D.length-1; }
- function aller(k){ txt[i]=ta.value; i=k; vu[k]=1; paint(); }
+ function aller(k){ txt[i]=ta.value; PE.set('pe_m3_brouillon',txt); i=k; vu[k]=1; paint(); }
+ ta.addEventListener('input',function(){ txt[i]=ta.value; PE.set('pe_m3_brouillon',txt); });
+ document.getElementById('dl').onclick=function(){ txt[i]=ta.value; PE.set('pe_m3_brouillon',txt); PE.brouillon(D.map(function(d){return d[0];})); };
  document.getElementById('next').onclick=function(){ if(i<D.length-1) aller(i+1); };
  document.getElementById('prev').onclick=function(){ if(i>0) aller(i-1); };
  paint();
