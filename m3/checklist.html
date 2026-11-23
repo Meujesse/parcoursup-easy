@@ -12,6 +12,7 @@ h2{margin:0;font:400 34px/1 'Patrick Hand',cursive;color:var(--rose)}
 #liste input:checked{background:var(--vert);border-color:var(--vert)}
 #liste input:checked:after{content:"✓";color:#fff;font:800 17px Montserrat,sans-serif}
 #liste label.ok{color:#5b7c86}
+#liste .num{font-weight:400;color:var(--canard);min-width:22px;margin:0 -6px 0 -2px}
 #compte{margin-top:12px;font:800 17px Montserrat,sans-serif;color:var(--canard)}
 #msg{font:400 19px/1.3 'Patrick Hand',cursive;color:#8a4b00;background:#fff3d6;border-radius:10px;padding:6px 12px;margin-top:6px}
 #msg:empty{display:none}
@@ -29,22 +30,25 @@ h2{margin:0;font:400 34px/1 'Patrick Hand',cursive;color:var(--rose)}
 </div></div>
 <script src="commun.js?v=2"></script><script>
 (function(){
- // Contenu : document de Laurence, mission 3, écrans 20 (grille de la lettre) et 23 (checklist du dossier)
+ // Contenu : document de Laurence, mission 3, écrans 11 (tutoriel express), 20 (grille de la lettre) et 23 (checklist du dossier)
  var L={
   lettre:{titre:'✅ Ma lettre est-elle prête ?',st:'Grille d’auto-évaluation de ma lettre · Coche les éléments que tu as réellement contrôlés.',fl:'25px',pl:'10px',
    items:['J’ai vérifié le nom et les caractéristiques de la formation.','J’explique ce qui m’intéresse réellement.','J’utilise au moins un exemple personnel pertinent.','Je fais le lien entre mon parcours et la formation.','Mes arguments sont précis et sincères.','J’ai relu l’orthographe et la syntaxe.','J’ai respecté les consignes et la limite de caractères indiquées.'],
    reste:'Continue à vérifier les points restants avant de considérer ta lettre comme prête.',bouton:'📥 Télécharger la grille complète'},
+  rubrique:{titre:'✅ Comment remplir Activités et centres d’intérêt ?',st:'Coche chaque point une fois vérifié dans ton dossier.',fl:'28px',pl:'18px',h:'570px',num:true,
+   items:['Je repère les catégories de la rubrique.','Je sélectionne les expériences pertinentes.','Je décris des faits concrets.','Je valorise mes apprentissages.','Je relis pour vérifier la clarté et l’exactitude.'],
+   reste:'',bouton:''},
   dossier:{titre:'✅ Ma checklist de vérification',st:'Coche chaque élément après vérification sur Parcoursup.',fl:'23px',pl:'6px',
    items:['J’ai vérifié mes informations personnelles et scolaires.','J’ai relu les rubriques de mon dossier.','J’ai vérifié la cohérence de mes informations.','J’ai renseigné les rubriques pertinentes pour mon parcours.','J’ai relu mes lettres et vérifié leur personnalisation.','J’ai contrôlé les consignes propres à chaque formation.','J’ai vérifié les éventuels documents demandés.','J’ai vérifié les échéances officielles.','J’ai identifié les éléments qui restent à corriger.'],
    reste:'Certains contrôles restent à effectuer. Reprends ton dossier avant de poursuivre.',bouton:'📥 Télécharger ma checklist',
    guide:['📘 Guide : les 20 erreurs','https://drive.google.com/file/d/13bo7kLY4pAKR6ibrVNjLztOFGJHdD_tY/view']}};
  var id=new URLSearchParams(location.search).get('l')||'lettre', d=L[id]||L.lettre, cle='pe_m3_chk_'+id;
  document.documentElement.style.setProperty('--fl',d.fl); document.documentElement.style.setProperty('--pl',d.pl);
- document.getElementById('titre').textContent=d.titre; document.getElementById('st').textContent=d.st;
- var act=document.getElementById('actions'); if(d.guide) act.innerHTML+='<a class="btn sec" href="'+d.guide[1]+'" target="_blank" rel="noopener" style="text-decoration:none;background:#fff;color:var(--canard)">'+d.guide[0]+'</a>'; act.innerHTML+='<button class="btn" onclick="window.print()">'+d.bouton+'</button>';
+ if(d.h) document.getElementById('page').style.height=d.h; document.getElementById('titre').textContent=d.titre; document.getElementById('st').textContent=d.st;
+ var act=document.getElementById('actions'); if(d.guide) act.innerHTML+='<a class="btn sec" href="'+d.guide[1]+'" target="_blank" rel="noopener" style="text-decoration:none;background:#fff;color:var(--canard)">'+d.guide[0]+'</a>'; if(d.bouton) act.innerHTML+='<button class="btn" onclick="window.print()">'+d.bouton+'</button>';
  var coche=PE.get(cle,[]), liste=document.getElementById('liste');
- liste.innerHTML=d.items.map(function(t,k){ return '<label><input type="checkbox" data-k="'+k+'"'+(coche.indexOf(k)>=0?' checked':'')+'>'+t+'</label>'; }).join('');
- function maj(){ var n=0; [].forEach.call(liste.querySelectorAll('input'),function(c){ c.parentNode.classList.toggle('ok',c.checked); if(c.checked) n++; }); document.getElementById('compte').textContent=n+' point(s) vérifié(s) sur '+d.items.length+'.'; document.getElementById('msg').textContent=n<d.items.length?d.reste:''; }
+ liste.innerHTML=d.items.map(function(t,k){ return '<label><input type="checkbox" data-k="'+k+'"'+(coche.indexOf(k)>=0?' checked':'')+'>'+(d.num?'<b class="num">'+(k+1)+'.</b>':'')+t+'</label>'; }).join('');
+ function maj(){ var n=0; [].forEach.call(liste.querySelectorAll('input'),function(c){ c.parentNode.classList.toggle('ok',c.checked); if(c.checked) n++; }); document.getElementById('compte').textContent=n+' point(s) vérifié(s) sur '+d.items.length+'.'; document.getElementById('msg').textContent=n<d.items.length?(d.reste||''):''; }
  liste.addEventListener('change',function(){ coche=[].filter.call(liste.querySelectorAll('input'),function(c){return c.checked;}).map(function(c){return +c.dataset.k;}); PE.set(cle,coche); maj(); });
  maj();
 })();
